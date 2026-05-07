@@ -1,0 +1,21 @@
+# Xcode
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# Build
+.build/
+DerivedData/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# SPM
+.swiftpm/
+
+# Secrets (ne jamais committer)
+*.env
+Secrets.swift
