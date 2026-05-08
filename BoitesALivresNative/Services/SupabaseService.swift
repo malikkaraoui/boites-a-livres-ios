@@ -107,20 +107,26 @@ actor SupabaseService {
 
         let (data, response) = try await URLSession.shared.data(for: req)
         struct StorageFile: Codable { let name: String }
+
+        var result: [BoxPhoto] = []
+
+        // Photo scrapée d'origine — toujours en tête, indépendamment des photos soumises
+        if let url = fallbackUrl {
+            result.append(BoxPhoto(id: "base_\(boxId)", url: url))
+        }
+
+        // Photos approuvées uploadées par les utilisateurs (sous-dossier {boxId}/)
         if let http = response as? HTTPURLResponse, http.statusCode < 400,
-           let files = try? JSONDecoder().decode([StorageFile].self, from: data), !files.isEmpty {
-            return files.map { file in
+           let files = try? JSONDecoder().decode([StorageFile].self, from: data) {
+            result += files.map { file in
                 BoxPhoto(
                     id: file.name,
                     url: "\(baseURL)/storage/v1/object/public/boites-photos/\(boxId)/\(file.name)"
                 )
             }
         }
-        // Fallback : photo legacy stockée à plat (ex: boites-photos/9812.jpg)
-        if let url = fallbackUrl {
-            return [BoxPhoto(id: "\(boxId)", url: url)]
-        }
-        return []
+
+        return result
     }
 
     func uploadPhoto(_ imageData: Data, for boxId: Int, filename: String) async throws -> String {

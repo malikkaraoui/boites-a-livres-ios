@@ -70,7 +70,7 @@ final class DetailViewModel {
             showAlert = true
             // Refresh photos after short delay
             try? await Task.sleep(nanoseconds: 1_000_000_000)
-            if let ph = try? await supabase.listPhotos(for: boxId) {
+            if let ph = try? await supabase.listPhotos(for: boxId, fallbackUrl: box?.photo_url) {
                 photos = ph
             }
         } catch {
