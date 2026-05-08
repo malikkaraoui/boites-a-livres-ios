@@ -9,14 +9,14 @@ struct BookBoxSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let urlStr = box.photo_url, let url = URL(string: urlStr) {
-                AsyncImage(url: url) { phase in
+                CachedAsyncImage(url: url) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
                     case .failure:
                         Color(.systemGray5)
                             .overlay(Image(systemName: "photo").font(.system(size: 30)).foregroundStyle(.secondary))
-                    default:
+                    case .empty:
                         Color(.systemGray6).overlay(ProgressView())
                     }
                 }

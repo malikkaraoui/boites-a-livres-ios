@@ -1,20 +1,22 @@
 import SwiftUI
 
 struct ListView: View {
+    @Binding var path: NavigationPath
     @State private var vm = ListViewModel()
+    @ObservedObject private var locationService = LocationService.shared
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             VStack(spacing: 0) {
                 // Filter bar
                 filterBar
 
-                if vm.loading {
+                if vm.loading && vm.boxes.isEmpty {
                     Spacer()
                     ProgressView().scaleEffect(1.3)
                     Spacer()
-                } else if let err = vm.errorMessage {
+                } else if let err = vm.errorMessage, vm.boxes.isEmpty {
                     Spacer()
                     VStack(spacing: 8) {
                         Image(systemName: "wifi.slash").font(.system(size: 40)).foregroundStyle(.secondary)
@@ -59,45 +61,49 @@ struct ListView: View {
             .navigationDestination(for: Int.self) { id in
                 DetailView(boxId: id)
             }
-            .task { await vm.initialLoad() }
+            .task {
+                if vm.boxes.isEmpty { await vm.initialLoad() }
+            }
             .refreshable { await vm.initialLoad() }
+            .onReceive(locationService.$currentLocation.compactMap { $0 }) { newLoc in
+                Task { await vm.reloadIfMovedFar(newLocation: newLoc) }
+            }
         }
     }
 
     private var filterBar: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                // Radius chips
-                ForEach(Constants.radiusOptionsKm, id: \.self) { km in
-                    filterChip(
-                        label: "\(Int(km)) km",
-                        isSelected: vm.radiusKm == km
-                    ) {
-                        if vm.radiusKm != km {
-                            vm.radiusKm = km
-                            Task { await vm.applyFilters() }
-                        }
-                    }
-                }
-
-                Divider().frame(height: 20)
-
-                // Photo filter chips
-                ForEach(PhotoFilter.allCases, id: \.self) { filter in
-                    filterChip(
-                        label: filter.rawValue,
-                        isSelected: vm.photoFilter == filter
-                    ) {
-                        if vm.photoFilter != filter {
-                            vm.photoFilter = filter
-                            Task { await vm.applyFilters() }
-                        }
+        HStack(spacing: 8) {
+            // Radius chips
+            ForEach(Constants.radiusOptionsKm, id: \.self) { km in
+                filterChip(
+                    label: "\(Int(km)) km",
+                    isSelected: vm.radiusKm == km
+                ) {
+                    if vm.radiusKm != km {
+                        vm.radiusKm = km
+                        Task { await vm.applyFilters() }
                     }
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+
+            // Photo toggle : actif (bleu) = avec photo only / inactif = toutes
+            Button {
+                vm.photoFilter = (vm.photoFilter == .withPhoto) ? .all : .withPhoto
+                Task { await vm.applyFilters() }
+            } label: {
+                Image(systemName: "camera.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(vm.photoFilter == .withPhoto ? .white : Color(.label))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 7)
+                    .background(vm.photoFilter == .withPhoto ? blue : Color(.systemGray6))
+                    .clipShape(Capsule())
+            }
+
+            Spacer(minLength: 0)
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
         .background(Color(.systemBackground))
         .overlay(alignment: .bottom) {
             Divider()

@@ -59,6 +59,7 @@ final class DetailViewModel {
     }
 
     func submitPhoto(_ image: UIImage, boxId: Int) async {
+        guard !uploading else { return }
         uploading = true
         localPhotoImage = image
         defer { uploading = false; localPhotoImage = nil }

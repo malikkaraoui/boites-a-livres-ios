@@ -1,0 +1,82 @@
+{
+  "handoff_date": "2026-05-08",
+  "author": "claude-sonnet-4-6",
+  "branch": "main",
+  "title": "MVP Polish — fixes lancement, géoloc, liste, sheet drag-to-navigate",
+  "scope": "iOS native Swift/SwiftUI — 19 fichiers modifiés, 7 nouveaux",
+  "summary": "Série de correctifs et améliorations post-MVP initial sur l'app Boîtes à Livres iOS.",
+  "changes": [
+    {
+      "file": "Services/LocationService.swift",
+      "type": "bugfix + refactor",
+      "description": "Correction race condition autorisation GPS : requestLocation() était appelé pendant que la dialog iOS était affichée. Ajout waitForAuthorizationChange() via withCheckedContinuation. Seed currentLocation depuis manager.location au init (position cachée). startUpdatingIfAuthorized() avec distanceFilter=50 et accuracy=100m pour batterie.",
+      "risk": "medium — cœur de la géolocalisation"
+    },
+    {
+      "file": "ViewModels/MapViewModel.swift",
+      "type": "bugfix + feature",
+      "description": "Correction écran blanc 20s au lancement : remplacement de .userLocation(fallback:) par .camera(MapCamera(...)) sur la position par défaut — MapKit ne bloque plus l'affichage en attendant le GPS. Ajout cycleMapStyle() (standard/hybrid/imagery). Ajout prefetchPhotos().",
+      "risk": "low"
+    },
+    {
+      "file": "ViewModels/ListViewModel.swift",
+      "type": "bugfix",
+      "description": "Correction ordre de tri liste lors déplacement : reloadIfMovedFar() passait par initialLoad() qui retournait la position cachée au lieu de la nouvelle position. Extraction loadFromCoordinate(lat:lng:) partagé. newLocation.coordinate passé directement.",
+      "risk": "low"
+    },
+    {
+      "file": "App/MapScreen.swift",
+      "type": "feature",
+      "description": "Ajout drag-to-navigate sur le sheet de prévisualisation boîte : PresentationDetent avec selection binding. Trigger sur .fraction(0.75) — évite le snap full-screen brutal. withTransaction(disablesAnimations:true) pour que seul le push NavigationStack soit animé (pas de double animation conflictuelle). selectBox() réinitialise le detent à l'ouverture.",
+      "risk": "low"
+    },
+    {
+      "file": "App/SettingsView.swift",
+      "type": "feature + refactor",
+      "description": "Ajout .refreshable { await vm.onAppear() } pour pull-to-refresh des photos soumises et statut notifications. Refonte UI : CachedAsyncImage pour thumbnails, liens crédits (malikkaraoui.com, geobib.fr), label version avec date build, bouton vider cache discret.",
+      "risk": "low"
+    },
+    {
+      "file": "Services/DeepLinkRouter.swift",
+      "type": "new",
+      "description": "Singleton pour deep links universels — pendingBoxId résolu à l'ouverture de la carte.",
+      "risk": "low"
+    },
+    {
+      "file": "Services/ImageCacheService.swift",
+      "type": "new",
+      "description": "Cache images en mémoire + disk via URLSession. prefetch(urls:) en tâche background .utility.",
+      "risk": "low"
+    },
+    {
+      "file": "Views/Components/CachedAsyncImage.swift",
+      "type": "new",
+      "description": "Drop-in replacement AsyncImage utilisant ImageCacheService.",
+      "risk": "low"
+    },
+    {
+      "file": "App/AppDelegate.swift",
+      "type": "new",
+      "description": "UNUserNotificationCenter delegate + deep link handler.",
+      "risk": "low"
+    }
+  ],
+  "review_focus": [
+    "LocationService : thread safety sur authContinuations (array muté depuis delegate callback)",
+    "MapViewModel.loadBoxes : cache zone — vérifier que zoneKey ne crée pas de faux hits pour rayon différent",
+    "MapScreen.selectBox : DispatchQueue.main.asyncAfter 0.32s — fragile si animation sheet change de durée",
+    "ListViewModel.reloadIfMovedFar : threshold 250m codé en dur — ok pour MVP, à rendre configurable ?",
+    "withTransaction(disablesAnimations:true) sur sheet dismiss — vérifier comportement iOS 17 vs 18"
+  ],
+  "known_limitations": [
+    "Pas de tests unitaires sur LocationService (async continuation difficile à mocker)",
+    "RGPD (création de compte) non implémenté — prévu prochaine phase"
+  ],
+  "test_plan": [
+    "Lancer sur iPhone physique (pas simulateur) — vérifier absence écran blanc au démarrage",
+    "Tirer sheet boîte vers le haut — vérifier navigation fluide sans double animation",
+    "Se déplacer de 300m+ — vérifier mise à jour liste dans le bon ordre",
+    "Pull-to-refresh dans Réglages — vérifier refresh photos + notif status",
+    "Changer rayon carte (5/10/30km) — vérifier recentrage + rechargement"
+  ]
+}

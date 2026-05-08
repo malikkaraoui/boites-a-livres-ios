@@ -60,7 +60,7 @@ struct DetailView: View {
                                     .foregroundStyle(.secondary)
                                     .padding(.top, 4)
                                 actionBtn("Voir sur boites-a-livres.fr") {
-                                    if let url = URL(string: "\(Constants.boitesDetailURL)\(box.id)") {
+                                    if let url = box.detailURL {
                                         UIApplication.shared.open(url)
                                     }
                                 }
@@ -100,9 +100,6 @@ struct DetailView: View {
                 .refreshable { await vm.refresh(boxId: boxId) }
                 .navigationTitle("#\(box.id) — \(box.city ?? "Détail")")
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationDestination(for: Int.self) { id in
-                    DetailView(boxId: id)
-                }
             } else {
                 Text("Boîte introuvable")
                     .foregroundStyle(.secondary)

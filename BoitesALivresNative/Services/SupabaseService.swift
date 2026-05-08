@@ -52,13 +52,15 @@ actor SupabaseService {
         }
     }
 
-    func fetchNearbyMap(lat: Double, lng: Double, radiusKm: Double) async throws -> [BookBox] {
+    func fetchNearbyMap(lat: Double, lng: Double, radiusKm: Double,
+                        photoFilter: PhotoFilter = .all) async throws -> [BookBox] {
         struct Params: Encodable {
             let user_lat: Double, user_lng: Double, radius_m: Int
             let filter_dept: String?, filter_photo: Int?, page_limit: Int, page_offset: Int
         }
         let p = Params(user_lat: lat, user_lng: lng, radius_m: Int(radiusKm * 1000),
-                       filter_dept: nil, filter_photo: nil, page_limit: 200, page_offset: 0)
+                       filter_dept: nil, filter_photo: photoFilter.intValue,
+                       page_limit: 200, page_offset: 0)
         return try await rpc("nearby_book_boxes", params: p)
     }
 
@@ -136,4 +138,37 @@ actor SupabaseService {
         }
         return "\(baseURL)/storage/v1/object/public/boites-photos/\(path)"
     }
+
+    func insertPhotoSubmission(boxId: Int, url: String, deviceToken: String?) async throws {
+        struct Params: Encodable {
+            let box_id: Int
+            let url: String
+            let device_token: String?
+        }
+        let body = try JSONEncoder().encode(Params(box_id: boxId, url: url, device_token: deviceToken))
+        let req = makeRequest(path: "/rest/v1/photo_submissions", method: "POST", body: body)
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+    }
+
+    func fetchPhotoSubmissions(for boxId: Int? = nil) async throws -> [PhotoSubmission] {
+        let filter = boxId.map { "box_id=eq.\($0)" } ?? ""
+        let req = makeRequest(path: "/rest/v1/photo_submissions?order=submitted_at.desc\(filter.isEmpty ? "" : "&\(filter)")")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+        return try JSONDecoder().decode([PhotoSubmission].self, from: data)
+    }
+}
+
+struct PhotoSubmission: Codable, Identifiable {
+    let id: Int
+    let box_id: Int
+    let url: String
+    let status: String
+    let submitted_at: String
+    let review_notes: String?
 }

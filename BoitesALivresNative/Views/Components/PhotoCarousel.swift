@@ -17,14 +17,14 @@ struct PhotoCarousel: View {
     var body: some View {
         TabView(selection: $currentPage) {
             ForEach(Array(photos.enumerated()), id: \.offset) { index, photo in
-                AsyncImage(url: URL(string: photo.url)) { phase in
+                CachedAsyncImage(url: URL(string: photo.url)) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
                     case .failure:
                         Color(.systemGray5)
                             .overlay(Image(systemName: "photo").font(.system(size: 40)).foregroundStyle(.secondary))
-                    default:
+                    case .empty:
                         Color(.systemGray6).overlay(ProgressView())
                     }
                 }
