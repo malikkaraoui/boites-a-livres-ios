@@ -18,8 +18,36 @@ struct BookBox: Codable, Identifiable, Hashable {
         CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 
+    var detailURL: URL? {
+        guard let city, let postal_code,
+              let citySlug = city.urlSlug, !citySlug.isEmpty
+        else { return URL(string: "https://www.boites-a-livres.fr") }
+        return URL(string: "https://www.boites-a-livres.fr/ville/\(citySlug)/\(postal_code)/boite-\(id)")
+    }
+
     static func == (lhs: BookBox, rhs: BookBox) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
+}
+
+extension String {
+    var urlSlug: String? {
+        let lowered = folding(options: .diacriticInsensitive, locale: .init(identifier: "fr_FR"))
+            .lowercased()
+        let allowed = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789")
+        var out = ""
+        var lastDash = false
+        for scalar in lowered.unicodeScalars {
+            if allowed.contains(scalar) {
+                out.append(Character(scalar))
+                lastDash = false
+            } else if !lastDash, !out.isEmpty {
+                out.append("-")
+                lastDash = true
+            }
+        }
+        if out.hasSuffix("-") { out.removeLast() }
+        return out.isEmpty ? nil : out
+    }
 }
 
 struct BoxPhoto: Identifiable {

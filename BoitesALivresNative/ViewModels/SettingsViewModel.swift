@@ -6,14 +6,14 @@ import Observation
 final class SettingsViewModel {
     var notificationStatus: UNAuthorizationStatus = .notDetermined
     var pushToken: String? = nil
-    var submissions: [PendingPhotoSubmission] = []
+    var submissions: [PhotoSubmission] = []
     var showCacheClearAlert = false
     var cacheClearDone = false
 
     func onAppear() async {
         notificationStatus = await NotificationService.shared.getAuthorizationStatus()
         pushToken = NotificationService.shared.getPushToken()
-        submissions = PhotoService.shared.loadSubmissions()
+        submissions = await PhotoService.shared.loadSubmissions()
     }
 
     func requestNotifications() async {
@@ -23,6 +23,7 @@ final class SettingsViewModel {
 
     func clearCache() async {
         await LocalCacheService.shared.clear()
+        ImageCacheService.shared.clear()
         cacheClearDone = true
         try? await Task.sleep(nanoseconds: 2_000_000_000)
         cacheClearDone = false

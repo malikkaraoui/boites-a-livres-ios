@@ -20,16 +20,6 @@ struct SettingsView: View {
                             .foregroundStyle(notifStatusColor)
                     }
 
-                    if let token = vm.pushToken {
-                        HStack {
-                            Label("Token push", systemImage: "number")
-                            Spacer()
-                            Text(String(token.prefix(12)) + "…")
-                                .font(.system(size: 12, design: .monospaced))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-
                     if vm.notificationStatus == .notDetermined || vm.notificationStatus == .denied {
                         Button {
                             if vm.notificationStatus == .denied {
@@ -58,24 +48,31 @@ struct SettingsView: View {
                     } else {
                         ForEach(vm.submissions) { sub in
                             HStack(spacing: 12) {
-                                // Miniature locale si disponible
-                                if let img = UIImage(contentsOfFile: sub.localImagePath) {
-                                    Image(uiImage: img)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 48, height: 48)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                } else {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color(.systemGray5))
-                                        .frame(width: 48, height: 48)
-                                        .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
+                                CachedAsyncImage(url: URL(string: sub.url)) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 48, height: 48)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    case .empty:
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color(.systemGray5))
+                                            .frame(width: 48, height: 48)
+                                            .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
+                                    case .failure:
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color(.systemGray5))
+                                            .frame(width: 48, height: 48)
+                                            .overlay(Image(systemName: "exclamationmark.circle").foregroundStyle(.secondary))
+                                    }
                                 }
 
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text("Boîte #\(sub.boxId)")
+                                    Text("Boîte #\(sub.box_id)")
                                         .font(.system(size: 14, weight: .semibold))
-                                    Text(sub.submittedAt, style: .relative)
+                                    Text(relativeDate(from: sub.submitted_at))
                                         .font(.system(size: 12))
                                         .foregroundStyle(.secondary)
                                 }
@@ -89,19 +86,53 @@ struct SettingsView: View {
                     }
                 }
 
-                // Données
-                Section("Données") {
-                    Button(role: .destructive) {
+                // Crédits
+                Section("À propos") {
+                    Text("Bénévolement :")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color(.label))
+
+                    Link(destination: URL(string: "https://malikkaraoui.com")!) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Une application proposée par")
+                                .font(.system(size: 13))
+                                .foregroundStyle(.secondary)
+                            Text("Malik Karaoui")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(blue)
+                        }
+                    }
+
+                    Link(destination: URL(string: "https://www.geobib.fr")!) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("En se basant sur le travail de")
+                                .font(.system(size: 13))
+                                .foregroundStyle(.secondary)
+                            Text("Sylvain Machefert")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(blue)
+                        }
+                    }
+
+                    Text("Merci aux contributeurs de boites-a-livres.fr")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color(.systemGray2))
+                }
+
+                // Vider le cache — collé sous "À propos"
+                Section {
+                    Button {
                         vm.showCacheClearAlert = true
                     } label: {
                         HStack {
-                            Label("Vider le cache", systemImage: "trash")
                             Spacer()
-                            if vm.cacheClearDone {
-                                Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                            }
+                            Text(vm.cacheClearDone ? "Cache vidé" : "Vider le cache")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color(.systemGray2))
+                            Spacer()
                         }
                     }
+                    .listRowBackground(Color.clear)
                     .alert("Vider le cache ?", isPresented: $vm.showCacheClearAlert) {
                         Button("Vider", role: .destructive) { Task { await vm.clearCache() } }
                         Button("Annuler", role: .cancel) {}
@@ -110,25 +141,38 @@ struct SettingsView: View {
                     }
                 }
 
-                // Crédits
-                Section("À propos") {
-                    Link(destination: URL(string: "https://www.boites-a-livres.fr")!) {
-                        Label("boites-a-livres.fr", systemImage: "globe")
-                    }
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Données sous licence ODbL")
-                            .font(.system(size: 13))
-                            .foregroundStyle(.secondary)
-                        Text("© boites-a-livres.fr — Merci aux contributeurs")
-                            .font(.system(size: 12))
+                // Suivi de version — isolé tout en bas
+                Section {
+                    HStack {
+                        Spacer()
+                        Text(versionLabel)
+                            .font(.system(size: 11, design: .monospaced))
                             .foregroundStyle(Color(.systemGray3))
+                        Spacer()
                     }
-                    .padding(.vertical, 2)
+                    .listRowBackground(Color.clear)
                 }
             }
             .navigationTitle("Réglages")
             .task { await vm.onAppear() }
+            .refreshable { await vm.onAppear() }
         }
+    }
+
+    private var versionLabel: String {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = info?["CFBundleVersion"] as? String ?? "?"
+        var dateStr = ""
+        if let exePath = Bundle.main.executablePath,
+           let attrs = try? FileManager.default.attributesOfItem(atPath: exePath),
+           let date = attrs[.modificationDate] as? Date {
+            let f = DateFormatter()
+            f.dateFormat = "dd/MM HH:mm"
+            f.locale = Locale(identifier: "fr_FR")
+            dateStr = " · \(f.string(from: date))"
+        }
+        return "v\(version) (\(build))\(dateStr)"
     }
 
     private var notifStatusLabel: String {
@@ -150,11 +194,12 @@ struct SettingsView: View {
     }
 
     @ViewBuilder
-    private func statusChip(_ status: PendingPhotoSubmission.SubmissionStatus) -> some View {
+    private func statusChip(_ status: String) -> some View {
         let (label, color): (String, Color) = switch status {
-        case .pending: ("En attente", .orange)
-        case .approved: ("Acceptée", .green)
-        case .rejected: ("Refusée", .red)
+        case "pending": ("En attente", .orange)
+        case "approved": ("Acceptée", .green)
+        case "rejected": ("Refusée", .red)
+        default: ("Inconnu", .gray)
         }
         Text(label)
             .font(.system(size: 11, weight: .semibold))
@@ -163,5 +208,22 @@ struct SettingsView: View {
             .padding(.vertical, 4)
             .background(color.opacity(0.12))
             .clipShape(Capsule())
+    }
+
+    private func relativeDate(from iso8601String: String) -> String {
+        let formatter = ISO8601DateFormatter()
+        if let date = formatter.date(from: iso8601String) {
+            let components = Calendar.current.dateComponents([.second, .minute, .hour, .day], from: date, to: Date())
+            if let day = components.day, day > 0 {
+                return "\(day) jour\(day > 1 ? "s" : "") ago"
+            } else if let hour = components.hour, hour > 0 {
+                return "\(hour)h ago"
+            } else if let minute = components.minute, minute > 0 {
+                return "\(minute)m ago"
+            } else {
+                return "à l'instant"
+            }
+        }
+        return iso8601String
     }
 }

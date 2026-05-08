@@ -1,0 +1,39 @@
+{
+  "handoff_date": "2026-05-08",
+  "author": "claude-sonnet-4-6",
+  "branch": "review/mvp-polish-2026-05-08",
+  "title": "Fix photo discrepancy — preview vs. détail",
+  "scope": "Services/SupabaseService.swift — listPhotos()",
+  "summary": "Correction du bug où la photo scrapée de base disparaissait de la page détail dès qu'une photo utilisateur existait dans le bucket Storage. La photo scrapée était traitée comme fallback-of-last-resort au lieu d'être toujours la première du carousel.",
+  "root_cause": "listPhotos() retournait UNIQUEMENT les fichiers du bucket quand ils existaient, ignorant complètement fallbackUrl. Quand 0 fichier bucket → fallback affiché. Quand ≥1 fichier bucket → fallback écrasé. D'où la divergence preview (photo_url directe depuis BookBox) vs. détail (listPhotos() sans fallback).",
+  "changes": [
+    {
+      "file": "Services/SupabaseService.swift",
+      "type": "bugfix",
+      "description": "Restructuration de listPhotos() : fallbackUrl (photo scrapée) est désormais toujours insérée en tête de result, puis les fichiers bucket s'ajoutent après. Suppression de la logique if/else qui traitait fallbackUrl comme dernier recours. L'id de la photo scrapée est désormais 'base_{boxId}' pour éviter les collisions avec les noms de fichiers bucket.",
+      "risk": "low — changement de l'ordre du carousel, pas de la logique réseau"
+    },
+    {
+      "file": "ViewModels/DetailViewModel.swift",
+      "type": "bugfix",
+      "description": "submitPhoto() : ajout de fallbackUrl: box?.photo_url au refresh listPhotos() post-upload. Sans ce fix, la photo scrapée disparaissait du carousel après chaque upload réussi.",
+      "risk": "low"
+    }
+  ],
+  "data_cleanup": {
+    "storage": "Suppression des 5 fichiers test uploadés depuis l'iPhone (boîtes 1639, 227×2, 8422, 15790) via DELETE /storage/v1/object/boites-photos avec service_role key.",
+    "photo_submissions": "DELETE FROM photo_submissions — 5 lignes supprimées (ids 1-5, statuts rejected/approved)."
+  },
+  "review_focus": [
+    "listPhotos() : vérifier que les fichiers bucket sans extension ou avec sous-dossiers imbriqués sont bien gérés",
+    "PhotoCarousel : s'assurer qu'un BoxPhoto avec id='base_{boxId}' ne casse pas les animations de swipe",
+    "DetailViewModel.submitPhoto : après upload, le refresh listPhotos() sans fallbackUrl — la photo scrapée disparaîtra si boxId est appelé sans fresh.photo_url"
+  ],
+  "test_plan": [
+    "Ouvrir boîte #227 — preview et détail doivent afficher la même photo scrapée (plus de divergence)",
+    "Uploader une photo test — vérifier que la photo scrapée reste en position 0 du carousel",
+    "Boîte sans photo scrapée (photo_url = nil) — vérifier que le carousel n'affiche que les photos bucket",
+    "Pull-to-refresh dans le détail — vérifier que la photo scrapée reste présente après refresh"
+  ],
+  "known_limitations": []
+}

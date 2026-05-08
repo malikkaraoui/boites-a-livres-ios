@@ -87,15 +87,9 @@ final class PhotoService {
         let filename = "\(UUID().uuidString).jpg"
         let remoteUrl = try await SupabaseService.shared.uploadPhoto(data, for: boxId, filename: filename)
 
-        let docDir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let localPath = docDir.appendingPathComponent(filename).path
-        try data.write(to: URL(fileURLWithPath: localPath))
+        let deviceToken = NotificationService.shared.getPushToken()
+        try await SupabaseService.shared.insertPhotoSubmission(boxId: boxId, url: remoteUrl, deviceToken: deviceToken)
 
-        let submission = PendingPhotoSubmission(
-            id: UUID(), boxId: boxId, localImagePath: localPath,
-            submittedAt: Date(), status: .pending, remoteUrl: remoteUrl
-        )
-        saveSubmission(submission)
         return remoteUrl
     }
 
@@ -111,30 +105,11 @@ final class PhotoService {
         return result
     }
 
-    func loadSubmissions() -> [PendingPhotoSubmission] {
-        guard let data = UserDefaults.standard.data(forKey: submissionsKey),
-              let subs = try? JSONDecoder().decode([PendingPhotoSubmission].self, from: data) else { return [] }
-        return subs
-    }
-
-    func updateSubmission(id: UUID, status: PendingPhotoSubmission.SubmissionStatus, remoteUrl: String? = nil) {
-        var subs = loadSubmissions()
-        if let idx = subs.firstIndex(where: { $0.id == id }) {
-            subs[idx].status = status
-            if let url = remoteUrl { subs[idx].remoteUrl = url }
-        }
-        save(subs)
-    }
-
-    private func saveSubmission(_ sub: PendingPhotoSubmission) {
-        var subs = loadSubmissions()
-        subs.append(sub)
-        save(subs)
-    }
-
-    private func save(_ subs: [PendingPhotoSubmission]) {
-        if let data = try? JSONEncoder().encode(subs) {
-            UserDefaults.standard.set(data, forKey: submissionsKey)
+    func loadSubmissions() async -> [PhotoSubmission] {
+        do {
+            return try await SupabaseService.shared.fetchPhotoSubmissions()
+        } catch {
+            return []
         }
     }
 }
