@@ -1,5 +1,8 @@
 import Foundation
 
+// MARK: - Error Handling
+
+/// Errors specific to Supabase operations
 enum SupabaseError: LocalizedError {
     case httpError(Int, String)
     case decodingError(Error)
@@ -14,12 +17,16 @@ enum SupabaseError: LocalizedError {
     }
 }
 
+// MARK: - Supabase Service
+
+/// Actor-based service for all Supabase backend calls (database, storage, auth)
 actor SupabaseService {
     static let shared = SupabaseService()
 
     private let baseURL = Constants.supabaseURL
     private let anonKey = Constants.supabaseAnonKey
 
+    // Build HTTP request with Supabase auth headers and JSON content type
     private func makeRequest(path: String, method: String = "GET", body: Data? = nil) -> URLRequest {
         var req = URLRequest(url: URL(string: "\(baseURL)\(path)")!)
         req.httpMethod = method
@@ -31,6 +38,7 @@ actor SupabaseService {
         return req
     }
 
+    // Call Postgres stored procedure via RPC: encode params, send POST, decode result
     private func rpc<P: Encodable, R: Decodable>(_ fn: String, params: P) async throws -> R {
         let body = try JSONEncoder().encode(params)
         let req = makeRequest(path: "/rest/v1/rpc/\(fn)", method: "POST", body: body)
@@ -52,6 +60,7 @@ actor SupabaseService {
         }
     }
 
+    // Fetch max 200 nearby boxes for map view: no pagination, photo filter applied
     func fetchNearbyMap(lat: Double, lng: Double, radiusKm: Double,
                         photoFilter: PhotoFilter = .all) async throws -> [BookBox] {
         struct Params: Encodable {
@@ -64,6 +73,7 @@ actor SupabaseService {
         return try await rpc("nearby_book_boxes", params: p)
     }
 
+    // Fetch paginated nearby boxes for list view: department and photo filter applied
     func fetchNearby(lat: Double, lng: Double, radiusKm: Double,
                      dept: String? = nil, photoFilter: PhotoFilter = .all, page: Int = 0) async throws -> [BookBox] {
         struct Params: Encodable {
@@ -76,6 +86,7 @@ actor SupabaseService {
         return try await rpc("nearby_book_boxes", params: p)
     }
 
+    // Retrieve box by ID from database; throw 404 if not found
     func fetchById(_ id: Int) async throws -> BookBox {
         let req = makeRequest(path: "/rest/v1/book_boxes?id=eq.\(id)&select=*")
         let (data, response) = try await URLSession.shared.data(for: req)
@@ -87,6 +98,7 @@ actor SupabaseService {
         return box
     }
 
+    // Fetch nearby boxes excluding specified box ID (for detail view "nearby" section)
     func fetchNearbyTo(id: Int, lat: Double, lng: Double) async throws -> [BookBox] {
         struct Params: Encodable {
             let user_lat: Double, user_lng: Double, radius_m: Int
@@ -99,6 +111,7 @@ actor SupabaseService {
         return all.filter { $0.id != id }.prefix(Constants.nearbyLimit).map { $0 }
     }
 
+    // List all approved photos in storage for a box (with fallback scraped URL)
     func listPhotos(for boxId: Int, fallbackUrl: String? = nil) async throws -> [BoxPhoto] {
         struct Body: Encodable { let prefix: String; let limit: Int; let offset: Int }
         let body = try JSONEncoder().encode(Body(prefix: "\(boxId)/", limit: 50, offset: 0))
@@ -110,12 +123,12 @@ actor SupabaseService {
 
         var result: [BoxPhoto] = []
 
-        // Photo scrapée d'origine — toujours en tête, indépendamment des photos soumises
+        // Include original scraped photo first, always at top
         if let url = fallbackUrl {
             result.append(BoxPhoto(id: "base_\(boxId)", url: url))
         }
 
-        // Photos approuvées uploadées par les utilisateurs (sous-dossier {boxId}/)
+        // Append user-submitted approved photos from storage
         if let http = response as? HTTPURLResponse, http.statusCode < 400,
            let files = try? JSONDecoder().decode([StorageFile].self, from: data) {
             result += files.map { file in
@@ -129,6 +142,7 @@ actor SupabaseService {
         return result
     }
 
+    // Upload photo to storage bucket (not yet approved, pending review)
     func uploadPhoto(_ imageData: Data, for boxId: Int, filename: String) async throws -> String {
         let path = "\(boxId)/\(filename)"
         var req = URLRequest(url: URL(string: "\(baseURL)/storage/v1/object/boites-photos/\(path)")!)
@@ -145,6 +159,7 @@ actor SupabaseService {
         return "\(baseURL)/storage/v1/object/public/boites-photos/\(path)"
     }
 
+    // Record photo submission for moderation queue
     func insertPhotoSubmission(boxId: Int, url: String, deviceToken: String?) async throws {
         struct Params: Encodable {
             let box_id: Int
@@ -159,6 +174,7 @@ actor SupabaseService {
         }
     }
 
+    // Fetch all photo submissions for current user (optionally filtered by box)
     func fetchPhotoSubmissions(for boxId: Int? = nil) async throws -> [PhotoSubmission] {
         let filter = boxId.map { "box_id=eq.\($0)" } ?? ""
         let req = makeRequest(path: "/rest/v1/photo_submissions?order=submitted_at.desc\(filter.isEmpty ? "" : "&\(filter)")")
@@ -170,6 +186,9 @@ actor SupabaseService {
     }
 }
 
+// MARK: - Data Models
+
+// Photo submission record from database
 struct PhotoSubmission: Codable, Identifiable {
     let id: Int
     let box_id: Int

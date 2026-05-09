@@ -2,6 +2,8 @@ import Foundation
 import Observation
 import UIKit
 
+// MARK: - Detail View Model
+
 @MainActor @Observable
 final class DetailViewModel {
     var box: BookBox? = nil
@@ -13,10 +15,15 @@ final class DetailViewModel {
     var alertTitle = ""
     var alertMessage = ""
     var showAlert = false
-    var localPhotoImage: UIImage? = nil  // image locale en attente d'upload
+    var localPhotoImage: UIImage? = nil
+
+    // MARK: - Photo Source
+
+    enum PhotoSource { case camera, library }
 
     private let supabase = SupabaseService.shared
 
+    // Fetch box details, photos list, and nearby boxes in parallel; suppress errors
     func load(boxId: Int) async {
         loading = true
         defer { loading = false }
@@ -28,6 +35,7 @@ final class DetailViewModel {
         nearbyBoxes = await nearbyTask
     }
 
+    // Refresh box details and photos list; keep existing data on failure
     func refresh(boxId: Int) async {
         guard let fresh = try? await supabase.fetchById(boxId) else { return }
         box = fresh
@@ -36,6 +44,7 @@ final class DetailViewModel {
         }
     }
 
+    // Validate photo limit before handling; implementation delegated to View pickers
     func handlePhoto(source: PhotoSource, boxId: Int) async {
         showPhotoModal = false
         guard photos.count < Constants.maxPhotosPerBox else {
@@ -58,6 +67,7 @@ final class DetailViewModel {
         }
     }
 
+    // Upload image to Supabase storage and record submission; refresh photo list after 1s
     func submitPhoto(_ image: UIImage, boxId: Int) async {
         guard !uploading else { return }
         uploading = true
@@ -79,6 +89,4 @@ final class DetailViewModel {
             showAlert = true
         }
     }
-
-    enum PhotoSource { case camera, library }
 }

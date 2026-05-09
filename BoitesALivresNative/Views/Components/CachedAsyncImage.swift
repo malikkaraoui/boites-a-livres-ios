@@ -1,12 +1,15 @@
 import SwiftUI
 import UIKit
 
+// MARK: - Cached Image Phase
+
 enum CachedImagePhase {
     case empty, success(Image), failure
 }
 
-/// Remplace `AsyncImage` en s'appuyant sur `ImageCacheService`.
-/// Sert depuis le cache (mem/disque) si dispo, sinon fetch réseau et cache.
+// MARK: - Cached Async Image
+
+// AsyncImage wrapper using ImageCacheService for two-tier memory/disk caching
 struct CachedAsyncImage<Content: View>: View {
     let url: URL?
     @ViewBuilder let content: (CachedImagePhase) -> Content
@@ -20,6 +23,7 @@ struct CachedAsyncImage<Content: View>: View {
             }
     }
 
+    // Load image from cache or network; update phase with result
     private func load() async {
         guard let url else {
             phase = .failure

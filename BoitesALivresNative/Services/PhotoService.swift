@@ -3,6 +3,8 @@ import PhotosUI
 import SwiftUI
 import UIKit
 
+// MARK: - Error Handling
+
 enum PhotoError: LocalizedError {
     case compressionFailed, noImage
 
@@ -14,11 +16,15 @@ enum PhotoError: LocalizedError {
     }
 }
 
+// MARK: - Camera Picker
+
 struct CameraPickerView: UIViewControllerRepresentable {
     let onImagePicked: (UIImage?) -> Void
 
+    /// Create coordinator for camera picker delegate callbacks
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
+    /// Initialize camera picker controller
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .camera
@@ -28,26 +34,33 @@ struct CameraPickerView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
+    /// Delegate to handle camera picker callbacks
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         let parent: CameraPickerView
         init(_ parent: CameraPickerView) { self.parent = parent }
 
+        /// Handle successful image capture and dismiss picker
         func imagePickerController(_ picker: UIImagePickerController,
                                    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             parent.onImagePicked(info[.originalImage] as? UIImage)
         }
 
+        /// Handle user cancellation of photo capture
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             parent.onImagePicked(nil)
         }
     }
 }
 
+// MARK: - Photo Library Picker
+
 struct LibraryPickerView: UIViewControllerRepresentable {
     let onImagePicked: (UIImage?) -> Void
 
+    /// Create coordinator for photo picker delegate callbacks
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
+    /// Initialize photo picker with single-image mode
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var config = PHPickerConfiguration()
         config.selectionLimit = 1
@@ -59,10 +72,12 @@ struct LibraryPickerView: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
 
+    /// Delegate to handle photo picker callbacks
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
         let parent: LibraryPickerView
         init(_ parent: LibraryPickerView) { self.parent = parent }
 
+        /// Load selected image and call parent callback on main thread
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             guard let provider = results.first?.itemProvider, provider.canLoadObject(ofClass: UIImage.self) else {
                 parent.onImagePicked(nil)
@@ -75,10 +90,13 @@ struct LibraryPickerView: UIViewControllerRepresentable {
     }
 }
 
+// MARK: - Photo Service
+
 final class PhotoService {
     static let shared = PhotoService()
     private let submissionsKey = "pendingPhotoSubmissions"
 
+    /// Resize and compress image, upload to storage, record submission with device token
     func submitPhoto(_ image: UIImage, for boxId: Int) async throws -> String {
         guard let resized = resizeImage(image, maxDimension: 1200),
               let data = resized.jpegData(compressionQuality: 0.8) else {
@@ -93,6 +111,7 @@ final class PhotoService {
         return remoteUrl
     }
 
+    /// Resize image to max dimension while preserving aspect ratio
     private func resizeImage(_ image: UIImage, maxDimension: CGFloat) -> UIImage? {
         let size = image.size
         guard size.width > maxDimension || size.height > maxDimension else { return image }
@@ -105,6 +124,7 @@ final class PhotoService {
         return result
     }
 
+    // Load all photo submissions from Supabase for current user; returns empty array on failure
     func loadSubmissions() async -> [PhotoSubmission] {
         do {
             return try await SupabaseService.shared.fetchPhotoSubmissions()

@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - List View
+
 struct ListView: View {
     @Binding var path: NavigationPath
     @State private var vm = ListViewModel()
@@ -9,7 +11,7 @@ struct ListView: View {
     var body: some View {
         NavigationStack(path: $path) {
             VStack(spacing: 0) {
-                // Filter bar
+                // Filter bar with radius and photo toggles
                 filterBar
 
                 if vm.loading && vm.boxes.isEmpty {
@@ -17,6 +19,7 @@ struct ListView: View {
                     ProgressView().scaleEffect(1.3)
                     Spacer()
                 } else if let err = vm.errorMessage, vm.boxes.isEmpty {
+                    // Network error state with retry action
                     Spacer()
                     VStack(spacing: 8) {
                         Image(systemName: "wifi.slash").font(.system(size: 40)).foregroundStyle(.secondary)
@@ -27,6 +30,7 @@ struct ListView: View {
                     .padding(32)
                     Spacer()
                 } else {
+                    // Scrollable list with pagination support
                     List {
                         ForEach(vm.boxes) { box in
                             NavigationLink(value: box.id) {
@@ -36,6 +40,7 @@ struct ListView: View {
                             .listRowSeparatorTint(Color(.systemGray5))
                         }
 
+                        // Pagination footer — load next page or show total count
                         if vm.hasMore || vm.loadingMore {
                             HStack {
                                 Spacer()
@@ -65,15 +70,17 @@ struct ListView: View {
                 if vm.boxes.isEmpty { await vm.initialLoad() }
             }
             .refreshable { await vm.initialLoad() }
+            // Auto-reload when user moves far from last fetch location
             .onReceive(locationService.$currentLocation.compactMap { $0 }) { newLoc in
                 Task { await vm.reloadIfMovedFar(newLocation: newLoc) }
             }
         }
     }
 
+    // Filter controls: radius chips and photo availability toggle
     private var filterBar: some View {
         HStack(spacing: 8) {
-            // Radius chips
+            // Radius chip buttons
             ForEach(Constants.radiusOptionsKm, id: \.self) { km in
                 filterChip(
                     label: "\(Int(km)) km",
@@ -86,7 +93,7 @@ struct ListView: View {
                 }
             }
 
-            // Photo toggle : actif (bleu) = avec photo only / inactif = toutes
+            // Toggle: active (blue) = photos only, inactive = all boxes
             Button {
                 vm.photoFilter = (vm.photoFilter == .withPhoto) ? .all : .withPhoto
                 Task { await vm.applyFilters() }
@@ -110,6 +117,7 @@ struct ListView: View {
         }
     }
 
+    // Reusable filter chip button: highlight selected state with blue background
     private func filterChip(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(label)
@@ -123,13 +131,15 @@ struct ListView: View {
     }
 }
 
+// MARK: - List Row Component
+
 struct BookBoxRow: View {
     let box: BookBox
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
 
     var body: some View {
         HStack(spacing: 12) {
-            // Icône
+            // Icon: filled blue circle if has photo, empty gray otherwise
             ZStack {
                 Circle()
                     .fill(box.has_photo ? Color(red: 239/255, green: 246/255, blue: 255/255) : Color(.systemGray6))
@@ -139,6 +149,7 @@ struct BookBoxRow: View {
                     .font(.system(size: 18))
             }
 
+            // Box info: ID, city, and address
             VStack(alignment: .leading, spacing: 3) {
                 Text("Boîte #\(box.id)")
                     .font(.system(size: 15, weight: .semibold))
@@ -158,6 +169,7 @@ struct BookBoxRow: View {
 
             Spacer()
 
+            // Distance from user location
             if let dist = box.distance_m {
                 Text(formatDist(dist))
                     .font(.system(size: 13, weight: .bold))
@@ -167,6 +179,7 @@ struct BookBoxRow: View {
         .padding(.vertical, 8)
     }
 
+    // Format meters to meters or kilometers with appropriate precision
     private func formatDist(_ m: Double) -> String {
         m < 1000 ? "\(Int(m)) m" : String(format: "%.1f km", m / 1000)
     }

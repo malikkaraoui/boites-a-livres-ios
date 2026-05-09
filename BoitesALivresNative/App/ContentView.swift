@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - Content View
+
 struct ContentView: View {
     @State private var selectedTab = 0
     @State private var router = DeepLinkRouter.shared
@@ -9,18 +11,18 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Carte — full screen, aucune safe area imposée
+            // Map — full screen, no safe area insets imposed
             MapScreen()
                 .opacity(selectedTab == 0 ? 1 : 0)
                 .allowsHitTesting(selectedTab == 0)
 
-            // Liste — réserve l'espace de la tab bar flottante
+            // List — reserves bottom space for the floating tab bar
             ListView(path: $listPath)
                 .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 84) }
                 .opacity(selectedTab == 1 ? 1 : 0)
                 .allowsHitTesting(selectedTab == 1)
 
-            // Réglages — idem
+            // Settings — same bottom inset
             SettingsView()
                 .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 84) }
                 .opacity(selectedTab == 2 ? 1 : 0)
@@ -35,6 +37,7 @@ struct ContentView: View {
         }
     }
 
+    // Floating tab bar with glassmorphism and spring animation on selection
     private var floatingTabBar: some View {
         HStack(spacing: 0) {
             tabButton(icon: "map", iconFill: "map.fill", title: "Carte", tag: 0)
@@ -55,12 +58,13 @@ struct ContentView: View {
         .padding(.horizontal, 24)
     }
 
+    // Tab button with double-tap-to-pop behavior for list tab
     @ViewBuilder
     private func tabButton(icon: String, iconFill: String, title: String, tag: Int) -> some View {
         let isSelected = selectedTab == tag
         Button {
             if isSelected {
-                // Tap sur l'onglet déjà sélectionné → pop to root
+                // Tap on already-selected tab → pop navigation stack to root
                 if tag == 1 { listPath = NavigationPath() }
             } else {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {

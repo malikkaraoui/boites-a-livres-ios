@@ -1,6 +1,9 @@
 import CoreLocation
 import Foundation
 
+// MARK: - Core Data Models
+
+// Book box record from Supabase: location, metadata, and computed navigation properties
 struct BookBox: Codable, Identifiable, Hashable {
     let id: Int
     let lat: Double
@@ -14,10 +17,12 @@ struct BookBox: Codable, Identifiable, Hashable {
     let flag: Int
     var distance_m: Double?
 
+    // CLLocationCoordinate2D binding for map annotations
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: lat, longitude: lng)
     }
 
+    // Build URL to official boites-a-livres.fr page or fallback to home
     var detailURL: URL? {
         guard let city, let postal_code,
               let citySlug = city.urlSlug, !citySlug.isEmpty
@@ -25,11 +30,17 @@ struct BookBox: Codable, Identifiable, Hashable {
         return URL(string: "https://www.boites-a-livres.fr/ville/\(citySlug)/\(postal_code)/boite-\(id)")
     }
 
+    // Hashable and Equatable by ID only
     static func == (lhs: BookBox, rhs: BookBox) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
+// MARK: - URL Slug Conversion
+
+// MARK: - URL Slug Extension
+
 extension String {
+    // Normalize city name to URL slug: remove accents, lowercase, replace spaces with dashes
     var urlSlug: String? {
         let lowered = folding(options: .diacriticInsensitive, locale: .init(identifier: "fr_FR"))
             .lowercased()
@@ -50,11 +61,15 @@ extension String {
     }
 }
 
+// MARK: - Photo Models
+
+// Photo record: ID and Supabase storage URL
 struct BoxPhoto: Identifiable {
     let id: String
     let url: String
 }
 
+// Photo filter options: all boxes, only with photos, only without photos
 enum PhotoFilter: String, CaseIterable, Identifiable {
     case all = "Toutes"
     case withPhoto = "Avec photo"
@@ -62,6 +77,7 @@ enum PhotoFilter: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    // Convert to database filter: nil for all, 1 for with photo, 0 for without
     var intValue: Int? {
         switch self {
         case .all: return nil
@@ -71,6 +87,9 @@ enum PhotoFilter: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Photo Submission Tracking
+
+// User photo submission: local image path and pending/approved/rejected status
 struct PendingPhotoSubmission: Codable, Identifiable {
     let id: UUID
     let boxId: Int
@@ -79,6 +98,7 @@ struct PendingPhotoSubmission: Codable, Identifiable {
     var status: SubmissionStatus
     var remoteUrl: String?
 
+    // Submission status: pending moderation, approved, or rejected
     enum SubmissionStatus: String, Codable {
         case pending, approved, rejected
     }

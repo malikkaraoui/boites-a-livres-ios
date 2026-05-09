@@ -1,12 +1,15 @@
 import SwiftUI
 import UIKit
 
+// MARK: - Photo Carousel
+
 struct PhotoCarousel: View {
     let photos: [BoxPhoto]
     let localImage: UIImage?
     let uploading: Bool
     @State private var currentPage = 0
 
+    // Count includes approved photos plus local preview or upload placeholder
     private var totalCount: Int {
         var count = photos.count
         if localImage != nil { count += 1 }

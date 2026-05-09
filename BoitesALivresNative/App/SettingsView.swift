@@ -2,6 +2,8 @@ import SwiftUI
 import UIKit
 import UserNotifications
 
+// MARK: - Settings View
+
 struct SettingsView: View {
     @State private var vm = SettingsViewModel()
 
@@ -10,7 +12,8 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                // Notifications
+                // MARK: Notifications Section
+
                 Section("Notifications") {
                     HStack {
                         Label("Statut", systemImage: "bell.fill")
@@ -20,6 +23,7 @@ struct SettingsView: View {
                             .foregroundStyle(notifStatusColor)
                     }
 
+                    // Allow user to enable notifications or open app settings if already denied
                     if vm.notificationStatus == .notDetermined || vm.notificationStatus == .denied {
                         Button {
                             if vm.notificationStatus == .denied {
@@ -39,7 +43,8 @@ struct SettingsView: View {
                     }
                 }
 
-                // Photos soumises
+                // MARK: User Submissions Section
+
                 Section("Mes photos soumises") {
                     if vm.submissions.isEmpty {
                         Text("Aucune photo soumise pour le moment.")
@@ -48,6 +53,7 @@ struct SettingsView: View {
                     } else {
                         ForEach(vm.submissions) { sub in
                             HStack(spacing: 12) {
+                                // Cached thumbnail of submitted photo
                                 CachedAsyncImage(url: URL(string: sub.url)) { phase in
                                     switch phase {
                                     case .success(let image):
@@ -69,6 +75,7 @@ struct SettingsView: View {
                                     }
                                 }
 
+                                // Box ID and submission date
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text("Boîte #\(sub.box_id)")
                                         .font(.system(size: 14, weight: .semibold))
@@ -79,6 +86,7 @@ struct SettingsView: View {
 
                                 Spacer()
 
+                                // Review status badge
                                 statusChip(sub.status)
                             }
                             .padding(.vertical, 4)
@@ -86,7 +94,8 @@ struct SettingsView: View {
                     }
                 }
 
-                // Crédits
+                // MARK: About Section
+
                 Section("À propos") {
                     Text("Bénévolement :")
                         .font(.system(size: 14, weight: .semibold))
@@ -119,7 +128,8 @@ struct SettingsView: View {
                         .foregroundStyle(Color(.systemGray2))
                 }
 
-                // Vider le cache — collé sous "À propos"
+                // MARK: Cache Management
+
                 Section {
                     Button {
                         vm.showCacheClearAlert = true
@@ -141,7 +151,8 @@ struct SettingsView: View {
                     }
                 }
 
-                // Suivi de version — isolé tout en bas
+                // MARK: Version Footer
+
                 Section {
                     HStack {
                         Spacer()
@@ -159,6 +170,7 @@ struct SettingsView: View {
         }
     }
 
+    // Format version, build, and executable modification date from bundle metadata
     private var versionLabel: String {
         let info = Bundle.main.infoDictionary
         let version = info?["CFBundleShortVersionString"] as? String ?? "?"
@@ -175,6 +187,7 @@ struct SettingsView: View {
         return "v\(version) (\(build))\(dateStr)"
     }
 
+    // Convert notification authorization status to localized label
     private var notifStatusLabel: String {
         switch vm.notificationStatus {
         case .authorized: return "Activées"
@@ -185,6 +198,7 @@ struct SettingsView: View {
         }
     }
 
+    // Color indicator: green for authorized, red for denied, secondary otherwise
     private var notifStatusColor: Color {
         switch vm.notificationStatus {
         case .authorized: return .green
@@ -193,6 +207,7 @@ struct SettingsView: View {
         }
     }
 
+    // Render status badge with color coding: pending (orange), approved (green), rejected (red)
     @ViewBuilder
     private func statusChip(_ status: String) -> some View {
         let (label, color): (String, Color) = switch status {
@@ -210,6 +225,7 @@ struct SettingsView: View {
             .clipShape(Capsule())
     }
 
+    // Format ISO8601 timestamp as relative time: "2h ago", "5m ago", etc
     private func relativeDate(from iso8601String: String) -> String {
         let formatter = ISO8601DateFormatter()
         if let date = formatter.date(from: iso8601String) {

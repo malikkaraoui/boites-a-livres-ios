@@ -67,7 +67,7 @@ struct DetailView: View {
                             }
                         }
 
-                        // Boîtes proches
+                        // Nearby boxes
                         if !vm.nearbyBoxes.isEmpty {
                             sectionCard {
                                 VStack(alignment: .leading, spacing: 0) {
@@ -130,8 +130,9 @@ struct DetailView: View {
         }
     }
 
-    // MARK: - Sous-vues
+    // MARK: - Views
 
+    // Display photo carousel with upload progress indicator overlay
     @ViewBuilder
     private func photoSection(box: BookBox) -> some View {
         ZStack(alignment: .topTrailing) {
@@ -149,6 +150,7 @@ struct DetailView: View {
         }
     }
 
+    // Button to add photo; disabled if photo limit reached or upload in progress
     @ViewBuilder
     private func photoAddButton(box: BookBox) -> some View {
         let canAdd = vm.photos.count < Constants.maxPhotosPerBox
@@ -176,6 +178,7 @@ struct DetailView: View {
         .disabled(vm.uploading || !canAdd)
     }
 
+    // Bottom sheet for selecting camera or library photo source
     private var photoPickerSheet: some View {
         VStack(spacing: 0) {
             Capsule().fill(Color(.systemGray4)).frame(width: 36, height: 5).padding(.top, 8)
@@ -223,8 +226,9 @@ struct DetailView: View {
         .presentationDragIndicator(.visible)
     }
 
-    // MARK: - Helpers UI
+    // MARK: - UI Helpers
 
+    // Reusable card container with shadow and rounded corners
     @ViewBuilder
     private func sectionCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading) { content() }
@@ -237,6 +241,7 @@ struct DetailView: View {
             .padding(.top, 12)
     }
 
+    // Uppercase section header with slate color
     private func sectionTitle(_ text: String) -> some View {
         Text(text)
             .font(.system(size: 13, weight: .bold))
@@ -246,6 +251,7 @@ struct DetailView: View {
             .padding(.bottom, 4)
     }
 
+    // Coordinate row with copy-to-clipboard button
     @ViewBuilder
     private func coordRow(label: String, value: String) -> some View {
         HStack {
@@ -261,6 +267,7 @@ struct DetailView: View {
         }
     }
 
+    // Reusable action button with blue text and gray background
     private func actionBtn(_ title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
@@ -273,14 +280,16 @@ struct DetailView: View {
         }
     }
 
-    // MARK: - Logique
+    // MARK: - Logic
 
+    // Open Apple Maps or Google Maps with box location
     private func openMaps(box: BookBox) {
         let url = URL(string: "maps://?ll=\(box.lat),\(box.lng)&q=Boîte+à+livres")
             ?? URL(string: "http://maps.apple.com/?ll=\(box.lat),\(box.lng)")!
         UIApplication.shared.open(url)
     }
 
+    // Convert decimal degrees to DMS (degrees, minutes, seconds) with N/S/E/O cardinal direction
     private func dms(_ deg: Double, isLat: Bool) -> String {
         let abs = Swift.abs(deg)
         let d = Int(abs)
@@ -290,6 +299,7 @@ struct DetailView: View {
         return "\(d)°\(m)'\(s)\"\(dir)"
     }
 
+    // Format distance in meters as meters or kilometers with appropriate precision
     private func formatDist(_ meters: Double) -> String {
         meters < 1000 ? "\(Int(meters)) m" : String(format: "%.1f km", meters / 1000)
     }

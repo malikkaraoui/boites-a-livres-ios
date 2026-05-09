@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 import CryptoKit
 
-/// Cache image deux niveaux : mémoire (NSCache) + disque (Caches/ImageCache).
-/// Clé = SHA256(url). Invalidation = changement d'URL (les images Supabase
-/// changent d'URL quand elles sont remplacées, donc pas besoin d'ETag).
+// MARK: - Image Cache Service
+
+/// Two-tier image cache: memory (NSCache) + disk (Caches/ImageCache). Key = SHA256(url). Cache invalidation by URL change
 final class ImageCacheService {
     static let shared = ImageCacheService()
 
@@ -20,7 +20,7 @@ final class ImageCacheService {
         try? FileManager.default.createDirectory(at: diskDir, withIntermediateDirectories: true)
 
         memCache.countLimit = 200
-        memCache.totalCostLimit = 60 * 1024 * 1024 // 60 Mo en mémoire
+        memCache.totalCostLimit = 60 * 1024 * 1024 // 60 MB in-memory limit
 
         let config = URLSessionConfiguration.default
         config.urlCache = nil
@@ -29,8 +29,7 @@ final class ImageCacheService {
         session = URLSession(configuration: config)
     }
 
-    /// Lit l'image depuis le cache (mem → disque), sinon fetch réseau et cache.
-    /// Retourne nil en cas d'échec.
+    // Load image from memory cache, then disk cache, then fetch from network; returns nil on failure
     func image(for url: URL) async -> UIImage? {
         let key = url.absoluteString as NSString
         if let img = memCache.object(forKey: key) { return img }
@@ -57,7 +56,7 @@ final class ImageCacheService {
         }
     }
 
-    /// Préchargement parallèle limité (4 simultanés). N'écrase pas un cache existant.
+    // Prefetch multiple images concurrently (max 4 at a time); skip if already cached
     func prefetch(urls: [URL], maxConcurrent: Int = 4) async {
         guard !urls.isEmpty else { return }
         await withTaskGroup(of: Void.self) { group in
@@ -74,7 +73,7 @@ final class ImageCacheService {
         }
     }
 
-    /// Vide tout : mémoire + disque.
+    // Remove all cached images from memory and disk
     func clear() {
         memCache.removeAllObjects()
         diskQueue.sync {
@@ -83,8 +82,9 @@ final class ImageCacheService {
         }
     }
 
-    // MARK: - Privé
+    // MARK: - Private
 
+    // Hash URL to filename: SHA256 ensures unique, collision-free names
     private func diskPath(for url: URL) -> URL {
         let data = Data(url.absoluteString.utf8)
         let hash = SHA256.hash(data: data)
@@ -92,6 +92,7 @@ final class ImageCacheService {
         return diskDir.appendingPathComponent(name)
     }
 
+    // LRU eviction: remove oldest-accessed files until below limit
     private static func enforceDiskLimit(at diskDir: URL, maxBytes: Int64) {
         let fm = FileManager.default
         guard let files = try? fm.contentsOfDirectory(

@@ -1,6 +1,8 @@
 import CoreLocation
 import Foundation
 
+// MARK: - Error Handling
+
 enum LocationError: LocalizedError {
     case unavailable, timeout, denied
 
@@ -13,6 +15,9 @@ enum LocationError: LocalizedError {
     }
 }
 
+// MARK: - Location Service
+
+/// Manages geolocation with reduced accuracy for faster fixes and cached position logic
 @MainActor
 final class LocationService: NSObject, ObservableObject {
     static let shared = LocationService()
@@ -28,18 +33,20 @@ final class LocationService: NSObject, ObservableObject {
     override private init() {
         super.init()
         manager.delegate = self
-        // Précision réduite = fix beaucoup plus rapide (3-5x). Suffisant pour centrer la carte.
+        // Reduced accuracy for 3-5x faster fix; 100m precision sufficient for map centering
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         manager.distanceFilter = 50
         authorizationStatus = manager.authorizationStatus
-        currentLocation = manager.location // dernière position connue immédiatement
+        currentLocation = manager.location // Load cached location immediately
     }
 
+    // Trigger system dialog for "When In Use" location permission
     func requestAuthorization() {
         guard authorizationStatus == .notDetermined else { return }
         manager.requestWhenInUseAuthorization()
     }
 
+    // Start CLLocationManager updates if authorized and not already running
     func startUpdatingIfAuthorized() {
         guard !isUpdating else { return }
         guard authorizationStatus == .authorizedWhenInUse || authorizationStatus == .authorizedAlways else { return }
@@ -47,8 +54,9 @@ final class LocationService: NSObject, ObservableObject {
         isUpdating = true
     }
 
+    // Get current location: return cached if < 60s old, else request fresh with 15s timeout
     func requestCurrentLocation() async throws -> CLLocation {
-        // Si on a déjà une position en cache (< 60s), la retourner immédiatement
+        // Return the cached location immediately if it is less than 60 seconds old
         if let cached = currentLocation, abs(cached.timestamp.timeIntervalSinceNow) < 60 {
             return cached
         }
@@ -66,7 +74,7 @@ final class LocationService: NSObject, ObservableObject {
             break
         }
 
-        // Démarrer le tracking continu (plus rapide que requestLocation pour le 1er fix)
+        // Start continuous updates — faster first fix than one-shot requestLocation()
         startUpdatingIfAuthorized()
 
         return try await withThrowingTaskGroup(of: CLLocation.self) { group in
@@ -85,6 +93,7 @@ final class LocationService: NSObject, ObservableObject {
         }
     }
 
+    // Block until authorization status changes from notDetermined
     private func waitForAuthorizationChange() async -> CLAuthorizationStatus {
         if authorizationStatus != .notDetermined { return authorizationStatus }
         return await withCheckedContinuation { cont in
@@ -93,7 +102,10 @@ final class LocationService: NSObject, ObservableObject {
     }
 }
 
+// MARK: - Location Manager Delegate
+
 extension LocationService: CLLocationManagerDelegate {
+    // Resume location continuation, update published location, stop on first valid fix
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let loc = locations.last else { return }
         Task { @MainActor in
@@ -105,6 +117,7 @@ extension LocationService: CLLocationManagerDelegate {
         }
     }
 
+    // Resume continuation with error: thrown to waiting requestCurrentLocation caller
     nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         Task { @MainActor in
             self.locationContinuation?.resume(throwing: error)
@@ -112,11 +125,12 @@ extension LocationService: CLLocationManagerDelegate {
         }
     }
 
+    // Update authorization status, start tracking if granted, resume waiting continuations
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
             self.authorizationStatus = manager.authorizationStatus
             let status = manager.authorizationStatus
-            // Démarrer dès l'autorisation accordée
+            // Start tracking immediately upon authorization
             if status == .authorizedWhenInUse || status == .authorizedAlways {
                 self.startUpdatingIfAuthorized()
                 if self.currentLocation == nil {
@@ -130,6 +144,9 @@ extension LocationService: CLLocationManagerDelegate {
     }
 }
 
+// MARK: - Helpers
+
+// Convert meters to readable string: below 1000m shows meters, above shows kilometers
 func formatDistance(_ meters: Double) -> String {
     if meters < 1000 { return "\(Int(meters)) m" }
     return String(format: "%.1f km", meters / 1000)

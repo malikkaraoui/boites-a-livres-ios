@@ -2,6 +2,8 @@ import Foundation
 import CoreLocation
 import Observation
 
+// MARK: - List View Model
+
 @MainActor @Observable
 final class ListViewModel {
     var boxes: [BookBox] = []
@@ -18,9 +20,10 @@ final class ListViewModel {
     private let supabase = SupabaseService.shared
     private let locationService = LocationService.shared
 
+    // Load first page of boxes using live location if available, fallback to default coordinate
     func initialLoad() async {
         guard !loading else { return }
-        // Priorise la position live du service (mise à jour en continu) sur le cache 60s
+        // Prefer live location (continuously updated) over the 60s-old CLLocation cache
         let lat: Double
         let lng: Double
         if let live = locationService.currentLocation {
@@ -36,6 +39,7 @@ final class ListViewModel {
         await loadFromCoordinate(lat: lat, lng: lng)
     }
 
+    // Fetch page 0 from coordinate, cache location for pagination, prefetch photos
     private func loadFromCoordinate(lat: Double, lng: Double) async {
         loading = true
         defer { loading = false }
@@ -53,12 +57,13 @@ final class ListViewModel {
             hasMore = data.count == Constants.listPageSize
             prefetchPhotos(for: data)
         } catch is CancellationError {
-            // navigation push/pop : ne pas afficher d'erreur, garder l'état
+            // Navigation push/pop cancels the task — silently discard to preserve existing state
         } catch {
             if boxes.isEmpty { errorMessage = error.localizedDescription }
         }
     }
 
+    // Fetch next page and append to boxes if hasMore is true; suppress pagination errors
     func loadMore() async {
         guard !loadingMore && hasMore && !loading else { return }
         loadingMore = true
@@ -79,23 +84,25 @@ final class ListViewModel {
         loadingMore = false
     }
 
+    // Reset to page 0 with new filter settings
     func applyFilters() async {
         await initialLoad()
     }
 
-    /// Auto-reload si l'utilisateur s'est déplacé de plus de 250m depuis le dernier fetch.
+    // Auto-reload if user moved more than threshold; fetches from new location with re-sort
     func reloadIfMovedFar(newLocation: CLLocation, threshold: Double = 250) async {
         guard !loading else { return }
         let last = CLLocation(latitude: lastLat, longitude: lastLng)
         let distance = newLocation.distance(from: last)
         guard distance > threshold else { return }
-        // Utilise newLocation directement : refetch + re-tri depuis la vraie position courante
+        // Use newLocation directly: refetch and re-sort from the actual current position
         await loadFromCoordinate(
             lat: newLocation.coordinate.latitude,
             lng: newLocation.coordinate.longitude
         )
     }
 
+    // Background prefetch of box photos using low-priority task to avoid UI jank
     private func prefetchPhotos(for boxes: [BookBox]) {
         let urls = boxes.compactMap { $0.photo_url.flatMap(URL.init(string:)) }
         guard !urls.isEmpty else { return }

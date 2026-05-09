@@ -1,6 +1,8 @@
 import SwiftUI
 import MapKit
 
+// MARK: - Map View
+
 struct MapScreen: View {
     @State private var vm = MapViewModel()
     @State private var path = NavigationPath()
@@ -10,6 +12,7 @@ struct MapScreen: View {
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
     private let gray = Color(red: 100/255, green: 116/255, blue: 139/255)
 
+    // Map style binding: convert internal enum to MapKit style for display
     private var currentMapStyle: MapStyle {
         switch vm.mapStyleMode {
         case .standard: return .standard
@@ -21,9 +24,11 @@ struct MapScreen: View {
     var body: some View {
         NavigationStack(path: $path) {
             ZStack(alignment: .top) {
+                // Interactive map with book box annotations
                 Map(position: $vm.cameraPosition) {
                     ForEach(vm.boxes) { box in
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
+                            // Blue circles for boxes with photos, gray for those without
                             Circle()
                                 .fill(box.has_photo ? blue : gray)
                                 .frame(width: 18, height: 18)
@@ -37,7 +42,7 @@ struct MapScreen: View {
                 .mapStyle(currentMapStyle)
                 .ignoresSafeArea()
 
-                // Header overlay — picker km + pastille à gauche, collés
+                // Header overlay — radius filter buttons and box count badge
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 0) {
                         ForEach(Constants.radiusOptionsKm, id: \.self) { km in
@@ -53,6 +58,7 @@ struct MapScreen: View {
                     .clipShape(Capsule())
                     .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
 
+                    // Display total nearby boxes count
                     Text("\(vm.boxes.count) boîtes")
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(Color(.label))
@@ -66,7 +72,7 @@ struct MapScreen: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 4)
 
-                // Boutons à droite — overlay indépendant
+                // Right-side control buttons — location center and map style toggle
                 VStack(spacing: 8) {
                     Button { vm.centerOnUser() } label: {
                         Image(systemName: "location.fill")
@@ -91,7 +97,7 @@ struct MapScreen: View {
                 .padding(.trailing, 12)
                 .padding(.top, 60)
 
-                // Loading
+                // Loading spinner overlay
                 if vm.loading {
                     VStack {
                         Spacer()
@@ -103,7 +109,7 @@ struct MapScreen: View {
                     }
                 }
 
-                // Error
+                // Error message overlay
                 if let msg = vm.errorMessage {
                     VStack {
                         Spacer().frame(height: 80)
@@ -162,9 +168,7 @@ struct MapScreen: View {
         }
     }
 
-    /// Tap sur une annotation : si un sheet est déjà présenté pour une autre boîte,
-    /// on ferme d'abord et on ré-ouvre après l'animation pour que le detent
-    /// soit recalculé proprement (sinon le sheet reste sur l'ancien detent UIKit).
+    // Handle annotation tap: close sheet for previous box before showing sheet for new box
     private func selectBox(_ box: BookBox) {
         let initial: PresentationDetent = .height(box.has_photo ? 320 : 200)
         if let current = vm.selectedBox, current.id != box.id {

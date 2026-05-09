@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - Book Box Sheet
+
 struct BookBoxSheet: View {
     let box: BookBox
     let onDetail: () -> Void
@@ -70,6 +72,7 @@ struct BookBoxSheet: View {
         .padding(20)
     }
 
+    // Format distance in meters as meters or kilometers
     private func formatDistance(_ meters: Double) -> String {
         if meters < 1000 {
             return "\(Int(meters)) m"

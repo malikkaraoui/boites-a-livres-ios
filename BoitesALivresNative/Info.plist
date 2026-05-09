@@ -29,7 +29,10 @@
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Ta photothèque est utilisée pour choisir une photo existante et l'ajouter à une boîte à livres.</string>
     <key>UILaunchScreen</key>
-    <dict/>
+    <dict>
+        <key>UIColorName</key>
+        <string>LaunchBackground</string>
+    </dict>
     <key>UIRequiresFullScreen</key>
     <false/>
     <key>UIUserInterfaceStyle</key>
