@@ -59,6 +59,7 @@ struct ListView: View {
                         }
                     }
                     .listStyle(.plain)
+                    .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 84) }
                 }
             }
             .navigationTitle("Boîtes à livres")
