@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Splash View
 
-// Animated splash screen: spring scale + 1.4s delay then fade out to content view
+// Animated splash screen kept intentionally short to avoid slowing perceived launch
 struct SplashView: View {
     @Binding var isVisible: Bool
 
@@ -25,12 +25,12 @@ struct SplashView: View {
                 .opacity(opacity)
         }
         .onAppear {
-            withAnimation(.spring(response: 0.55, dampingFraction: 0.72)) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
                 scale = 1.0
                 opacity = 1.0
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
-                withAnimation(.easeInOut(duration: 0.35)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
+                withAnimation(.easeOut(duration: 0.18)) {
                     isVisible = false
                 }
             }

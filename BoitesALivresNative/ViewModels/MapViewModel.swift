@@ -12,6 +12,7 @@ final class MapViewModel {
     var selectedBox: BookBox? = nil
     var radiusKm: Double = Constants.defaultRadiusKm
     var mapStyleMode: MapStyleMode = .standard
+    private var hasBootstrapped = false
 
     enum MapStyleMode { case standard, hybrid, imagery }
 
@@ -34,35 +35,36 @@ final class MapViewModel {
     private let supabase = SupabaseService.shared
     private let cache = LocalCacheService.shared
 
-    // Load cached location immediately, request fresh GPS in background, and load nearby boxes
+    // Load cached data immediately, then refresh from fallback/live location in background
     func onAppear() async {
-        // If a cached location is available from a previous run, center the map immediately
-        if let cached = locationService.currentLocation {
-            let coord = cached.coordinate
-            cameraPosition = .camera(MapCamera(
-                centerCoordinate: coord,
-                distance: CLLocationDistance(radiusKm * 1000 * 2)
-            ))
-            if boxes.isEmpty {
-                await loadBoxes(lat: coord.latitude, lng: coord.longitude)
-            }
-        } else {
-            // Load fallback boxes while GPS warms up so the map is immediately usable
-            let fallback = Constants.defaultLocation
-            if boxes.isEmpty {
-                await loadBoxes(lat: fallback.latitude, lng: fallback.longitude)
-            }
+        guard !hasBootstrapped else { return }
+        hasBootstrapped = true
+
+        let initialCoord = locationService.currentLocation?.coordinate ?? Constants.defaultLocation
+        cameraPosition = .camera(MapCamera(
+            centerCoordinate: initialCoord,
+            distance: CLLocationDistance(radiusKm * 1000 * 2)
+        ))
+
+        if boxes.isEmpty, let cached = await cache.getBoxes(zone: LocalCacheService.mapKey(lat: initialCoord.latitude, lng: initialCoord.longitude, radiusKm: radiusKm)) {
+            boxes = cached
+            prefetchPhotos(for: cached)
         }
 
-        // Request GPS in background — does not block the UI
         locationService.requestAuthorization()
         locationService.startUpdatingIfAuthorized()
 
-        Task { [weak self] in
+        Task(priority: .utility) { [weak self] in
+            guard let self else { return }
+            await self.loadBoxes(lat: initialCoord.latitude, lng: initialCoord.longitude)
+        }
+
+        Task(priority: .background) { [weak self] in
             guard let self else { return }
             do {
                 let loc = try await self.locationService.requestCurrentLocation()
                 let coord = loc.coordinate
+                guard coord.latitude != initialCoord.latitude || coord.longitude != initialCoord.longitude else { return }
                 await MainActor.run {
                     withAnimation {
                         self.cameraPosition = .camera(MapCamera(
@@ -108,22 +110,25 @@ final class MapViewModel {
 
     // Fetch nearby boxes from cache or backend, invalidate cache if zone changes
     private func loadBoxes(lat: Double, lng: Double) async {
-        let zoneKey = LocalCacheService.zoneKey(lat: lat, lng: lng, radiusKm: radiusKm)
-        if let cached = await cache.getBoxes(zone: zoneKey) {
+        let cacheKey = LocalCacheService.mapKey(lat: lat, lng: lng, radiusKm: radiusKm)
+        let hadCachedData = !boxes.isEmpty
+        if let cached = await cache.getBoxes(zone: cacheKey) {
             boxes = cached
             prefetchPhotos(for: cached)
-            return
         }
-        loading = true
+
+        loading = !hadCachedData && boxes.isEmpty
         errorMessage = nil
         do {
             let data = try await supabase.fetchNearbyMap(lat: lat, lng: lng, radiusKm: radiusKm)
             boxes = data
-            await cache.setBoxes(data, zone: zoneKey)
+            await cache.setBoxes(data, zone: cacheKey)
             prefetchPhotos(for: data)
         } catch {
-            errorMessage = error.localizedDescription
-            boxes = []
+            if boxes.isEmpty {
+                errorMessage = error.localizedDescription
+                boxes = []
+            }
         }
         loading = false
     }

@@ -1,0 +1,112 @@
+/* Tab Bar */
+"Carte" = "Map";
+"Liste" = "List";
+"Réglages" = "Settings";
+
+/* Settings — Navigation */
+"Réglages" = "Settings";
+
+/* Settings — Langue */
+"Langue / Language" = "Language / Langue";
+"Langue" = "Language";
+"Redémarrez l'application pour appliquer le changement de langue." = "Restart the app to apply the language change.";
+"Le changement de langue s'applique immédiatement." = "Language changes apply immediately.";
+
+/* Settings — Unités */
+"Unités de distance" = "Distance units";
+"Unités" = "Units";
+
+/* Settings — Apparence */
+"Affichage" = "Display";
+"Apparence" = "Appearance";
+"Auto" = "Auto";
+"Clair" = "Light";
+"Sombre" = "Dark";
+
+/* Settings — Accessibilité */
+"Taille du texte" = "Text Size";
+"Accessibilité" = "Accessibility";
+"Augmentez la taille pour une meilleure lisibilité." = "Increase the size for better readability.";
+
+/* Settings — Partager */
+"Partager l'application" = "Share the app";
+"WhatsApp, SMS, e-mail…" = "WhatsApp, SMS, email…";
+"Partager" = "Share";
+"Faites découvrir Boîtes à Livres à vos proches !" = "Share Boîtes à Livres with your friends and family!";
+"Noter l'application" = "Rate the app";
+"Laisser un avis sur l'App Store" = "Leave a review on the App Store";
+
+/* Settings — Notifications */
+"Statut" = "Status";
+"Notifications" = "Notifications";
+"Activées" = "Enabled";
+"Refusées" = "Denied";
+"Provisoires" = "Provisional";
+"Non configurées" = "Not configured";
+"Inconnu" = "Unknown";
+"Ouvrir les Réglages" = "Open Settings";
+"Activer les notifications" = "Enable notifications";
+
+/* Settings — Mes photos */
+"Aucune photo soumise pour le moment." = "No photos submitted yet.";
+"Mes photos soumises" = "My submitted photos";
+"En attente" = "Pending";
+"Acceptée" = "Approved";
+"Refusée" = "Rejected";
+
+/* Settings — À propos */
+"Bénévolement :" = "Volunteer work:";
+"Une application proposée par" = "An app by";
+"Données issues de" = "Data from";
+"À propos" = "About";
+
+/* Settings — Cache */
+"Vider le cache" = "Clear cache";
+"Cache vidé" = "Cache cleared";
+"Cache vidé ✓" = "Cache cleared ✓";
+"Vider le cache ?" = "Clear cache?";
+"Vider" = "Clear";
+"Les boîtes seront rechargées depuis le serveur." = "Boxes will be reloaded from the server.";
+"Supprime les données mises en cache localement." = "Deletes locally cached data.";
+
+/* Settings — Version */
+"Version" = "Version";
+
+/* Common */
+"Annuler" = "Cancel";
+"OK" = "OK";
+"Réessayer" = "Retry";
+
+/* Share */
+"share_app_text" = "Discover Boîtes à Livres 📚 — the free app to find book boxes near you! Available on iOS.";
+
+/* Detail View */
+"Localisation" = "Location";
+"DMS" = "DMS";
+"Voir le détail" = "See details";
+"Décimal" = "Decimal";
+"Ouvrir dans Plans" = "Open in Maps";
+"Adresse" = "Address";
+"Les nouvelles photos sont publiées après validation manuelle." = "New photos are published after manual review.";
+"Boîte introuvable" = "Box not found";
+"Ajouter une photo" = "Add a photo";
+"Recommandé — inclut ta position GPS" = "Recommended — includes your GPS position";
+"Choisir depuis la bibliothèque" = "Choose from library";
+"Sans données de localisation" = "Without location data";
+"Envoi en cours…" = "Uploading…";
+"Prendre une photo" = "Take a photo";
+
+/* Detail View — interpolated */
+"À proximité (%lld)" = "Nearby (%lld)";
+"Département %@" = "Department %@";
+"Ajouter une photo (%lld/%lld publiées)" = "Add a photo (%lld/%lld published)";
+"Maximum %lld photos atteint" = "Maximum %lld photos reached";
+"Boîte #%lld" = "Box #%lld";
+
+/* List View */
+"Boîtes à livres" = "Book boxes";
+"%lld boîtes chargées" = "%lld boxes loaded";
+
+/* Map View */
+"%lld boîtes" = "%lld boxes";
+"Chargement impossible" = "Loading failed";

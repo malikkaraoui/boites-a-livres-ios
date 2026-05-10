@@ -15,7 +15,7 @@ enum Constants {
     // Pagination: fetch 15 nearby for detail view, 50 per page for list view, max 5 photos per box
     static let nearbyLimit = 15
     static let listPageSize = 50
-    static let maxPhotosPerBox = 5
+    static let maxPhotosPerBox = 3
 
     // Fallback location (Chamonix, France) for when GPS is unavailable or denied
     static let defaultLocation = CLLocationCoordinate2D(latitude: 45.9245224, longitude: 6.1537557)

@@ -6,7 +6,8 @@ struct BookBoxSheet: View {
     let box: BookBox
     let onDetail: () -> Void
 
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    @AppStorage("useImperialUnits") private var useImperialUnits = false
+    private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -25,37 +26,50 @@ struct BookBoxSheet: View {
                 .frame(maxWidth: .infinity, minHeight: 140, maxHeight: 140)
                 .clipped()
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(.white.opacity(0.25), lineWidth: 1)
+                )
             }
 
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Boîte #\(box.id)")
-                        .font(.system(size: 17, weight: .bold))
-                    if let city = box.city {
-                        Text(city)
-                            .font(.system(size: 14))
-                            .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Boîte #\(box.id)")
+                            .font(.system(size: 17, weight: .bold))
+                        if let city = box.city {
+                            Text(city)
+                                .font(.system(size: 14))
+                                .foregroundStyle(.secondary)
+                        }
+                        if let address = box.address {
+                            Text(address)
+                                .font(.system(size: 13))
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        }
                     }
-                    if let address = box.address {
-                        Text(address)
-                            .font(.system(size: 13))
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                    Spacer()
+                    if box.has_photo {
+                        Image(systemName: "photo.fill")
+                            .foregroundStyle(green)
+                            .font(.system(size: 20))
                     }
                 }
-                Spacer()
-                if box.has_photo {
-                    Image(systemName: "photo.fill")
-                        .foregroundStyle(blue)
-                        .font(.system(size: 20))
-                }
-            }
 
-            if let dist = box.distance_m {
-                Text(formatDistance(dist))
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(blue)
+                if let dist = box.distance_m {
+                    Text(formatDistance(dist))
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(green)
+                }
             }
+            .padding(12)
+            .background(.regularMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+            )
 
             Button {
                 onDetail()
@@ -64,20 +78,20 @@ struct BookBoxSheet: View {
                     .font(.system(size: 15, weight: .semibold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(blue)
+                    .background(green)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: green.opacity(0.35), radius: 8, y: 4)
             }
         }
         .padding(20)
     }
 
-    // Format distance in meters as meters or kilometers
     private func formatDistance(_ meters: Double) -> String {
-        if meters < 1000 {
-            return "\(Int(meters)) m"
-        } else {
-            return String(format: "%.1f km", meters / 1000)
+        if useImperialUnits {
+            let miles = meters / 1609.344
+            return miles < 0.1 ? "\(Int(meters * 3.28084)) ft" : String(format: "%.1f mi", miles)
         }
+        return meters < 1000 ? "\(Int(meters)) m" : String(format: "%.1f km", meters / 1000)
     }
 }

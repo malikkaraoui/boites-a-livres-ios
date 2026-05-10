@@ -7,6 +7,7 @@ struct PhotoCarousel: View {
     let photos: [BoxPhoto]
     let localImage: UIImage?
     let uploading: Bool
+    var onTap: ((Int) -> Void)? = nil
     @State private var currentPage = 0
 
     // Count includes approved photos plus local preview or upload placeholder
@@ -33,6 +34,8 @@ struct PhotoCarousel: View {
                 }
                 .frame(height: 220)
                 .clipped()
+                .contentShape(Rectangle())
+                .onTapGesture { onTap?(index) }
                 .tag(index)
             }
 

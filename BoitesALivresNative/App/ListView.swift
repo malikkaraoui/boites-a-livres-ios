@@ -6,7 +6,8 @@ struct ListView: View {
     @Binding var path: NavigationPath
     @State private var vm = ListViewModel()
     @ObservedObject private var locationService = LocationService.shared
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    @AppStorage("useImperialUnits") private var useImperialUnits = false
+    private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -24,8 +25,8 @@ struct ListView: View {
                     VStack(spacing: 8) {
                         Image(systemName: "wifi.slash").font(.system(size: 40)).foregroundStyle(.secondary)
                         Text(err).font(.system(size: 14)).foregroundStyle(.secondary).multilineTextAlignment(.center)
-                        Button("Réessayer") { Task { await vm.initialLoad() } }
-                            .buttonStyle(.borderedProminent).tint(blue)
+                        Button("Réessayer") { Task { await vm.initialLoad(force: true) } }
+                            .buttonStyle(.borderedProminent).tint(green)
                     }
                     .padding(32)
                     Spacer()
@@ -50,7 +51,7 @@ struct ListView: View {
                             .listRowSeparator(.hidden)
                             .task { await vm.loadMore() }
                         } else if !vm.boxes.isEmpty {
-                            Text("\(vm.boxes.count) boîtes chargées")
+                            Text(loadedBoxesLabel(vm.boxes.count))
                                 .font(.system(size: 12))
                                 .foregroundStyle(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .center)
@@ -70,7 +71,7 @@ struct ListView: View {
             .task {
                 if vm.boxes.isEmpty { await vm.initialLoad() }
             }
-            .refreshable { await vm.initialLoad() }
+            .refreshable { await vm.initialLoad(force: true) }
             // Auto-reload when user moves far from last fetch location
             .onReceive(locationService.$currentLocation.compactMap { $0 }) { newLoc in
                 Task { await vm.reloadIfMovedFar(newLocation: newLoc) }
@@ -84,7 +85,7 @@ struct ListView: View {
             // Radius chip buttons
             ForEach(Constants.radiusOptionsKm, id: \.self) { km in
                 filterChip(
-                    label: "\(Int(km)) km",
+                    label: radiusLabel(km),
                     isSelected: vm.radiusKm == km
                 ) {
                     if vm.radiusKm != km {
@@ -94,7 +95,7 @@ struct ListView: View {
                 }
             }
 
-            // Toggle: active (blue) = photos only, inactive = all boxes
+            // Toggle: active (green) = photos only, inactive = all boxes
             Button {
                 vm.photoFilter = (vm.photoFilter == .withPhoto) ? .all : .withPhoto
                 Task { await vm.applyFilters() }
@@ -104,7 +105,7 @@ struct ListView: View {
                     .foregroundStyle(vm.photoFilter == .withPhoto ? .white : Color(.label))
                     .padding(.horizontal, 14)
                     .padding(.vertical, 7)
-                    .background(vm.photoFilter == .withPhoto ? blue : Color(.systemGray6))
+                    .background(vm.photoFilter == .withPhoto ? green : Color(.systemGray6))
                     .clipShape(Capsule())
             }
 
@@ -118,7 +119,15 @@ struct ListView: View {
         }
     }
 
-    // Reusable filter chip button: highlight selected state with blue background
+    private func radiusLabel(_ km: Double) -> String {
+        useImperialUnits ? "\(Int(km / 1.60934)) mi" : "\(Int(km)) km"
+    }
+
+    private func loadedBoxesLabel(_ count: Int) -> String {
+        String(format: NSLocalizedString("%lld boîtes chargées", comment: "Loaded boxes count"), count)
+    }
+
+    // Reusable filter chip button: highlight selected state with green background
     private func filterChip(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(label)
@@ -126,7 +135,7 @@ struct ListView: View {
                 .foregroundStyle(isSelected ? .white : Color(.label))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
-                .background(isSelected ? blue : Color(.systemGray6))
+                .background(isSelected ? green : Color(.systemGray6))
                 .clipShape(Capsule())
         }
     }
@@ -136,23 +145,24 @@ struct ListView: View {
 
 struct BookBoxRow: View {
     let box: BookBox
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    @AppStorage("useImperialUnits") private var useImperialUnits = false
+    private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     var body: some View {
         HStack(spacing: 12) {
-            // Icon: filled blue circle if has photo, empty gray otherwise
+            // Icon: filled green circle if has photo, empty gray otherwise
             ZStack {
                 Circle()
-                    .fill(box.has_photo ? Color(red: 239/255, green: 246/255, blue: 255/255) : Color(.systemGray6))
+                    .fill(box.has_photo ? green.opacity(0.12) : Color(.systemGray6))
                     .frame(width: 44, height: 44)
                 Image(systemName: box.has_photo ? "book.fill" : "book")
-                    .foregroundStyle(box.has_photo ? blue : Color(.systemGray2))
+                    .foregroundStyle(box.has_photo ? green : Color(.systemGray2))
                     .font(.system(size: 18))
             }
 
             // Box info: ID, city, and address
             VStack(alignment: .leading, spacing: 3) {
-                Text("Boîte #\(box.id)")
+                Text(String(format: NSLocalizedString("Boîte #%lld", comment: "Book box title"), box.id))
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color(.label))
                 if let city = box.city {
@@ -174,14 +184,17 @@ struct BookBoxRow: View {
             if let dist = box.distance_m {
                 Text(formatDist(dist))
                     .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(blue)
+                    .foregroundStyle(green)
             }
         }
         .padding(.vertical, 8)
     }
 
-    // Format meters to meters or kilometers with appropriate precision
     private func formatDist(_ m: Double) -> String {
-        m < 1000 ? "\(Int(m)) m" : String(format: "%.1f km", m / 1000)
+        if useImperialUnits {
+            let miles = m / 1609.344
+            return miles < 0.1 ? "\(Int(m * 3.28084)) ft" : String(format: "%.1f mi", miles)
+        }
+        return m < 1000 ? "\(Int(m)) m" : String(format: "%.1f km", m / 1000)
     }
 }

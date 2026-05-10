@@ -7,8 +7,12 @@ struct DetailView: View {
     @State private var vm = DetailViewModel()
     @State private var showCamera = false
     @State private var showLibrary = false
+    @State private var showDMS = false
+    @State private var photoViewerIndex: Int? = nil
+    @State private var coordCopied = false
+    @State private var coordRotating = false
 
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     var body: some View {
         Group {
@@ -23,15 +27,12 @@ struct DetailView: View {
                             photoSection(box: box)
                         }
 
-                        // Localisation
+                        // Localisation — coordonnées GPS + bouton Maps
                         sectionCard {
                             VStack(alignment: .leading, spacing: 12) {
                                 sectionTitle("Localisation")
-                                coordRow(label: "Décimal",
-                                         value: String(format: "%.7f, %.7f", box.lat, box.lng))
-                                coordRow(label: "DMS",
-                                         value: "\(dms(box.lat, isLat: true)) \(dms(box.lng, isLat: false))")
-                                actionBtn("Ouvrir dans Plans / Maps") { openMaps(box: box) }
+                                coordToggleRow(box: box)
+                                mapsButton(box: box)
                             }
                         }
 
@@ -51,7 +52,7 @@ struct DetailView: View {
                             }
                         }
 
-                        // Actions
+                        // Ajout photo
                         sectionCard {
                             VStack(spacing: 8) {
                                 photoAddButton(box: box)
@@ -59,11 +60,6 @@ struct DetailView: View {
                                     .font(.system(size: 12))
                                     .foregroundStyle(.secondary)
                                     .padding(.top, 4)
-                                actionBtn("Voir sur boites-a-livres.fr") {
-                                    if let url = box.detailURL {
-                                        UIApplication.shared.open(url)
-                                    }
-                                }
                             }
                         }
 
@@ -84,7 +80,7 @@ struct DetailView: View {
                                                 if let dist = nearby.distance_m {
                                                     Text(formatDist(dist))
                                                         .font(.system(size: 13, weight: .bold))
-                                                        .foregroundStyle(blue)
+                                                        .foregroundStyle(green)
                                                 }
                                             }
                                             .padding(.vertical, 10)
@@ -95,11 +91,13 @@ struct DetailView: View {
                             }
                         }
                     }
-                    .padding(.bottom, 40)
                 }
                 .refreshable { await vm.refresh(boxId: boxId) }
                 .navigationTitle("#\(box.id) — \(box.city ?? "Détail")")
                 .navigationBarTitleDisplayMode(.inline)
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    Color.clear.frame(height: 90)
+                }
             } else {
                 Text("Boîte introuvable")
                     .foregroundStyle(.secondary)
@@ -114,6 +112,12 @@ struct DetailView: View {
         }
         .sheet(isPresented: $vm.showPhotoModal) {
             photoPickerSheet
+        }
+        .fullScreenCover(isPresented: Binding(
+            get: { photoViewerIndex != nil },
+            set: { if !$0 { photoViewerIndex = nil } }
+        )) {
+            FullScreenPhotoViewer(photos: vm.photos, startIndex: photoViewerIndex ?? 0)
         }
         .fullScreenCover(isPresented: $showCamera) {
             CameraPickerView { image in
@@ -132,11 +136,15 @@ struct DetailView: View {
 
     // MARK: - Views
 
-    // Display photo carousel with upload progress indicator overlay
     @ViewBuilder
     private func photoSection(box: BookBox) -> some View {
         ZStack(alignment: .topTrailing) {
-            PhotoCarousel(photos: vm.photos, localImage: vm.localPhotoImage, uploading: vm.uploading)
+            PhotoCarousel(
+                photos: vm.photos,
+                localImage: vm.localPhotoImage,
+                uploading: vm.uploading,
+                onTap: { index in photoViewerIndex = index }
+            )
             if vm.uploading && (!vm.photos.isEmpty || vm.localPhotoImage != nil) {
                 HStack(spacing: 6) {
                     ProgressView().tint(.white).scaleEffect(0.8)
@@ -150,7 +158,79 @@ struct DetailView: View {
         }
     }
 
-    // Button to add photo; disabled if photo limit reached or upload in progress
+    // Ligne GPS avec format Décimal/DMS basculable au tap
+    @ViewBuilder
+    private func coordToggleRow(box: BookBox) -> some View {
+        let coordValue = showDMS
+            ? "\(dms(box.lat, isLat: true)) \(dms(box.lng, isLat: false))"
+            : String(format: "%.6f, %.6f", box.lat, box.lng)
+
+        HStack(alignment: .center, spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.35)) {
+                    showDMS.toggle()
+                    coordRotating = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    coordRotating = false
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(showDMS ? LocalizedStringKey("DMS") : "Décimal")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundStyle(.secondary)
+                        Text(coordValue)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(Color(.label))
+                            .multilineTextAlignment(.leading)
+                    }
+                    Spacer()
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.system(size: 13))
+                        .foregroundStyle(green.opacity(0.8))
+                        .rotationEffect(.degrees(coordRotating ? 180 : 0))
+                        .animation(.easeInOut(duration: 0.35), value: coordRotating)
+                }
+            }
+            .buttonStyle(.plain)
+
+            Divider()
+                .frame(height: 28)
+                .padding(.horizontal, 12)
+
+            Button {
+                UIPasteboard.general.string = coordValue
+                withAnimation(.spring(duration: 0.2)) { coordCopied = true }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    withAnimation(.easeOut(duration: 0.3)) { coordCopied = false }
+                }
+            } label: {
+                Image(systemName: coordCopied ? "checkmark" : "doc.on.doc")
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundStyle(coordCopied ? .green : green)
+                    .frame(width: 40, height: 40)
+                    .background(coordCopied ? Color.green.opacity(0.12) : Color.clear)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .animation(.spring(duration: 0.2), value: coordCopied)
+            }
+        }
+    }
+
+    // Bouton Maps avec icône et fond vert
+    private func mapsButton(box: BookBox) -> some View {
+        Button { openMaps(box: box) } label: {
+            Label("Ouvrir dans Plans", systemImage: "map.fill")
+                .font(.system(size: 15, weight: .semibold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(green)
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadow(color: green.opacity(0.35), radius: 8, y: 4)
+        }
+    }
+
     @ViewBuilder
     private func photoAddButton(box: BookBox) -> some View {
         let canAdd = vm.photos.count < Constants.maxPhotosPerBox
@@ -159,90 +239,136 @@ struct DetailView: View {
         } label: {
             HStack(spacing: 8) {
                 if vm.uploading {
-                    ProgressView().tint(blue)
+                    ProgressView().tint(green)
                 } else {
-                    Image(systemName: "camera.fill").foregroundStyle(blue)
-                    Text(canAdd
-                         ? "Ajouter une photo (\(vm.photos.count)/\(Constants.maxPhotosPerBox) publiées)"
-                         : "Maximum \(Constants.maxPhotosPerBox) photos atteint")
+                    Image(systemName: "camera.fill").foregroundStyle(green)
+                    Group {
+                        if canAdd {
+                            Text("Ajouter une photo (\(vm.photos.count)/\(Constants.maxPhotosPerBox) publiées)")
+                        } else {
+                            Text("Maximum \(Constants.maxPhotosPerBox) photos atteint")
+                        }
+                    }
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(canAdd ? blue : .secondary)
+                    .foregroundStyle(canAdd ? green : .secondary)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(canAdd ? Color(red: 239/255, green: 246/255, blue: 255/255) : Color(.systemGray6))
+            .background(canAdd ? green.opacity(0.1) : Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .opacity(canAdd ? 1 : 0.6)
         }
         .disabled(vm.uploading || !canAdd)
     }
 
-    // Bottom sheet for selecting camera or library photo source
     private var photoPickerSheet: some View {
         VStack(spacing: 0) {
-            Capsule().fill(Color(.systemGray4)).frame(width: 36, height: 5).padding(.top, 8)
-            Text("Ajouter une photo").font(.system(size: 16, weight: .bold)).padding(.top, 16)
+            VStack(spacing: 4) {
+                Text("Ajouter une photo")
+                    .font(.system(size: 17, weight: .bold))
+                Text("Boîte #\(boxId)")
+                    .font(.system(size: 13))
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.top, 24)
+            .padding(.bottom, 20)
 
-            VStack(spacing: 10) {
+            VStack(spacing: 12) {
                 Button {
                     vm.showPhotoModal = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { showCamera = true }
                 } label: {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("📷 Prendre une photo").font(.system(size: 15, weight: .semibold)).foregroundStyle(Color(.label))
-                        Text("Recommandé — inclut ta position GPS").font(.system(size: 12)).foregroundStyle(.secondary)
+                    HStack(spacing: 14) {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 44, height: 44)
+                            .background(green)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Prendre une photo")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color(.label))
+                            Text("Recommandé — inclut ta position GPS")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.tertiary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(14)
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(green.opacity(0.35), lineWidth: 1))
                 }
 
                 Button {
                     vm.showPhotoModal = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { showLibrary = true }
                 } label: {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("🖼 Choisir depuis la bibliothèque").font(.system(size: 15, weight: .semibold)).foregroundStyle(Color(.label))
-                        Text("Sans données de localisation automatiques").font(.system(size: 12)).foregroundStyle(.secondary)
+                    HStack(spacing: 14) {
+                        Image(systemName: "photo.on.rectangle")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(green)
+                            .frame(width: 44, height: 44)
+                            .background(green.opacity(0.12))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text("Choisir depuis la bibliothèque")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(Color(.label))
+                            Text("Sans données de localisation")
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(.tertiary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(Color(.systemGray6))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(14)
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.2), lineWidth: 1))
                 }
 
                 Button("Annuler") { vm.showPhotoModal = false }
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
-                    .padding(.top, 4)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 16)
             .padding(.bottom, 40)
         }
-        .presentationDetents([.height(280)])
+        .presentationDetents([.height(330)])
         .presentationDragIndicator(.visible)
+        .presentationBackground(.ultraThinMaterial)
+        .presentationCornerRadius(28)
     }
 
     // MARK: - UI Helpers
 
-    // Reusable card container with shadow and rounded corners
     @ViewBuilder
     private func sectionCard<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading) { content() }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .background(.white)
+            .background(.regularMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 14))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(.white.opacity(0.2), lineWidth: 1)
+            )
             .shadow(color: .black.opacity(0.05), radius: 3, y: 1)
             .padding(.horizontal, 16)
             .padding(.top, 12)
     }
 
-    // Uppercase section header with slate color
-    private func sectionTitle(_ text: String) -> some View {
+    private func sectionTitle(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 13, weight: .bold))
             .foregroundStyle(Color(red: 148/255, green: 163/255, blue: 184/255))
@@ -251,45 +377,14 @@ struct DetailView: View {
             .padding(.bottom, 4)
     }
 
-    // Coordinate row with copy-to-clipboard button
-    @ViewBuilder
-    private func coordRow(label: String, value: String) -> some View {
-        HStack {
-            Text(label).font(.system(size: 14)).foregroundStyle(.secondary)
-            Spacer()
-            Button {
-                UIPasteboard.general.string = value
-            } label: {
-                Text("\(value) 📋")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(blue)
-            }
-        }
-    }
-
-    // Reusable action button with blue text and gray background
-    private func actionBtn(_ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(blue)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(Color(.systemGray6))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-        }
-    }
-
     // MARK: - Logic
 
-    // Open Apple Maps or Google Maps with box location
     private func openMaps(box: BookBox) {
         let url = URL(string: "maps://?ll=\(box.lat),\(box.lng)&q=Boîte+à+livres")
             ?? URL(string: "http://maps.apple.com/?ll=\(box.lat),\(box.lng)")!
         UIApplication.shared.open(url)
     }
 
-    // Convert decimal degrees to DMS (degrees, minutes, seconds) with N/S/E/O cardinal direction
     private func dms(_ deg: Double, isLat: Bool) -> String {
         let abs = Swift.abs(deg)
         let d = Int(abs)
@@ -299,7 +394,6 @@ struct DetailView: View {
         return "\(d)°\(m)'\(s)\"\(dir)"
     }
 
-    // Format distance in meters as meters or kilometers with appropriate precision
     private func formatDist(_ meters: Double) -> String {
         meters < 1000 ? "\(Int(meters)) m" : String(format: "%.1f km", meters / 1000)
     }

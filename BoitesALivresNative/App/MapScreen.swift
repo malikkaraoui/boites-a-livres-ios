@@ -4,13 +4,14 @@ import MapKit
 // MARK: - Map View
 
 struct MapScreen: View {
+    @Binding var path: NavigationPath
     @State private var vm = MapViewModel()
-    @State private var path = NavigationPath()
     @State private var router = DeepLinkRouter.shared
     @State private var sheetDetent: PresentationDetent = .height(320)
 
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
-    private let gray = Color(red: 100/255, green: 116/255, blue: 139/255)
+    private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
+    private let greenMuted = Color(red: 0.102, green: 0.718, blue: 0.608).opacity(0.45)
 
     // Map style binding: convert internal enum to MapKit style for display
     private var currentMapStyle: MapStyle {
@@ -30,9 +31,9 @@ struct MapScreen: View {
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
                             // Blue circles for boxes with photos, gray for those without
                             Circle()
-                                .fill(box.has_photo ? blue : gray)
+                                .fill(box.has_photo ? green : greenMuted)
                                 .frame(width: 18, height: 18)
-                                .overlay(Circle().stroke(.white, lineWidth: 1.5))
+                                .overlay(Circle().stroke(Color.black.opacity(0.35), lineWidth: 1.5))
                                 .onTapGesture { selectBox(box) }
                         }
                     }
@@ -48,23 +49,23 @@ struct MapScreen: View {
                         ForEach(Constants.radiusOptionsKm, id: \.self) { km in
                             Button("\(Int(km)) km") { vm.changeRadius(km) }
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(vm.radiusKm == km ? .white : Color(.systemGray))
+                                .foregroundStyle(vm.radiusKm == km ? .white : Color(.secondaryLabel))
                                 .padding(.horizontal, 14)
                                 .padding(.vertical, 8)
-                                .background(vm.radiusKm == km ? blue : .clear)
+                                .background(vm.radiusKm == km ? green : .clear)
                         }
                     }
-                    .background(.white)
+                    .background(Color(.systemBackground))
                     .clipShape(Capsule())
                     .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
 
                     // Display total nearby boxes count
-                    Text("\(vm.boxes.count) boîtes")
+                    Text(String(format: NSLocalizedString("%lld boîtes", comment: ""), Int64(vm.boxes.count)))
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(Color(.label))
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
-                        .background(.white)
+                        .background(Color(.systemBackground))
                         .clipShape(Capsule())
                         .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
                 }
@@ -77,18 +78,18 @@ struct MapScreen: View {
                     Button { vm.centerOnUser() } label: {
                         Image(systemName: "location.fill")
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(blue)
+                            .foregroundStyle(green)
                             .frame(width: 44, height: 44)
-                            .background(.white)
+                            .background(Color(.systemBackground))
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
                     }
                     Button { vm.cycleMapStyle() } label: {
                         Image(systemName: "square.stack.3d.up.fill")
                             .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(blue)
+                            .foregroundStyle(green)
                             .frame(width: 44, height: 44)
-                            .background(.white)
+                            .background(Color(.systemBackground))
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
                     }
@@ -103,7 +104,7 @@ struct MapScreen: View {
                         Spacer()
                         ProgressView()
                             .padding()
-                            .background(.white.opacity(0.9))
+                            .background(Color(.systemBackground).opacity(0.9))
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                             .padding(.bottom, 100)
                     }
@@ -121,7 +122,7 @@ struct MapScreen: View {
                                 .foregroundStyle(.secondary)
                         }
                         .padding(14)
-                        .background(.white.opacity(0.96))
+                        .background(Color(.systemBackground).opacity(0.96))
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                         .padding(.horizontal, 12)
                         Spacer()
@@ -139,6 +140,8 @@ struct MapScreen: View {
                 }
                 .presentationDetents([small, trigger], selection: $sheetDetent)
                 .presentationDragIndicator(.visible)
+                .presentationBackground(.ultraThinMaterial)
+                .presentationCornerRadius(28)
                 .presentationBackgroundInteraction(.enabled(upThrough: small))
                 .onChange(of: sheetDetent) { _, new in
                     guard new == trigger else { return }
