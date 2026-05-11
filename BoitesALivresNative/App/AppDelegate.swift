@@ -33,14 +33,15 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         completionHandler([.banner, .sound])
     }
 
-    // Handle notification tap: extract photo-approved event and route to detail view
+    // Handle notification tap: route to box detail for photo-approved and box-approved events
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
         let type = userInfo["type"] as? String
 
-        if type == "photo-approved", let boxId = userInfo["boxId"] as? Int {
+        if (type == "photo-approved" || type == "box-approved"),
+           let boxId = userInfo["boxId"] as? Int {
             Task { @MainActor in
                 DeepLinkRouter.shared.pendingBoxId = boxId
             }

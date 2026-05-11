@@ -5,6 +5,7 @@ import SwiftUI
 struct ListView: View {
     @Binding var path: NavigationPath
     @State private var vm = ListViewModel()
+    @State private var showAddBox = false
     @ObservedObject private var locationService = LocationService.shared
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
@@ -65,6 +66,20 @@ struct ListView: View {
             }
             .navigationTitle("Boîtes à livres")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showAddBox = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(green)
+                    }
+                }
+            }
+            .fullScreenCover(isPresented: $showAddBox) {
+                AddBoxView()
+            }
             .navigationDestination(for: Int.self) { id in
                 DetailView(boxId: id)
             }

@@ -8,10 +8,15 @@ struct MapScreen: View {
     @State private var vm = MapViewModel()
     @State private var router = DeepLinkRouter.shared
     @State private var sheetDetent: PresentationDetent = .height(320)
+    @State private var showAddBox = false
+    @AppStorage("useImperialUnits") private var useImperialUnits = false
 
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private let greenMuted = Color(red: 0.102, green: 0.718, blue: 0.608).opacity(0.45)
+
+    private func radiusLabel(_ km: Double) -> String {
+        useImperialUnits ? "\(Int((km / 1.60934).rounded())) mi" : "\(Int(km)) km"
+    }
 
     // Map style binding: convert internal enum to MapKit style for display
     private var currentMapStyle: MapStyle {
@@ -29,11 +34,14 @@ struct MapScreen: View {
                 Map(position: $vm.cameraPosition) {
                     ForEach(vm.boxes) { box in
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
-                            // Blue circles for boxes with photos, gray for those without
+                            let isSelected = vm.selectedBox?.id == box.id
                             Circle()
-                                .fill(box.has_photo ? green : greenMuted)
-                                .frame(width: 18, height: 18)
-                                .overlay(Circle().stroke(Color.black.opacity(0.35), lineWidth: 1.5))
+                                .fill(isSelected ? .white : (box.has_photo ? green : greenMuted))
+                                .frame(width: isSelected ? 26 : 18, height: isSelected ? 26 : 18)
+                                .overlay(Circle().stroke(Color.white, lineWidth: isSelected ? 3 : 2.5))
+                                .shadow(color: .black.opacity(0.25), radius: 3, y: 1)
+                                .shadow(color: isSelected ? green.opacity(0.5) : .clear, radius: 6)
+                                .animation(.spring(response: 0.25, dampingFraction: 0.6), value: isSelected)
                                 .onTapGesture { selectBox(box) }
                         }
                     }
@@ -47,7 +55,7 @@ struct MapScreen: View {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 0) {
                         ForEach(Constants.radiusOptionsKm, id: \.self) { km in
-                            Button("\(Int(km)) km") { vm.changeRadius(km) }
+                            Button(radiusLabel(km)) { vm.changeRadius(km) }
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(vm.radiusKm == km ? .white : Color(.secondaryLabel))
                                 .padding(.horizontal, 14)
@@ -73,7 +81,7 @@ struct MapScreen: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 4)
 
-                // Right-side control buttons — location center and map style toggle
+                // Right-side control buttons — location center, map style toggle, add box
                 VStack(spacing: 8) {
                     Button { vm.centerOnUser() } label: {
                         Image(systemName: "location.fill")
@@ -92,6 +100,15 @@ struct MapScreen: View {
                             .background(Color(.systemBackground))
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                    }
+                    Button { showAddBox = true } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(.white)
+                            .frame(width: 44, height: 44)
+                            .background(green)
+                            .clipShape(Circle())
+                            .shadow(color: green.opacity(0.45), radius: 6, y: 2)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -130,6 +147,9 @@ struct MapScreen: View {
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
+            .fullScreenCover(isPresented: $showAddBox) {
+                AddBoxView()
+            }
             .sheet(item: $vm.selectedBox) { box in
                 let small: PresentationDetent = .height(box.has_photo ? 320 : 200)
                 let trigger: PresentationDetent = .fraction(0.75)

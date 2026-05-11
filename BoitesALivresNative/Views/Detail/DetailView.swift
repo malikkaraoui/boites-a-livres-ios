@@ -110,6 +110,9 @@ struct DetailView: View {
         } message: {
             Text(vm.alertMessage)
         }
+        .sheet(isPresented: $vm.photoSubmitted) {
+            PhotoSubmittedView()
+        }
         .sheet(isPresented: $vm.showPhotoModal) {
             photoPickerSheet
         }

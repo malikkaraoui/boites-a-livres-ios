@@ -87,6 +87,24 @@ enum PhotoFilter: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Box Submission
+
+// Box submission sent to moderation queue by a volunteer
+struct BoxSubmission: Codable, Identifiable {
+    let id: UUID
+    let lat: Double
+    let lng: Double
+    let address: String?
+    let city: String?
+    let postal_code: String?
+    let department: String?
+    let notes: String?
+    let photo_url: String?
+    let device_token: String?
+    let status: String
+    let submitted_at: String
+}
+
 // MARK: - Photo Submission Tracking
 
 // User photo submission: local image path and pending/approved/rejected status

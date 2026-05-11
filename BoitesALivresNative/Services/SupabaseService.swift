@@ -174,6 +174,45 @@ actor SupabaseService {
         }
     }
 
+    // Upload a photo for a new box submission (stored under submissions/ prefix, pending review)
+    func uploadBoxSubmissionPhoto(_ imageData: Data) async throws -> String {
+        let filename = "\(UUID().uuidString).jpg"
+        let path = "submissions/\(filename)"
+        var req = URLRequest(url: URL(string: "\(baseURL)/storage/v1/object/boites-photos/\(path)")!)
+        req.httpMethod = "POST"
+        req.setValue(anonKey, forHTTPHeaderField: "apikey")
+        req.setValue("Bearer \(anonKey)", forHTTPHeaderField: "Authorization")
+        req.setValue("image/jpeg", forHTTPHeaderField: "Content-Type")
+        req.httpBody = imageData
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+        return "\(baseURL)/storage/v1/object/public/boites-photos/\(path)"
+    }
+
+    // Submit a new book box location for moderation
+    func insertBoxSubmission(lat: Double, lng: Double, address: String?, city: String?,
+                             postalCode: String?, department: String?, notes: String?,
+                             photoUrl: String? = nil, deviceToken: String?) async throws {
+        struct Params: Encodable {
+            let lat: Double, lng: Double
+            let address: String?, city: String?, postal_code: String?, department: String?
+            let notes: String?, photo_url: String?, device_token: String?
+        }
+        let body = try JSONEncoder().encode(Params(
+            lat: lat, lng: lng, address: address, city: city,
+            postal_code: postalCode, department: department,
+            notes: notes, photo_url: photoUrl, device_token: deviceToken
+        ))
+        var req = makeRequest(path: "/rest/v1/box_submissions", method: "POST", body: body)
+        req.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+    }
+
     // Fetch all photo submissions for current user (optionally filtered by box)
     func fetchPhotoSubmissions(for boxId: Int? = nil) async throws -> [PhotoSubmission] {
         let filter = boxId.map { "box_id=eq.\($0)" } ?? ""

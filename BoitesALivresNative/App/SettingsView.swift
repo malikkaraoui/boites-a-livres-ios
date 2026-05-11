@@ -307,14 +307,11 @@ struct SettingsView: View {
     private var versionSection: some View {
         Section {
             HStack(spacing: 14) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(green.gradient)
-                        .frame(width: 48, height: 48)
-                    Image(systemName: "books.vertical.fill")
-                        .font(.system(size: 22))
-                        .foregroundStyle(.white)
-                }
+                Image("SplashIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Boîtes à Livres")
                         .font(.system(size: 15, weight: .semibold))
@@ -333,19 +330,8 @@ struct SettingsView: View {
     // MARK: - Helpers
 
     private var versionLabel: String {
-        let info = Bundle.main.infoDictionary
-        let version = info?["CFBundleShortVersionString"] as? String ?? "?"
-        let build = info?["CFBundleVersion"] as? String ?? "?"
-        var dateStr = ""
-        if let exePath = Bundle.main.executablePath,
-           let attrs = try? FileManager.default.attributesOfItem(atPath: exePath),
-           let date = attrs[.modificationDate] as? Date {
-            let f = DateFormatter()
-            f.dateFormat = "dd/MM HH:mm"
-            f.locale = Locale.current
-            dateStr = " · \(f.string(from: date))"
-        }
-        return "v\(version) (\(build))\(dateStr)"
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        return "v\(version)"
     }
 
     private var notifStatusKey: LocalizedStringKey {

@@ -15,6 +15,7 @@ final class DetailViewModel {
     var alertTitle = ""
     var alertMessage = ""
     var showAlert = false
+    var photoSubmitted = false
     var localPhotoImage: UIImage? = nil
 
     // MARK: - Photo Source
@@ -75,9 +76,7 @@ final class DetailViewModel {
         defer { uploading = false; localPhotoImage = nil }
         do {
             _ = try await PhotoService.shared.submitPhoto(image, for: boxId)
-            alertTitle = "Photo envoyée"
-            alertMessage = "Merci ! La photo est en attente de validation avant publication."
-            showAlert = true
+            photoSubmitted = true
             // Refresh photos after short delay
             try? await Task.sleep(nanoseconds: 1_000_000_000)
             if let ph = try? await supabase.listPhotos(for: boxId, fallbackUrl: box?.photo_url) {
