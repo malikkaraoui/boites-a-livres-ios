@@ -55,12 +55,15 @@ struct MapScreen: View {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 0) {
                         ForEach(Constants.radiusOptionsKm, id: \.self) { km in
-                            Button(radiusLabel(km)) { vm.changeRadius(km) }
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(vm.radiusKm == km ? .white : Color(.secondaryLabel))
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 8)
-                                .background(vm.radiusKm == km ? green : .clear)
+                            Button { lightHaptic(); vm.changeRadius(km) } label: {
+                                Text(radiusLabel(km))
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundStyle(vm.radiusKm == km ? .white : Color(.secondaryLabel))
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 8)
+                                    .background(vm.radiusKm == km ? green : .clear)
+                            }
+                            .buttonStyle(ScaleButtonStyle())
                         }
                     }
                     .background(Color(.systemBackground))
@@ -83,7 +86,7 @@ struct MapScreen: View {
 
                 // Right-side control buttons — location center, map style toggle, add box
                 VStack(spacing: 8) {
-                    Button { vm.centerOnUser() } label: {
+                    Button { lightHaptic(); vm.centerOnUser() } label: {
                         Image(systemName: "location.fill")
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(green)
@@ -92,7 +95,8 @@ struct MapScreen: View {
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
                     }
-                    Button { vm.cycleMapStyle() } label: {
+                    .buttonStyle(ScaleButtonStyle())
+                    Button { lightHaptic(); vm.cycleMapStyle() } label: {
                         Image(systemName: "square.stack.3d.up.fill")
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(green)
@@ -101,7 +105,8 @@ struct MapScreen: View {
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
                     }
-                    Button { showAddBox = true } label: {
+                    .buttonStyle(ScaleButtonStyle())
+                    Button { mediumHaptic(); showAddBox = true } label: {
                         Image(systemName: "plus")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(.white)
@@ -110,6 +115,7 @@ struct MapScreen: View {
                             .clipShape(Circle())
                             .shadow(color: green.opacity(0.45), radius: 6, y: 2)
                     }
+                    .buttonStyle(ScaleButtonStyle())
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, 12)

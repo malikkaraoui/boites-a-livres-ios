@@ -43,7 +43,7 @@ struct FullScreenPhotoViewer: View {
             .tabViewStyle(.page(indexDisplayMode: photos.count > 1 ? .always : .never))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
 
-            Button { dismiss() } label: {
+            Button { lightHaptic(); dismiss() } label: {
                 Image(systemName: "xmark")
                     .font(.system(size: 15, weight: .bold))
                     .foregroundStyle(.white)
@@ -51,6 +51,7 @@ struct FullScreenPhotoViewer: View {
                     .background(.black.opacity(0.55))
                     .clipShape(Circle())
             }
+            .buttonStyle(ScaleButtonStyle())
             .padding(.top, 56)
             .padding(.trailing, 20)
         }

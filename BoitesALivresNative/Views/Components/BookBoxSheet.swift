@@ -72,6 +72,7 @@ struct BookBoxSheet: View {
             )
 
             Button {
+                mediumHaptic()
                 onDetail()
             } label: {
                 Text("Voir le détail")
@@ -83,6 +84,7 @@ struct BookBoxSheet: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .shadow(color: green.opacity(0.35), radius: 8, y: 4)
             }
+            .buttonStyle(ScaleButtonStyle())
         }
         .padding(20)
     }

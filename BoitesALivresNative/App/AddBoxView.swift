@@ -80,6 +80,7 @@ struct AddBoxView: View {
                         .clipShape(Capsule())
 
                     Button {
+                        mediumHaptic()
                         Task { await vm.confirmPosition() }
                     } label: {
                         HStack {
@@ -93,6 +94,7 @@ struct AddBoxView: View {
                         .background(green)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                     }
+                    .buttonStyle(ScaleButtonStyle())
                     .disabled(vm.isGeocoding)
                 }
                 .padding(.horizontal, 20)
@@ -156,6 +158,7 @@ struct AddBoxView: View {
                                 .frame(height: 180)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
                             Button {
+                                lightHaptic()
                                 vm.selectedImage = nil
                             } label: {
                                 Image(systemName: "xmark.circle.fill")
@@ -163,17 +166,21 @@ struct AddBoxView: View {
                                     .foregroundStyle(.white)
                                     .shadow(radius: 3)
                             }
+                            .buttonStyle(ScaleButtonStyle())
                             .padding(8)
                         }
                         Button {
+                            lightHaptic()
                             showPhotoOptions = true
                         } label: {
                             Label("Changer la photo", systemImage: "arrow.triangle.2.circlepath")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(green)
                         }
+                        .buttonStyle(ScaleButtonStyle())
                     } else {
                         Button {
+                            lightHaptic()
                             showPhotoOptions = true
                         } label: {
                             HStack(spacing: 10) {
@@ -201,6 +208,7 @@ struct AddBoxView: View {
                                     .strokeBorder(Color(.separator), lineWidth: 1)
                             )
                         }
+                        .buttonStyle(ScaleButtonStyle())
                     }
                 }
                 .padding(16)
@@ -243,9 +251,12 @@ struct AddBoxView: View {
                         .font(.system(size: 13, design: .monospaced))
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Button("Replacer") { vm.step = .map }
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(green)
+                    Button { lightHaptic(); vm.step = .map } label: {
+                        Text("Replacer")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(green)
+                    }
+                    .buttonStyle(ScaleButtonStyle())
                 }
                 .padding(.horizontal, 16)
 
@@ -257,6 +268,7 @@ struct AddBoxView: View {
                 }
 
                 Button {
+                    mediumHaptic()
                     Task {
                         let token = NotificationService.shared.getPushToken()
                         await vm.submit(deviceToken: token)
@@ -273,6 +285,7 @@ struct AddBoxView: View {
                     .background(green)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
+                .buttonStyle(ScaleButtonStyle())
                 .disabled(vm.isSubmitting)
 
                 Text("Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision.")
@@ -308,13 +321,16 @@ struct AddBoxView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
-            Button("Fermer") { dismiss() }
-                .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(.white)
-                .padding(.horizontal, 40)
-                .padding(.vertical, 14)
-                .background(green)
-                .clipShape(Capsule())
+            Button { lightHaptic(); dismiss() } label: {
+                Text("Fermer")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 14)
+                    .background(green)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(ScaleButtonStyle())
             Spacer()
         }
     }

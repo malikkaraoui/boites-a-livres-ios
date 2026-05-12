@@ -112,6 +112,7 @@ struct ListView: View {
 
             // Toggle: active (green) = photos only, inactive = all boxes
             Button {
+                lightHaptic()
                 vm.photoFilter = (vm.photoFilter == .withPhoto) ? .all : .withPhoto
                 Task { await vm.applyFilters() }
             } label: {
@@ -123,6 +124,7 @@ struct ListView: View {
                     .background(vm.photoFilter == .withPhoto ? green : Color(.systemGray6))
                     .clipShape(Capsule())
             }
+            .buttonStyle(ScaleButtonStyle())
 
             Spacer(minLength: 0)
         }
@@ -144,7 +146,7 @@ struct ListView: View {
 
     // Reusable filter chip button: highlight selected state with green background
     private func filterChip(label: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+        Button { lightHaptic(); action() } label: {
             Text(label)
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundStyle(isSelected ? .white : Color(.label))
@@ -153,6 +155,7 @@ struct ListView: View {
                 .background(isSelected ? green : Color(.systemGray6))
                 .clipShape(Capsule())
         }
+        .buttonStyle(ScaleButtonStyle())
     }
 }
 

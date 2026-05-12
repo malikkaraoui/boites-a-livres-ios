@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA00BB11CC22DD33EE44FF55 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */; };
 		00CCA7307DA763FD1252A232 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A41BB2D8AC2D7C8C363610 /* Constants.swift */; };
 		06145687E8FB5A0A46040D3F /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262AB7A044952E111039D350 /* ListView.swift */; };
 		0C6100BBD1230547E8838D81 /* ImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4290B7F3239EDD24E5C7FBC7 /* ImageCacheService.swift */; };
@@ -60,6 +61,7 @@
 		7F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8BF27BDDAE056D88CB7E1843 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PhotoSubmittedView.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		94B765557228691DC2F6C9C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A530FD1A72EA2FF2155F8910 /* PhotoCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarousel.swift; sourceTree = "<group>"; };
 		A924B3C6C1EED9C0DC38F81F /* BookBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookBox.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		09B2E359EFE17F59394F4CAB /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */,
 				D541733523FE0747B494016D /* BookBoxSheet.swift */,
 				FABE634523BD886953FEE1EC /* CachedAsyncImage.swift */,
 				BB1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift */,
@@ -266,6 +269,7 @@
 				1835476688A98A8404A34BA5 /* AppDelegate.swift in Sources */,
 				32E3529658CF228BFBB7E28F /* BoitesALivresApp.swift in Sources */,
 				71A7B3C62508394FBCBF7AFA /* BookBox.swift in Sources */,
+				AA00BB11CC22DD33EE44FF55 /* ButtonStyles.swift in Sources */,
 				77284E55902CE66F31CDABD0 /* BookBoxSheet.swift in Sources */,
 				583C9083AB0D9E922D408EF4 /* CachedAsyncImage.swift in Sources */,
 				00CCA7307DA763FD1252A232 /* Constants.swift in Sources */,

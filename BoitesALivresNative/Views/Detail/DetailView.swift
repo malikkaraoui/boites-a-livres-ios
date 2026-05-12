@@ -11,6 +11,7 @@ struct DetailView: View {
     @State private var photoViewerIndex: Int? = nil
     @State private var coordCopied = false
     @State private var coordRotating = false
+    @AppStorage("useImperialUnits") private var useImperialUnits = false
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -170,6 +171,7 @@ struct DetailView: View {
 
         HStack(alignment: .center, spacing: 0) {
             Button {
+                lightHaptic()
                 withAnimation(.easeInOut(duration: 0.35)) {
                     showDMS.toggle()
                     coordRotating = true
@@ -203,6 +205,7 @@ struct DetailView: View {
                 .padding(.horizontal, 12)
 
             Button {
+                lightHaptic()
                 UIPasteboard.general.string = coordValue
                 withAnimation(.spring(duration: 0.2)) { coordCopied = true }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -222,7 +225,7 @@ struct DetailView: View {
 
     // Bouton Maps avec icône et fond vert
     private func mapsButton(box: BookBox) -> some View {
-        Button { openMaps(box: box) } label: {
+        Button { lightHaptic(); openMaps(box: box) } label: {
             Label("Ouvrir dans Plans", systemImage: "map.fill")
                 .font(.system(size: 15, weight: .semibold))
                 .frame(maxWidth: .infinity)
@@ -262,7 +265,9 @@ struct DetailView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .opacity(canAdd ? 1 : 0.6)
         }
+        .buttonStyle(ScaleButtonStyle())
         .disabled(vm.uploading || !canAdd)
+        .sensoryFeedback(.impact(weight: .light), trigger: vm.showPhotoModal)
     }
 
     private var photoPickerSheet: some View {
@@ -398,6 +403,10 @@ struct DetailView: View {
     }
 
     private func formatDist(_ meters: Double) -> String {
-        meters < 1000 ? "\(Int(meters)) m" : String(format: "%.1f km", meters / 1000)
+        if useImperialUnits {
+            let miles = meters / 1609.344
+            return miles < 0.1 ? "\(Int(meters * 3.28084)) ft" : String(format: "%.1f mi", miles)
+        }
+        return meters < 1000 ? "\(Int(meters)) m" : String(format: "%.1f km", meters / 1000)
     }
 }

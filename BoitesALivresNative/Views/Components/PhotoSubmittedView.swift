@@ -23,13 +23,16 @@ struct PhotoSubmittedView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
 
-            Button("Fermer") { dismiss() }
-                .font(.system(size: 16, weight: .bold))
-                .foregroundStyle(.white)
-                .padding(.horizontal, 40)
-                .padding(.vertical, 14)
-                .background(green)
-                .clipShape(Capsule())
+            Button { lightHaptic(); dismiss() } label: {
+                Text("Fermer")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 14)
+                    .background(green)
+                    .clipShape(Capsule())
+            }
+            .buttonStyle(ScaleButtonStyle())
 
             Spacer()
         }
