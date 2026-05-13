@@ -15,6 +15,11 @@ final class MapViewModel {
     private var hasBootstrapped = false
 
     enum MapStyleMode { case standard, hybrid, imagery }
+    enum TrackingMode { case none, centered, followHeading }
+    var trackingMode: TrackingMode = .none
+    private var currentCameraCenter = Constants.defaultLocation
+    private var currentCameraDistance: CLLocationDistance = 5000
+    private let preferredTrackingDistance: CLLocationDistance = 1500
 
     // Cycle through map styles: standard → hybrid → imagery → standard
     func cycleMapStyle() {
@@ -96,15 +101,57 @@ final class MapViewModel {
         }
     }
 
-    // Animate camera to current user location if available
-    func centerOnUser() {
-        if let loc = locationService.currentLocation {
-            withAnimation {
+    // Apple Maps-like cycle: center user → follow heading → reset north up.
+    func cycleTracking() {
+        locationService.requestAuthorization()
+        locationService.startUpdatingIfAuthorized()
+
+        let fallback = locationService.currentLocation?.coordinate ?? currentCameraCenter
+        let distance = cameraPosition.camera?.distance ?? currentCameraDistance
+
+        switch trackingMode {
+        case .none:
+            trackingMode = .centered
+            currentCameraDistance = preferredTrackingDistance
+            cameraPosition = .userLocation(
+                followsHeading: false,
+                fallback: .camera(MapCamera(centerCoordinate: fallback, distance: preferredTrackingDistance))
+            )
+
+        case .centered:
+            trackingMode = .followHeading
+            currentCameraDistance = distance
+            cameraPosition = .userLocation(
+                followsHeading: true,
+                fallback: .camera(MapCamera(centerCoordinate: fallback, distance: distance))
+            )
+
+        case .followHeading:
+            trackingMode = .none
+            let center = locationService.currentLocation?.coordinate ?? currentCameraCenter
+            withAnimation(.easeInOut(duration: 0.35)) {
                 cameraPosition = .camera(MapCamera(
-                    centerCoordinate: loc.coordinate,
-                    distance: 5000
+                    centerCoordinate: center,
+                    distance: currentCameraDistance,
+                    heading: 0
                 ))
             }
+        }
+    }
+
+    // Keep the latest visible camera so reset-to-north preserves the current zoom.
+    func onCameraChange(camera: MapCamera) {
+        currentCameraCenter = camera.centerCoordinate
+        currentCameraDistance = camera.distance
+
+                guard trackingMode == .centered || trackingMode == .followHeading,
+              let loc = locationService.currentLocation else { return }
+
+        let center = CLLocation(latitude: camera.centerCoordinate.latitude, longitude: camera.centerCoordinate.longitude)
+        let offset = center.distance(from: loc)
+        let threshold = max(80, camera.distance * 0.12)
+        if offset > threshold {
+            trackingMode = .none
         }
     }
 

@@ -9,7 +9,9 @@ struct MapScreen: View {
     @State private var router = DeepLinkRouter.shared
     @State private var sheetDetent: PresentationDetent = .height(320)
     @State private var showAddBox = false
+    @State private var isHandlingAnnotationTap = false
     @AppStorage("useImperialUnits") private var useImperialUnits = false
+    @Namespace private var mapScope
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private let greenMuted = Color(red: 0.102, green: 0.718, blue: 0.608).opacity(0.45)
@@ -31,7 +33,7 @@ struct MapScreen: View {
         NavigationStack(path: $path) {
             ZStack(alignment: .top) {
                 // Interactive map with book box annotations
-                Map(position: $vm.cameraPosition) {
+                Map(position: $vm.cameraPosition, scope: mapScope) {
                     ForEach(vm.boxes) { box in
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
                             let isSelected = vm.selectedBox?.id == box.id
@@ -47,8 +49,20 @@ struct MapScreen: View {
                     }
                     UserAnnotation()
                 }
-                .mapControls { MapCompass() }
+                .mapControls { }
                 .mapStyle(currentMapStyle)
+                .onMapCameraChange(frequency: .onEnd) { context in
+                    vm.onCameraChange(camera: context.camera)
+                }
+                .simultaneousGesture(
+                    TapGesture().onEnded {
+                        guard !isHandlingAnnotationTap else {
+                            isHandlingAnnotationTap = false
+                            return
+                        }
+                        vm.selectedBox = nil
+                    }
+                )
                 .ignoresSafeArea()
 
                 // Header overlay — radius filter buttons and box count badge
@@ -84,10 +98,12 @@ struct MapScreen: View {
                 .padding(.horizontal, 12)
                 .padding(.top, 4)
 
-                // Right-side control buttons — location center, map style toggle, add box
+                // Right-side control buttons — MapKit owns compass/location behavior, like Apple Plans.
                 VStack(spacing: 8) {
-                    Button { lightHaptic(); vm.centerOnUser() } label: {
-                        Image(systemName: "location.fill")
+                    MapCompass(scope: mapScope)
+                        .frame(width: 44, height: 44)
+                    Button { lightHaptic(); vm.cycleTracking() } label: {
+                        Image(systemName: trackingIcon)
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundStyle(green)
                             .frame(width: 44, height: 44)
@@ -195,10 +211,24 @@ struct MapScreen: View {
                 }
             }
         }
+        .mapScope(mapScope)
+    }
+
+    private var trackingIcon: String {
+        switch vm.trackingMode {
+        case .none: return "location"
+        case .centered: return "location.fill"
+        case .followHeading: return "location.north.line.fill"
+        }
     }
 
     // Handle annotation tap: close sheet for previous box before showing sheet for new box
     private func selectBox(_ box: BookBox) {
+        isHandlingAnnotationTap = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            isHandlingAnnotationTap = false
+        }
+
         let initial: PresentationDetent = .height(box.has_photo ? 320 : 200)
         if let current = vm.selectedBox, current.id != box.id {
             vm.selectedBox = nil
@@ -212,3 +242,4 @@ struct MapScreen: View {
         }
     }
 }
+
