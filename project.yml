@@ -21,8 +21,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: BoitesALivresNative/BoitesALivresNative.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_VERSION: 5.9
-        MARKETING_VERSION: 1.0.0
-        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.1.0
+        CURRENT_PROJECT_VERSION: 3
         DEVELOPMENT_TEAM: UPES5479T5
         CODE_SIGN_IDENTITY: "Apple Development"
         CODE_SIGN_STYLE: Automatic
