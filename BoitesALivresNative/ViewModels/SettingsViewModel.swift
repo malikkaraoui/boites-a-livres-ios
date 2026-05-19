@@ -9,14 +9,18 @@ final class SettingsViewModel {
     var notificationStatus: UNAuthorizationStatus = .notDetermined
     var pushToken: String? = nil
     var submissions: [PhotoSubmission] = []
+    var deletionRequests: [DeletionRequestRecord] = []
     var showCacheClearAlert = false
     var cacheClearDone = false
 
-    // Load notification status, device push token, and photo submissions on view appear
+    // Load notification status, device push token, photo submissions and deletion requests on view appear
     func onAppear() async {
         notificationStatus = await NotificationService.shared.getAuthorizationStatus()
         pushToken = NotificationService.shared.getPushToken()
-        submissions = await PhotoService.shared.loadSubmissions()
+        async let subs = PhotoService.shared.loadSubmissions()
+        async let dels = (try? await SupabaseService.shared.fetchMyDeletionRequests()) ?? []
+        submissions = await subs
+        deletionRequests = await dels
     }
 
     // Request notification permission and refresh status

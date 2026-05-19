@@ -24,6 +24,7 @@ struct SettingsView: View {
                 shareSection
                 notificationsSection
                 submissionsSection
+                deletionRequestsSection
                 aboutSection
                 cacheSection
                 versionSection
@@ -239,6 +240,61 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    private var deletionRequestsSection: some View {
+        Section("Mes demandes de suppression") {
+            if vm.deletionRequests.isEmpty {
+                Text("Aucune demande envoyée depuis cet appareil.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(vm.deletionRequests) { req in
+                    HStack(spacing: 12) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color(.systemGray5))
+                                .frame(width: 48, height: 48)
+                            Image(systemName: "trash")
+                                .foregroundStyle(.secondary)
+                                .font(.system(size: 18))
+                        }
+
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(boxTitle(req.box_id))
+                                .font(.system(size: 14, weight: .semibold))
+                            Text(req.reason)
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                            Text(relativeDate(from: req.created_at))
+                                .font(.system(size: 11))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                        }
+
+                        Spacer()
+                        deletionStatusChip(req.status)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+        }
+    }
+
+    private func deletionStatusChip(_ status: String) -> some View {
+        let (label, color): (String, Color) = switch status {
+            case "pending":  ("En attente", .orange)
+            case "approved": ("Supprimée", .red)
+            case "rejected": ("Refusée", .secondary)
+            default:         (status, .secondary)
+        }
+        return Text(label)
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(color)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.12))
+            .clipShape(Capsule())
     }
 
     private var aboutSection: some View {

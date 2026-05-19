@@ -12,6 +12,7 @@ struct DetailView: View {
     @State private var coordCopied = false
     @State private var coordRotating = false
     @AppStorage("useImperialUnits") private var useImperialUnits = false
+    @State private var showDeletionSheet = false
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -61,6 +62,19 @@ struct DetailView: View {
                                     .font(.system(size: 12))
                                     .foregroundStyle(.secondary)
                                     .padding(.top, 4)
+                                Button {
+                                    lightHaptic()
+                                    showDeletionSheet = true
+                                } label: {
+                                    Label("Signaler une suppression", systemImage: "trash")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(.red)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 11)
+                                        .background(Color.red.opacity(0.08))
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                }
+                                .buttonStyle(.plain)
                             }
                         }
 
@@ -113,6 +127,9 @@ struct DetailView: View {
         }
         .sheet(isPresented: $vm.photoSubmitted) {
             PhotoSubmittedView()
+        }
+        .sheet(isPresented: $showDeletionSheet) {
+            DeletionRequestSheet(boxId: boxId)
         }
         .sheet(isPresented: $vm.showPhotoModal) {
             photoPickerSheet

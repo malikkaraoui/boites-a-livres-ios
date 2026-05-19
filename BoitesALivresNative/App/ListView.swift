@@ -1,11 +1,14 @@
 import SwiftUI
 
+private struct IdentifiableInt: Identifiable { let value: Int; var id: Int { value } }
+
 // MARK: - List View
 
 struct ListView: View {
     @Binding var path: NavigationPath
     @State private var vm = ListViewModel()
     @State private var showAddBox = false
+    @State private var deletionBoxId: Int? = nil
     @ObservedObject private var locationService = LocationService.shared
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
@@ -40,6 +43,13 @@ struct ListView: View {
                             }
                             .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                             .listRowSeparatorTint(Color(.systemGray5))
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    deletionBoxId = box.id
+                                } label: {
+                                    Label("Supprimer", systemImage: "trash")
+                                }
+                            }
                         }
 
                         // Pagination footer — load next page or show total count
@@ -90,6 +100,12 @@ struct ListView: View {
             // Auto-reload when user moves far from last fetch location
             .onReceive(locationService.$currentLocation.compactMap { $0 }) { newLoc in
                 Task { await vm.reloadIfMovedFar(newLocation: newLoc) }
+            }
+            .sheet(item: Binding(
+                get: { deletionBoxId.map { IdentifiableInt(value: $0) } },
+                set: { deletionBoxId = $0?.value }
+            )) { item in
+                DeletionRequestSheet(boxId: item.value)
             }
         }
     }
@@ -171,10 +187,10 @@ struct BookBoxRow: View {
             // Icon: filled green circle if has photo, empty gray otherwise
             ZStack {
                 Circle()
-                    .fill(box.has_photo ? green.opacity(0.12) : Color(.systemGray6))
+                    .fill(box.photo_url != nil ? green.opacity(0.12) : Color(.systemGray6))
                     .frame(width: 44, height: 44)
-                Image(systemName: box.has_photo ? "book.fill" : "book")
-                    .foregroundStyle(box.has_photo ? green : Color(.systemGray2))
+                Image(systemName: box.photo_url != nil ? "book.fill" : "book")
+                    .foregroundStyle(box.photo_url != nil ? green : Color(.systemGray2))
                     .font(.system(size: 18))
             }
 

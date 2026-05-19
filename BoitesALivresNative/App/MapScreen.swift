@@ -38,7 +38,7 @@ struct MapScreen: View {
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
                             let isSelected = vm.selectedBox?.id == box.id
                             Circle()
-                                .fill(isSelected ? .white : (box.has_photo ? green : greenMuted))
+                                .fill(isSelected ? .white : (box.photo_url != nil ? green : greenMuted))
                                 .frame(width: isSelected ? 26 : 18, height: isSelected ? 26 : 18)
                                 .overlay(Circle().stroke(Color.white, lineWidth: isSelected ? 3 : 2.5))
                                 .shadow(color: .black.opacity(0.25), radius: 3, y: 1)
@@ -173,7 +173,7 @@ struct MapScreen: View {
                 AddBoxView()
             }
             .sheet(item: $vm.selectedBox) { box in
-                let small: PresentationDetent = .height(box.has_photo ? 320 : 200)
+                let small: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
                 let trigger: PresentationDetent = .fraction(0.75)
                 BookBoxSheet(box: box) {
                     let id = box.id
@@ -229,7 +229,7 @@ struct MapScreen: View {
             isHandlingAnnotationTap = false
         }
 
-        let initial: PresentationDetent = .height(box.has_photo ? 320 : 200)
+        let initial: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
         if let current = vm.selectedBox, current.id != box.id {
             vm.selectedBox = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.32) {

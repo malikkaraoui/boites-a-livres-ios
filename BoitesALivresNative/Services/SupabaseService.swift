@@ -69,7 +69,7 @@ actor SupabaseService {
         }
         let p = Params(user_lat: lat, user_lng: lng, radius_m: Int(radiusKm * 1000),
                        filter_dept: nil, filter_photo: photoFilter.intValue,
-                       page_limit: 200, page_offset: 0)
+                       page_limit: 500, page_offset: 0)
         return try await rpc("nearby_book_boxes", params: p)
     }
 
@@ -96,6 +96,19 @@ actor SupabaseService {
         let arr = try JSONDecoder().decode([BookBox].self, from: data)
         guard let box = arr.first else { throw SupabaseError.httpError(404, "Boîte introuvable") }
         return box
+    }
+
+    // Submit a deletion request for a box (pending admin validation)
+    func submitDeletionRequest(boxId: Int, reason: String) async throws {
+        struct Body: Encodable { let box_id: Int; let reason: String; let device_token: String? }
+        let token = NotificationService.shared.getPushToken()
+        let body = try JSONEncoder().encode(Body(box_id: boxId, reason: reason, device_token: token))
+        var req = makeRequest(path: "/rest/v1/deletion_requests", method: "POST", body: body)
+        req.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
     }
 
     // Fetch nearby boxes excluding specified box ID (for detail view "nearby" section)
@@ -223,6 +236,16 @@ actor SupabaseService {
         }
         return try JSONDecoder().decode([PhotoSubmission].self, from: data)
     }
+
+    // Fetch deletion requests submitted from this device
+    func fetchMyDeletionRequests() async throws -> [DeletionRequestRecord] {
+        guard let token = NotificationService.shared.getPushToken() else { return [] }
+        let encoded = token.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? token
+        let req = makeRequest(path: "/rest/v1/deletion_requests?device_token=eq.\(encoded)&order=created_at.desc&limit=5")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
+        return (try? JSONDecoder().decode([DeletionRequestRecord].self, from: data)) ?? []
+    }
 }
 
 // MARK: - Data Models
@@ -235,4 +258,13 @@ struct PhotoSubmission: Codable, Identifiable {
     let status: String
     let submitted_at: String
     let review_notes: String?
+}
+
+// Deletion request submitted by this device
+struct DeletionRequestRecord: Codable, Identifiable {
+    let id: Int
+    let box_id: Int
+    let reason: String
+    let status: String
+    let created_at: String
 }

@@ -29,6 +29,7 @@
 		8A7A9CFBDB43BFC593D35168 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD863E2E1DD3B71B8797673 /* DetailViewModel.swift */; };
 		8F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy */; };
 		93C0A0AF024FD9C0CF22ECE8 /* PhotoSubmittedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */; };
+		DD1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */; };
 		95C14329994EDC207F637F54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D85382CA5E970BF4B82947D9 /* Assets.xcassets */; };
 		A2B3C4D5E6F7A8B9C0D1E2F3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4D5E6F7A8B9C0D1E2F3A4B5 /* Localizable.strings */; };
 		AA1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift */; };
@@ -61,6 +62,7 @@
 		7F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8BF27BDDAE056D88CB7E1843 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PhotoSubmittedView.swift; sourceTree = "<group>"; };
+		EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionRequestSheet.swift; sourceTree = "<group>"; };
 		AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		94B765557228691DC2F6C9C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A530FD1A72EA2FF2155F8910 /* PhotoCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarousel.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		09B2E359EFE17F59394F4CAB /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */,
 				AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */,
 				D541733523FE0747B494016D /* BookBoxSheet.swift */,
 				FABE634523BD886953FEE1EC /* CachedAsyncImage.swift */,
@@ -269,6 +272,7 @@
 				1835476688A98A8404A34BA5 /* AppDelegate.swift in Sources */,
 				32E3529658CF228BFBB7E28F /* BoitesALivresApp.swift in Sources */,
 				71A7B3C62508394FBCBF7AFA /* BookBox.swift in Sources */,
+				DD1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift in Sources */,
 				AA00BB11CC22DD33EE44FF55 /* ButtonStyles.swift in Sources */,
 				77284E55902CE66F31CDABD0 /* BookBoxSheet.swift in Sources */,
 				583C9083AB0D9E922D408EF4 /* CachedAsyncImage.swift in Sources */,

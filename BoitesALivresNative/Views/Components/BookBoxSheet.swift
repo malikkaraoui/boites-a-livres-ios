@@ -50,7 +50,7 @@ struct BookBoxSheet: View {
                         }
                     }
                     Spacer()
-                    if box.has_photo {
+                    if box.photo_url != nil {
                         Image(systemName: "photo.fill")
                             .foregroundStyle(green)
                             .font(.system(size: 20))
