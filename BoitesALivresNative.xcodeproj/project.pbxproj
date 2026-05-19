@@ -326,7 +326,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -409,7 +409,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
