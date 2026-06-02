@@ -156,7 +156,7 @@ struct ListView: View {
         useImperialUnits ? "\(Int(km / 1.60934)) mi" : "\(Int(km)) km"
     }
 
-    private func loadedBoxesLabel(_ count: Int) -> String {
+private func loadedBoxesLabel(_ count: Int) -> String {
         String(format: NSLocalizedString("%lld boîtes chargées", comment: "Loaded boxes count"), count)
     }
 

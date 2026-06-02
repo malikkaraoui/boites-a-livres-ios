@@ -37,8 +37,9 @@ struct MapScreen: View {
                     ForEach(vm.boxes) { box in
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
                             let isSelected = vm.selectedBox?.id == box.id
+                            let pinColor = pinFillColor(for: box, isSelected: isSelected)
                             Circle()
-                                .fill(isSelected ? .white : (box.photo_url != nil ? green : greenMuted))
+                                .fill(pinColor)
                                 .frame(width: isSelected ? 26 : 18, height: isSelected ? 26 : 18)
                                 .overlay(Circle().stroke(Color.white, lineWidth: isSelected ? 3 : 2.5))
                                 .shadow(color: .black.opacity(0.25), radius: 3, y: 1)
@@ -212,6 +213,17 @@ struct MapScreen: View {
             }
         }
         .mapScope(mapScope)
+    }
+
+    // Couleur du pin : sélectionné = blanc ; sinon condition du dernier avis approuvé
+    // si présent, fallback sur la teinte verte (saturée si photo, atténuée sinon).
+    private func pinFillColor(for box: BookBox, isSelected: Bool) -> Color {
+        if isSelected { return .white }
+        if let condStr = box.last_review_condition,
+           let cond = BoxReview.Condition(rawValue: condStr) {
+            return ConditionStyle.color(for: cond)
+        }
+        return box.photo_url != nil ? green : greenMuted
     }
 
     private var trackingIcon: String {

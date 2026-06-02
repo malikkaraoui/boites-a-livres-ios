@@ -9,6 +9,7 @@ final class DetailViewModel {
     var box: BookBox? = nil
     var photos: [BoxPhoto] = []
     var nearbyBoxes: [BookBox] = []
+    var reviews: [BoxReview] = []
     var loading = false
     var uploading = false
     var showPhotoModal = false
@@ -24,7 +25,7 @@ final class DetailViewModel {
 
     private let supabase = SupabaseService.shared
 
-    // Fetch box details, photos list, and nearby boxes in parallel; suppress errors
+    // Fetch box details, photos list, nearby boxes, and reviews in parallel; suppress errors
     func load(boxId: Int) async {
         loading = true
         defer { loading = false }
@@ -32,8 +33,18 @@ final class DetailViewModel {
         box = data
         async let photosTask = (try? await supabase.listPhotos(for: boxId, fallbackUrl: data.photo_url)) ?? []
         async let nearbyTask = (try? await supabase.fetchNearbyTo(id: boxId, lat: data.lat, lng: data.lng)) ?? []
+        async let reviewsTask = (try? await supabase.fetchApprovedReviews(boxId: boxId)) ?? []
         photos = await photosTask
         nearbyBoxes = await nearbyTask
+        reviews = await reviewsTask
+    }
+
+    // Recharger les avis après soumission (l'avis du device courant reste pending → liste inchangée
+    // mais on rafraîchit au cas où d'autres avis auraient été approuvés entre-temps).
+    func reloadReviews(boxId: Int) async {
+        if let fresh = try? await supabase.fetchApprovedReviews(boxId: boxId) {
+            reviews = fresh
+        }
     }
 
     // Refresh box details and photos list; keep existing data on failure

@@ -9,6 +9,7 @@ struct AddBoxView: View {
     @State private var showPhotoOptions = false
     @State private var showCamera = false
     @State private var showLibrary = false
+    @State private var showNoPhotoWarning = false
     @FocusState private var isNotesFocused: Bool
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
@@ -269,9 +270,13 @@ struct AddBoxView: View {
 
                 Button {
                     mediumHaptic()
-                    Task {
-                        let token = NotificationService.shared.getPushToken()
-                        await vm.submit(deviceToken: token)
+                    if vm.selectedImage == nil {
+                        showNoPhotoWarning = true
+                    } else {
+                        Task {
+                            let token = NotificationService.shared.getPushToken()
+                            await vm.submit(deviceToken: token)
+                        }
                     }
                 } label: {
                     HStack {
@@ -303,6 +308,18 @@ struct AddBoxView: View {
             Button("Prendre une photo") { showCamera = true }
             Button("Choisir dans la bibliothèque") { showLibrary = true }
             Button("Annuler", role: .cancel) {}
+        }
+        .alert("Ajouter une photo ?", isPresented: $showNoPhotoWarning) {
+            Button("Ajouter une photo") { showPhotoOptions = true }
+            Button("Soumettre quand même", role: .destructive) {
+                Task {
+                    let token = NotificationService.shared.getPushToken()
+                    await vm.submit(deviceToken: token)
+                }
+            }
+            Button("Annuler", role: .cancel) {}
+        } message: {
+            Text("Une photo aide les autres utilisateurs à reconnaître la boîte. Les soumissions sans photo sont souvent refusées.")
         }
     }
 

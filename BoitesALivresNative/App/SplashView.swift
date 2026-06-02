@@ -25,12 +25,12 @@ struct SplashView: View {
                 .opacity(opacity)
         }
         .onAppear {
-            withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
+            withAnimation(.spring(response: 0.25, dampingFraction: 0.82)) {
                 scale = 1.0
                 opacity = 1.0
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) {
-                withAnimation(.easeOut(duration: 0.18)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                withAnimation(.easeOut(duration: 0.12)) {
                     isVisible = false
                 }
             }

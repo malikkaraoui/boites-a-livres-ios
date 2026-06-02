@@ -65,10 +65,10 @@ actor SupabaseService {
                         photoFilter: PhotoFilter = .all) async throws -> [BookBox] {
         struct Params: Encodable {
             let user_lat: Double, user_lng: Double, radius_m: Int
-            let filter_dept: String?, filter_photo: Int?, page_limit: Int, page_offset: Int
+            let filter_dept: String?, filter_photo: Bool?, page_limit: Int, page_offset: Int
         }
         let p = Params(user_lat: lat, user_lng: lng, radius_m: Int(radiusKm * 1000),
-                       filter_dept: nil, filter_photo: photoFilter.intValue,
+                       filter_dept: nil, filter_photo: photoFilter.boolValue,
                        page_limit: 500, page_offset: 0)
         return try await rpc("nearby_book_boxes", params: p)
     }
@@ -78,10 +78,10 @@ actor SupabaseService {
                      dept: String? = nil, photoFilter: PhotoFilter = .all, page: Int = 0) async throws -> [BookBox] {
         struct Params: Encodable {
             let user_lat: Double, user_lng: Double, radius_m: Int
-            let filter_dept: String?, filter_photo: Int?, page_limit: Int, page_offset: Int
+            let filter_dept: String?, filter_photo: Bool?, page_limit: Int, page_offset: Int
         }
         let p = Params(user_lat: lat, user_lng: lng, radius_m: Int(radiusKm * 1000),
-                       filter_dept: dept, filter_photo: photoFilter.intValue,
+                       filter_dept: dept, filter_photo: photoFilter.boolValue,
                        page_limit: Constants.listPageSize, page_offset: page * Constants.listPageSize)
         return try await rpc("nearby_book_boxes", params: p)
     }
@@ -115,7 +115,7 @@ actor SupabaseService {
     func fetchNearbyTo(id: Int, lat: Double, lng: Double) async throws -> [BookBox] {
         struct Params: Encodable {
             let user_lat: Double, user_lng: Double, radius_m: Int
-            let filter_dept: String?, filter_photo: Int?, page_limit: Int, page_offset: Int
+            let filter_dept: String?, filter_photo: Bool?, page_limit: Int, page_offset: Int
         }
         let p = Params(user_lat: lat, user_lng: lng, radius_m: 5000,
                        filter_dept: nil, filter_photo: nil,
@@ -246,6 +246,74 @@ actor SupabaseService {
         if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
         return (try? JSONDecoder().decode([DeletionRequestRecord].self, from: data)) ?? []
     }
+
+    // MARK: - Box Reviews
+
+    // Soumettre un avis sur une boîte (pending → validation admin).
+    // 409 si un avis du même device existe pour cette boîte sur les 7 derniers jours.
+    func insertReview(boxId: Int, authorName: String?, comment: String,
+                      condition: BoxReview.Condition, bookCount: Int?) async throws {
+        struct Body: Encodable {
+            let box_id: Int
+            let author_name: String?
+            let comment: String
+            let box_condition: String
+            let book_count: Int?
+            let device_token: String
+            let platform: String
+        }
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else {
+            throw SupabaseError.httpError(400, "device_token manquant")
+        }
+        let cleanedName = authorName?.trimmingCharacters(in: .whitespaces)
+        let body = try JSONEncoder().encode(Body(
+            box_id: boxId,
+            author_name: (cleanedName?.isEmpty == false) ? cleanedName : nil,
+            comment: comment.trimmingCharacters(in: .whitespaces),
+            box_condition: condition.rawValue,
+            book_count: bookCount,
+            device_token: token,
+            platform: "ios"
+        ))
+        var req = makeRequest(path: "/rest/v1/box_reviews", method: "POST", body: body)
+        req.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+    }
+
+    // Lister les avis approuvés visibles publiquement pour une boîte.
+    func fetchApprovedReviews(boxId: Int) async throws -> [BoxReview] {
+        let req = makeRequest(path: "/rest/v1/box_reviews?box_id=eq.\(boxId)&status=eq.approved&order=created_at.desc&limit=50")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+        return (try? JSONDecoder().decode([BoxReview].self, from: data)) ?? []
+    }
+
+    // Mes avis (tous statuts) via RPC SECURITY DEFINER filtrée par device_token.
+    func fetchMyReviews() async throws -> [BoxReview] {
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else { return [] }
+        let body = try JSONEncoder().encode(["p_device_token": token])
+        var req = makeRequest(path: "/rest/v1/rpc/my_box_reviews", method: "POST", body: body)
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
+        return (try? JSONDecoder().decode([BoxReview].self, from: data)) ?? []
+    }
+
+    // Mes soumissions de nouvelles boîtes via RPC SECURITY DEFINER.
+    func fetchMyBoxSubmissions() async throws -> [BoxSubmissionRecord] {
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else { return [] }
+        let body = try JSONEncoder().encode(["p_device_token": token])
+        var req = makeRequest(path: "/rest/v1/rpc/my_box_submissions", method: "POST", body: body)
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
+        return (try? JSONDecoder().decode([BoxSubmissionRecord].self, from: data)) ?? []
+    }
 }
 
 // MARK: - Data Models
@@ -267,4 +335,15 @@ struct DeletionRequestRecord: Codable, Identifiable {
     let reason: String
     let status: String
     let created_at: String
+}
+
+// Box submission soumise par ce device (RPC my_box_submissions).
+struct BoxSubmissionRecord: Codable, Identifiable {
+    let id: String          // UUID en string
+    let lat: Double
+    let lng: Double
+    let address: String?
+    let city: String?
+    let status: String
+    let submitted_at: String
 }

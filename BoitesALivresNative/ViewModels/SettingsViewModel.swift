@@ -10,17 +10,24 @@ final class SettingsViewModel {
     var pushToken: String? = nil
     var submissions: [PhotoSubmission] = []
     var deletionRequests: [DeletionRequestRecord] = []
+    var myReviews: [BoxReview] = []
+    var myBoxSubmissions: [BoxSubmissionRecord] = []
     var showCacheClearAlert = false
     var cacheClearDone = false
 
-    // Load notification status, device push token, photo submissions and deletion requests on view appear
+    // Load notification status, device push token, photo submissions, deletion requests,
+    // mes avis et mes soumissions de nouvelles boîtes — tout en parallèle.
     func onAppear() async {
         notificationStatus = await NotificationService.shared.getAuthorizationStatus()
         pushToken = NotificationService.shared.getPushToken()
         async let subs = PhotoService.shared.loadSubmissions()
         async let dels = (try? await SupabaseService.shared.fetchMyDeletionRequests()) ?? []
+        async let revs = (try? await SupabaseService.shared.fetchMyReviews()) ?? []
+        async let boxes = (try? await SupabaseService.shared.fetchMyBoxSubmissions()) ?? []
         submissions = await subs
         deletionRequests = await dels
+        myReviews = await revs
+        myBoxSubmissions = await boxes
     }
 
     // Request notification permission and refresh status

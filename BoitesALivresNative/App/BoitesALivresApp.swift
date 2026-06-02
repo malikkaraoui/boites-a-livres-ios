@@ -6,7 +6,6 @@ import UIKit
 @main
 struct BoitesALivresApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @State private var showSplash = true
     @AppStorage("colorSchemeIndex") private var colorSchemeIndex = 0
     @AppStorage("textSizeIndex") private var textSizeIndex = 0
 
@@ -18,27 +17,23 @@ struct BoitesALivresApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                ContentView()
-                    .preferredColorScheme(resolvedColorScheme)
-                    .environment(\.dynamicTypeSize, resolvedTypeSize)
-
-                if showSplash {
-                    SplashView(isVisible: $showSplash)
-                        .transition(.opacity)
-                }
-            }
-            .task {
-                Task.detached(priority: .background) {
-                    try? await Task.sleep(nanoseconds: 2_000_000_000)
-                    let granted = await NotificationService.shared.requestPermission()
-                    if granted {
-                        await MainActor.run {
-                            UIApplication.shared.registerForRemoteNotifications()
+            // Le LaunchScreen iOS natif (Info.plist → UILaunchScreen.LaunchBackground)
+            // assure déjà la transition visuelle au démarrage. Pas de splash SwiftUI
+            // pour éviter de bloquer le first-frame derrière l'init de MapKit.
+            ContentView()
+                .preferredColorScheme(resolvedColorScheme)
+                .environment(\.dynamicTypeSize, resolvedTypeSize)
+                .task {
+                    Task.detached(priority: .background) {
+                        try? await Task.sleep(nanoseconds: 2_000_000_000)
+                        let granted = await NotificationService.shared.requestPermission()
+                        if granted {
+                            await MainActor.run {
+                                UIApplication.shared.registerForRemoteNotifications()
+                            }
                         }
                     }
                 }
-            }
         }
     }
 

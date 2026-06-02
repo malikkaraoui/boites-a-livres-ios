@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 // MARK: - Content View
 
@@ -8,8 +9,11 @@ struct ContentView: View {
     @State private var router = DeepLinkRouter.shared
     @State private var mapPath = NavigationPath()
     @State private var listPath = NavigationPath()
+    @Environment(\.requestReview) private var requestReview
+    @AppStorage("reviewPromptShownForVersion") private var reviewPromptShownForVersion = ""
 
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    private let reviewPromptDelay: UInt64 = 90 * 1_000_000_000
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -47,6 +51,16 @@ struct ContentView: View {
         }
         .onChange(of: router.pendingBoxId) { _, newValue in
             if newValue != nil { selectedTab = 0 }
+        }
+        .task {
+            // Demande de notation auto après 90s d'usage — une fois par version max.
+            // iOS limite réellement le prompt à 3/an, donc requestReview peut être no-op.
+            let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+            guard reviewPromptShownForVersion != currentVersion else { return }
+            try? await Task.sleep(nanoseconds: reviewPromptDelay)
+            guard !Task.isCancelled else { return }
+            reviewPromptShownForVersion = currentVersion
+            requestReview()
         }
     }
 

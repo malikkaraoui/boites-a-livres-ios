@@ -22,6 +22,8 @@
 		6CD04A374AEAF7ABE1357DC1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1147B4F0F538752110450C12 /* SettingsView.swift */; };
 		6F9A1B2C3D4E5F6A7B8C9D0E /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A1B2C3D4E5F6A7B8C9D0E /* SplashView.swift */; };
 		71A7B3C62508394FBCBF7AFA /* BookBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = A924B3C6C1EED9C0DC38F81F /* BookBox.swift */; };
+		B0FE518025A14C90A9F2D4E1 /* BoxReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE517FE5A14C90A9F2D4E1 /* BoxReview.swift */; };
+		B0FE518225A24C90A9F2D4E2 /* ReviewSubmitSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FE5181E5A24C90A9F2D4E2 /* ReviewSubmitSheet.swift */; };
 		77284E55902CE66F31CDABD0 /* BookBoxSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541733523FE0747B494016D /* BookBoxSheet.swift */; };
 		798FE547395A4ED9DE0D6528 /* MapScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEF503EFAC6CC8C6D5968F7 /* MapScreen.swift */; };
 		818A6D2A545006EA1281CA15 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461B34C2E2396E9DE4215E4D /* DetailView.swift */; };
@@ -67,6 +69,8 @@
 		94B765557228691DC2F6C9C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A530FD1A72EA2FF2155F8910 /* PhotoCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCarousel.swift; sourceTree = "<group>"; };
 		A924B3C6C1EED9C0DC38F81F /* BookBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookBox.swift; sourceTree = "<group>"; };
+		B0FE517FE5A14C90A9F2D4E1 /* BoxReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxReview.swift; sourceTree = "<group>"; };
+		B0FE5181E5A24C90A9F2D4E2 /* ReviewSubmitSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewSubmitSheet.swift; sourceTree = "<group>"; };
 		B3C4D5E6F7A8B9C0D1E2F3A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BB1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPhotoViewer.swift; sourceTree = "<group>"; };
 		BFB89F12C1BB8895F56D6F00 /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
@@ -95,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */,
+				B0FE5181E5A24C90A9F2D4E2 /* ReviewSubmitSheet.swift */,
 				AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */,
 				D541733523FE0747B494016D /* BookBoxSheet.swift */,
 				FABE634523BD886953FEE1EC /* CachedAsyncImage.swift */,
@@ -163,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				A924B3C6C1EED9C0DC38F81F /* BookBox.swift */,
+				B0FE517FE5A14C90A9F2D4E1 /* BoxReview.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -272,6 +278,8 @@
 				1835476688A98A8404A34BA5 /* AppDelegate.swift in Sources */,
 				32E3529658CF228BFBB7E28F /* BoitesALivresApp.swift in Sources */,
 				71A7B3C62508394FBCBF7AFA /* BookBox.swift in Sources */,
+				B0FE518025A14C90A9F2D4E1 /* BoxReview.swift in Sources */,
+				B0FE518225A24C90A9F2D4E2 /* ReviewSubmitSheet.swift in Sources */,
 				DD1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift in Sources */,
 				AA00BB11CC22DD33EE44FF55 /* ButtonStyles.swift in Sources */,
 				77284E55902CE66F31CDABD0 /* BookBoxSheet.swift in Sources */,
@@ -326,7 +334,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -335,7 +343,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.malikkaraoui.boitesalivresapp;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -409,7 +417,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -418,7 +426,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.malikkaraoui.boitesalivresapp;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

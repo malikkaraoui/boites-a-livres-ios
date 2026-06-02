@@ -13,6 +13,7 @@ struct DetailView: View {
     @State private var coordRotating = false
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     @State private var showDeletionSheet = false
+    @State private var showReviewSheet = false
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -78,6 +79,9 @@ struct DetailView: View {
                             }
                         }
 
+                        // Avis de la communauté
+                        reviewsSection(box: box)
+
                         // Nearby boxes
                         if !vm.nearbyBoxes.isEmpty {
                             sectionCard {
@@ -131,6 +135,13 @@ struct DetailView: View {
         .sheet(isPresented: $showDeletionSheet) {
             DeletionRequestSheet(boxId: boxId)
         }
+        .sheet(isPresented: $showReviewSheet) {
+            if let box = vm.box {
+                ReviewSubmitSheet(boxId: boxId, boxCoordinate: box.coordinate) {
+                    Task { await vm.reloadReviews(boxId: boxId) }
+                }
+            }
+        }
         .sheet(isPresented: $vm.showPhotoModal) {
             photoPickerSheet
         }
@@ -156,6 +167,112 @@ struct DetailView: View {
     }
 
     // MARK: - Views
+
+    // Section "Avis de la communauté" : état actuel (dénormalisé), liste des avis approuvés, CTA.
+    @ViewBuilder
+    private func reviewsSection(box: BookBox) -> some View {
+        sectionCard {
+            VStack(alignment: .leading, spacing: 12) {
+                sectionTitle("Avis de la communauté")
+
+                // Snapshot état actuel — basé sur le dernier avis approuvé (dénormalisé sur la boîte)
+                if let condStr = box.last_review_condition,
+                   let cond = BoxReview.Condition(rawValue: condStr) {
+                    HStack(spacing: 10) {
+                        ConditionBadge(condition: cond)
+                        if let count = box.last_review_book_count {
+                            Text("~\(count) livres")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        if let when = box.last_review_at {
+                            Text(reviewDateShort(when))
+                                .font(.system(size: 12))
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                    .padding(.bottom, 2)
+                }
+
+                // Liste des avis approuvés
+                if vm.reviews.isEmpty {
+                    Text("Aucun avis pour le moment")
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, 8)
+                } else {
+                    VStack(spacing: 0) {
+                        ForEach(vm.reviews) { review in
+                            reviewRow(review)
+                            if review.id != vm.reviews.last?.id {
+                                Divider().padding(.vertical, 6)
+                            }
+                        }
+                    }
+                }
+
+                // CTA "donner mon avis"
+                Button {
+                    lightHaptic()
+                    showReviewSheet = true
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "square.and.pencil")
+                            .font(.system(size: 14, weight: .semibold))
+                        Text("Donner mon avis")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(green)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 11)
+                    .background(green.opacity(0.10))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 4)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func reviewRow(_ review: BoxReview) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Text(review.displayName)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color(.label))
+                if let cond = review.condition {
+                    ConditionBadge(condition: cond, compact: true)
+                }
+                if let count = review.book_count {
+                    Text("\(count) livres")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Text(reviewDateShort(review.created_at))
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
+            }
+            Text(review.comment)
+                .font(.system(size: 14))
+                .foregroundStyle(Color(.label))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func reviewDateShort(_ iso: String) -> String {
+        let f = ISO8601DateFormatter()
+        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let date = f.date(from: iso) ?? ISO8601DateFormatter().date(from: iso)
+        guard let d = date else { return "" }
+        let rf = RelativeDateTimeFormatter()
+        rf.unitsStyle = .short
+        return rf.localizedString(for: d, relativeTo: Date())
+    }
 
     @ViewBuilder
     private func photoSection(box: BookBox) -> some View {
@@ -256,35 +373,64 @@ struct DetailView: View {
 
     @ViewBuilder
     private func photoAddButton(box: BookBox) -> some View {
-        let canAdd = vm.photos.count < Constants.maxPhotosPerBox
-        Button {
-            if canAdd { vm.showPhotoModal = true }
-        } label: {
-            HStack(spacing: 8) {
-                if vm.uploading {
-                    ProgressView().tint(green)
-                } else {
-                    Image(systemName: "camera.fill").foregroundStyle(green)
-                    Group {
-                        if canAdd {
-                            Text("Ajouter une photo (\(vm.photos.count)/\(Constants.maxPhotosPerBox) publiées)")
-                        } else {
-                            Text("Maximum \(Constants.maxPhotosPerBox) photos atteint")
+        let belowMax = vm.photos.count < Constants.maxPhotosPerBox
+        let distance = distanceFromUser(to: box)
+        let withinRange = (distance ?? .greatestFiniteMagnitude) <= 100
+        let canAdd = belowMax && withinRange
+        return VStack(spacing: 6) {
+            Button {
+                if canAdd { vm.showPhotoModal = true }
+            } label: {
+                HStack(spacing: 8) {
+                    if vm.uploading {
+                        ProgressView().tint(green)
+                    } else {
+                        Image(systemName: canAdd ? "camera.fill" : (withinRange ? "camera.fill" : "location.slash.fill"))
+                            .foregroundStyle(canAdd ? green : .secondary)
+                        Group {
+                            if !belowMax {
+                                Text("Maximum \(Constants.maxPhotosPerBox) photos atteint")
+                            } else if !withinRange {
+                                Text("Trop loin pour ajouter une photo")
+                            } else {
+                                Text("Ajouter une photo (\(vm.photos.count)/\(Constants.maxPhotosPerBox) publiées)")
+                            }
                         }
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(canAdd ? green : .secondary)
                     }
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(canAdd ? green : .secondary)
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(canAdd ? green.opacity(0.1) : Color(.systemGray6))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .opacity(canAdd ? 1 : 0.6)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .background(canAdd ? green.opacity(0.1) : Color(.systemGray6))
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .opacity(canAdd ? 1 : 0.6)
+            .buttonStyle(ScaleButtonStyle())
+            .disabled(vm.uploading || !canAdd)
+            .sensoryFeedback(.impact(weight: .light), trigger: vm.showPhotoModal)
+
+            if belowMax, !withinRange {
+                Text(distanceExplanation(distance))
+                    .font(.system(size: 11))
+                    .foregroundStyle(.orange)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
         }
-        .buttonStyle(ScaleButtonStyle())
-        .disabled(vm.uploading || !canAdd)
-        .sensoryFeedback(.impact(weight: .light), trigger: vm.showPhotoModal)
+    }
+
+    private func distanceFromUser(to box: BookBox) -> CLLocationDistance? {
+        guard let loc = LocationService.shared.currentLocation else { return nil }
+        let target = CLLocation(latitude: box.lat, longitude: box.lng)
+        return loc.distance(from: target)
+    }
+
+    private func distanceExplanation(_ distance: CLLocationDistance?) -> String {
+        guard let d = distance else {
+            return NSLocalizedString("Position introuvable. Activez la localisation pour ajouter une photo.", comment: "")
+        }
+        let formatted = d >= 1000 ? String(format: "%.1f km", d / 1000) : "\(Int(d.rounded())) m"
+        return String(format: NSLocalizedString("Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo.", comment: ""), formatted)
     }
 
     private var photoPickerSheet: some View {

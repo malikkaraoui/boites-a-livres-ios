@@ -16,6 +16,11 @@ struct BookBox: Codable, Identifiable, Hashable {
     let photo_url: String?
     let flag: Int
     var distance_m: Double?
+    // Dénormalisé depuis box_reviews à chaque approbation pour colorer le pin carte.
+    var last_review_condition: String?
+    var last_review_book_count: Int?
+    var last_review_at: String?
+    var reviews_approved_count: Int?
 
     // CLLocationCoordinate2D binding for map annotations
     var coordinate: CLLocationCoordinate2D {
@@ -83,6 +88,15 @@ enum PhotoFilter: String, CaseIterable, Identifiable {
         case .all: return nil
         case .withPhoto: return 1
         case .withoutPhoto: return 0
+        }
+    }
+
+    // RPC nearby_book_boxes attend un BOOLEAN — null = pas de filtre.
+    var boolValue: Bool? {
+        switch self {
+        case .all: return nil
+        case .withPhoto: return true
+        case .withoutPhoto: return false
         }
     }
 }

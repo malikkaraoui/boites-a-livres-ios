@@ -26,7 +26,7 @@
 "Faites découvrir Boîtes à Livres à vos proches !" = "Faites découvrir Boîtes à Livres à vos proches !";
 "Noter l'application" = "Noter l'application";
 "Laisser un avis sur l'App Store" = "Laisser un avis sur l'App Store";
-"share_app_text" = "Découvre Boîtes à Livres 📚 — l'app gratuite pour trouver les boîtes à livres près de chez toi ! Disponible sur iOS.";
+"share_app_text" = "Découvre Boîtes à Livres 📚 — l'app gratuite pour trouver les boîtes à livres près de chez toi !\nDisponible sur iOS : https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762";
 
 /* Settings — Notifications */
 "Statut" = "Statut";
@@ -39,9 +39,14 @@
 "Ouvrir les Réglages" = "Ouvrir les Réglages";
 "Activer les notifications" = "Activer les notifications";
 
-/* Settings — Mes photos */
+/* Settings — Mes soumissions */
 "Aucune photo soumise pour le moment." = "Aucune photo soumise pour le moment.";
-"Mes photos soumises" = "Mes photos soumises";
+"Aucune soumission pour le moment." = "Aucune soumission pour le moment.";
+"Mes photos soumises" = "Mes soumissions";
+"Mes soumissions" = "Mes soumissions";
+"Photo" = "Photo";
+"Nouvelle boîte" = "Nouvelle boîte";
+"Avis" = "Avis";
 "En attente" = "En attente";
 "Acceptée" = "Acceptée";
 "Refusée" = "Refusée";
@@ -95,7 +100,40 @@
 /* List View */
 "Boîtes à livres" = "Boîtes à livres";
 "%lld boîtes chargées" = "%lld boîtes chargées";
+"Toutes" = "Toutes";
+"Avec photo" = "Avec photo";
+"Sans photo" = "Sans photo";
 
 /* Map View */
 "%lld boîtes" = "%lld boîtes";
 "Chargement impossible" = "Chargement impossible";
+
+/* Reviews */
+"Avis de la communauté" = "Avis de la communauté";
+"Donner mon avis" = "Donner mon avis";
+"Envoyer mon avis" = "Envoyer mon avis";
+"Envoi…" = "Envoi…";
+"Avis envoyé" = "Avis envoyé";
+"État de la boîte" = "État de la boîte";
+"Bon" = "Bon";
+"Moyen" = "Moyen";
+"Mauvais" = "Mauvais";
+"Nombre estimé de livres" = "Nombre estimé de livres";
+"Votre nom (facultatif)" = "Votre nom (facultatif)";
+"Anonyme" = "Anonyme";
+"Commentaire" = "Commentaire";
+"Aucun avis pour le moment" = "Aucun avis pour le moment";
+"Vous avez déjà laissé un avis cette semaine sur cette boîte" = "Vous avez déjà laissé un avis cette semaine sur cette boîte";
+"Une erreur est survenue. Réessaie plus tard." = "Une erreur est survenue. Réessaie plus tard.";
+"Merci ! Ton avis sera publié après validation par un administrateur." = "Merci ! Ton avis sera publié après validation par un administrateur.";
+"Vous devez être à moins de 100 m de la boîte pour la noter." = "Vous devez être à moins de 100 m de la boîte pour la noter.";
+"Trop loin pour ajouter une photo" = "Trop loin pour ajouter une photo";
+"Ajouter une photo ?" = "Ajouter une photo ?";
+"Soumettre quand même" = "Soumettre quand même";
+"Une photo aide les autres utilisateurs à reconnaître la boîte. Les soumissions sans photo sont souvent refusées." = "Une photo aide les autres utilisateurs à reconnaître la boîte. Les soumissions sans photo sont souvent refusées.";
+"Position introuvable. Activez la localisation pour ajouter une photo." = "Position introuvable. Activez la localisation pour ajouter une photo.";
+"Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo." = "Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo.";
+"Position introuvable. Activez la localisation pour pouvoir noter cette boîte." = "Position introuvable. Activez la localisation pour pouvoir noter cette boîte.";
+"Localisation en cours…" = "Localisation en cours…";
+"Vous êtes à %d m de la boîte ✓" = "Vous êtes à %d m de la boîte ✓";
+"Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m." = "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m.";

@@ -47,9 +47,14 @@
 "Ouvrir les Réglages" = "Open Settings";
 "Activer les notifications" = "Enable notifications";
 
-/* Settings — Mes photos */
+/* Settings — Mes soumissions */
 "Aucune photo soumise pour le moment." = "No photos submitted yet.";
-"Mes photos soumises" = "My submitted photos";
+"Aucune soumission pour le moment." = "No submissions yet.";
+"Mes photos soumises" = "My submissions";
+"Mes soumissions" = "My submissions";
+"Photo" = "Photo";
+"Nouvelle boîte" = "New box";
+"Avis" = "Review";
 "En attente" = "Pending";
 "Acceptée" = "Approved";
 "Refusée" = "Rejected";
@@ -78,7 +83,7 @@
 "Réessayer" = "Retry";
 
 /* Share */
-"share_app_text" = "Discover Boîtes à Livres 📚 — the free app to find book boxes near you! Available on iOS.";
+"share_app_text" = "Discover Boîtes à Livres 📚 — the free app to find book boxes near you!\nAvailable on iOS: https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762";
 
 /* Detail View */
 "Localisation" = "Location";
@@ -106,7 +111,40 @@
 /* List View */
 "Boîtes à livres" = "Book boxes";
 "%lld boîtes chargées" = "%lld boxes loaded";
+"Toutes" = "All";
+"Avec photo" = "With photo";
+"Sans photo" = "Without photo";
 
 /* Map View */
 "%lld boîtes" = "%lld boxes";
 "Chargement impossible" = "Loading failed";
+
+/* Reviews */
+"Avis de la communauté" = "Community reviews";
+"Donner mon avis" = "Leave a review";
+"Envoyer mon avis" = "Submit review";
+"Envoi…" = "Sending…";
+"Avis envoyé" = "Review sent";
+"État de la boîte" = "Box condition";
+"Bon" = "Good";
+"Moyen" = "Fair";
+"Mauvais" = "Poor";
+"Nombre estimé de livres" = "Estimated book count";
+"Votre nom (facultatif)" = "Your name (optional)";
+"Anonyme" = "Anonymous";
+"Commentaire" = "Comment";
+"Aucun avis pour le moment" = "No reviews yet";
+"Vous avez déjà laissé un avis cette semaine sur cette boîte" = "You already reviewed this box this week";
+"Une erreur est survenue. Réessaie plus tard." = "Something went wrong. Try again later.";
+"Merci ! Ton avis sera publié après validation par un administrateur." = "Thanks! Your review will be published after moderation.";
+"Vous devez être à moins de 100 m de la boîte pour la noter." = "You must be within 100 m of the box to leave a review.";
+"Trop loin pour ajouter une photo" = "Too far to add a photo";
+"Ajouter une photo ?" = "Add a photo?";
+"Soumettre quand même" = "Submit anyway";
+"Une photo aide les autres utilisateurs à reconnaître la boîte. Les soumissions sans photo sont souvent refusées." = "A photo helps other users recognize the box. Submissions without a photo are often rejected.";
+"Position introuvable. Activez la localisation pour ajouter une photo." = "Location unavailable. Enable location to add a photo.";
+"Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo." = "You're %@ away. Get within 100 m to add a photo.";
+"Position introuvable. Activez la localisation pour pouvoir noter cette boîte." = "Location unavailable. Enable location to review this box.";
+"Localisation en cours…" = "Locating…";
+"Vous êtes à %d m de la boîte ✓" = "You're %d m from the box ✓";
+"Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m." = "Too far to review — you're %@ from the box. Get within 100 m.";

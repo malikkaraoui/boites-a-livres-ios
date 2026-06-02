@@ -196,50 +196,139 @@ struct SettingsView: View {
         }
     }
 
+    // Agrège mes photos, mes nouvelles boîtes, mes avis — triés par date desc.
+    private enum MySubmissionEntry: Identifiable {
+        case photo(PhotoSubmission)
+        case box(BoxSubmissionRecord)
+        case review(BoxReview)
+
+        var id: String {
+            switch self {
+            case .photo(let p): return "photo-\(p.id)"
+            case .box(let b): return "box-\(b.id)"
+            case .review(let r): return "review-\(r.id)"
+            }
+        }
+
+        var submittedAt: String {
+            switch self {
+            case .photo(let p): return p.submitted_at
+            case .box(let b): return b.submitted_at
+            case .review(let r): return r.created_at
+            }
+        }
+    }
+
+    private var allMySubmissions: [MySubmissionEntry] {
+        let merged: [MySubmissionEntry] =
+            vm.submissions.map { .photo($0) }
+            + vm.myBoxSubmissions.map { .box($0) }
+            + vm.myReviews.map { .review($0) }
+        return merged.sorted { $0.submittedAt > $1.submittedAt }
+    }
+
     private var submissionsSection: some View {
-        Section("Mes photos soumises") {
-            if vm.submissions.isEmpty {
-                Text("Aucune photo soumise pour le moment.")
+        Section("Mes soumissions") {
+            let entries = allMySubmissions
+            if entries.isEmpty {
+                Text("Aucune soumission pour le moment.")
                     .font(.system(size: 14))
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(vm.submissions) { sub in
-                    HStack(spacing: 12) {
-                        CachedAsyncImage(url: URL(string: sub.url)) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 48, height: 48)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                            case .empty:
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(.systemGray5))
-                                    .frame(width: 48, height: 48)
-                                    .overlay(Image(systemName: "photo").foregroundStyle(.secondary))
-                            case .failure:
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(.systemGray5))
-                                    .frame(width: 48, height: 48)
-                                    .overlay(Image(systemName: "exclamationmark.circle").foregroundStyle(.secondary))
-                            }
-                        }
-
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text(boxTitle(sub.box_id))
-                                .font(.system(size: 14, weight: .semibold))
-                            Text(relativeDate(from: sub.submitted_at))
-                                .font(.system(size: 12))
-                                .foregroundStyle(.secondary)
-                        }
-
-                        Spacer()
-                        statusChip(sub.status)
-                    }
-                    .padding(.vertical, 4)
+                ForEach(entries) { entry in
+                    submissionRow(entry)
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func submissionRow(_ entry: MySubmissionEntry) -> some View {
+        switch entry {
+        case .photo(let p):
+            HStack(spacing: 12) {
+                CachedAsyncImage(url: URL(string: p.url)) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image.resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 48, height: 48)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    case .empty:
+                        placeholderTile(icon: "photo")
+                    case .failure:
+                        placeholderTile(icon: "exclamationmark.circle")
+                    }
+                }
+                rowBody(
+                    title: NSLocalizedString("Photo", comment: "") + " · " + boxTitle(p.box_id),
+                    subtitle: relativeDate(from: p.submitted_at)
+                )
+                statusChip(p.status)
+            }
+            .padding(.vertical, 4)
+
+        case .box(let b):
+            HStack(spacing: 12) {
+                typedIconTile(systemName: "mappin.and.ellipse", color: .blue)
+                rowBody(
+                    title: NSLocalizedString("Nouvelle boîte", comment: "") + " · " + (b.city ?? b.address ?? "—"),
+                    subtitle: relativeDate(from: b.submitted_at)
+                )
+                statusChip(b.status)
+            }
+            .padding(.vertical, 4)
+
+        case .review(let r):
+            HStack(spacing: 12) {
+                typedIconTile(systemName: "square.and.pencil", color: green)
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 6) {
+                        Text(NSLocalizedString("Avis", comment: "") + " · " + boxTitle(r.box_id))
+                            .font(.system(size: 14, weight: .semibold))
+                        if let cond = r.condition {
+                            ConditionBadge(condition: cond, compact: true)
+                        }
+                    }
+                    Text(r.comment)
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                    Text(relativeDate(from: r.created_at))
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color(.tertiaryLabel))
+                }
+                Spacer()
+                statusChip(r.status)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    private func rowBody(title: String, subtitle: String) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title).font(.system(size: 14, weight: .semibold))
+            Text(subtitle).font(.system(size: 12)).foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func placeholderTile(icon: String) -> some View {
+        RoundedRectangle(cornerRadius: 8)
+            .fill(Color(.systemGray5))
+            .frame(width: 48, height: 48)
+            .overlay(Image(systemName: icon).foregroundStyle(.secondary))
+    }
+
+    private func typedIconTile(systemName: String, color: Color) -> some View {
+        RoundedRectangle(cornerRadius: 8)
+            .fill(color.opacity(0.15))
+            .frame(width: 48, height: 48)
+            .overlay(
+                Image(systemName: systemName)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(color)
+            )
     }
 
     private var deletionRequestsSection: some View {
