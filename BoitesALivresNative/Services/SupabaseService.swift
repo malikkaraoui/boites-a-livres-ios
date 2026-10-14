@@ -226,15 +226,19 @@ actor SupabaseService {
         }
     }
 
-    // Fetch all photo submissions for current user (optionally filtered by box)
+    // Mes soumissions photo via RPC SECURITY DEFINER, cloisonnées par device_token (issue #2).
+    // Plus aucune lecture directe de la table : sans token push, la liste est vide.
     func fetchPhotoSubmissions(for boxId: Int? = nil) async throws -> [PhotoSubmission] {
-        let filter = boxId.map { "box_id=eq.\($0)" } ?? ""
-        let req = makeRequest(path: "/rest/v1/photo_submissions?order=submitted_at.desc\(filter.isEmpty ? "" : "&\(filter)")")
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else { return [] }
+        let body = try JSONEncoder().encode(["p_device_token": token])
+        let req = makeRequest(path: "/rest/v1/rpc/my_photo_submissions", method: "POST", body: body)
         let (data, response) = try await URLSession.shared.data(for: req)
         if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
             throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
         }
-        return try JSONDecoder().decode([PhotoSubmission].self, from: data)
+        let all = try JSONDecoder().decode([PhotoSubmission].self, from: data)
+        guard let boxId else { return all }
+        return all.filter { $0.box_id == boxId }
     }
 
     // Fetch deletion requests submitted from this device
