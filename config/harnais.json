@@ -86,5 +86,25 @@
       },
       "vault/reprise/CARNET_DE_BORD.md"
     ]
+  },
+  "niveaux": {
+    "critiques": [
+      "BoitesALivresNative/Services/SupabaseService.swift",
+      "BoitesALivresNative/App/Constants.swift",
+      "BoitesALivresNative/App/AppDelegate.swift",
+      "BoitesALivresNative/Services/NotificationService.swift",
+      "BoitesALivresNative/Services/LocationService.swift",
+      "BoitesALivresNative/Services/PhotoService.swift",
+      "BoitesALivresNative/ViewModels/AddBoxViewModel.swift",
+      "BoitesALivresNative/ViewModels/SettingsViewModel.swift",
+      "BoitesALivresNative/ViewModels/DetailViewModel.swift",
+      "BoitesALivresNative/Info.plist",
+      "BoitesALivresNative/PrivacyInfo.xcprivacy",
+      "BoitesALivresNative/*.entitlements",
+      "BoitesALivresNative.xcodeproj/project.pbxproj",
+      "project.yml",
+      "Makefile"
+    ],
+    "n1_max_lignes": 300
   }
 }
