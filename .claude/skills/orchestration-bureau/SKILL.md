@@ -68,7 +68,8 @@ de fin.
 Frontmatter obligatoire (gabarit exact : `references/gabarits.md` §1) : `date, tags, session,
 mandat, mandat_id` (compteur `state.json.next_mandat_id` **relu à l'instant T**, jamais « le dernier
 vu + 1 »), `statut` (démarre à `en-pose`), `modele, effort, worktree, branche, derniere_maj`
-(horloge réelle interrogée dans le même tour, jamais estimée — commande en §12).
+(horloge réelle interrogée dans le même tour, jamais estimée — commande en §12), `niveau` de
+relecture (§9 ; absent = N2).
 
 Corps du mandat, **AUTONOME** : la session terminal ne voit rien de la conversation d'orchestration,
 tout le contexte nécessaire est dans le fichier.
@@ -204,9 +205,10 @@ contradiction footer/narration = STOP, ne pas fermer la fenêtre. Mise à jour d
 carnet À CHAQUE événement (prompt prêt, rendu ✅/⚠️/⛔, merge soldé avec SHA, décision du fondateur
 **verbatim et datée** — une décision actée ne se re-débat pas sans demande explicite).
 
-Doublage indépendant OBLIGATOIRE avant tout merge (§9). **⚠️ « mergeable avec réserve » n'autorise
-PAS un merge par défaut** : correctif d'abord (jamais de dette), re-doublage, puis merge — sauf
-acceptation explicite et datée du fondateur. Mandat suivant posé aussitôt (§3).
+Relecture au niveau du mandat OBLIGATOIRE avant tout merge (§9). **Une réserve bloquante n'autorise
+PAS le merge** : correctif d'abord, re-relecture selon le niveau, puis merge — sauf acceptation
+explicite et datée du fondateur. Une remarque ne bloque rien : elle est en issue. Mandat suivant
+posé aussitôt (§3).
 
 Deux rapports contradictoires (« poussé » vs « pas poussé ») = course probable : vérifier l'état
 réel, **jamais refaire une opération sur une simple affirmation**.
@@ -245,7 +247,8 @@ Merge vers `<principale>` : scratch détaché + `merge --no-ff`, tests **sur ce 
 `merge --ff-only` depuis la racine + push + `ls-remote` collé (bloc exact : gabarit §9). Refus
 `ff-only` = rapport, **jamais de force** ; si `origin/<principale>` a bougé entre le scratch et le
 `ff-only`, refaire le scratch UNE fois. Le hook `pre-push` du harnais refuse tout push sur
-`<principale>` qui introduit un merge sans rapport de doublage `verdict: GO` citant le tip mergé.
+`<principale>` qui introduit un merge sans rapport de doublage `verdict: GO` citant le tip mergé,
+ou dont le `niveau:` ne couvre pas les chemins touchés (§9).
 
 JAMAIS `stash` / `reset --hard` / `checkout -- .` / `update-ref` / `pull --rebase --autostash` à la
 racine partagée. `git commit -- <chemins>` explicite toujours (index partagé) ; commit AVANT toute
@@ -261,8 +264,26 @@ injoignable → rien de forcé : consigner le SHA en attente dans `state.json.pr
 
 ## 9. Doublage — la méthode trio
 
-Rien ne merge sans doublage **indépendant** : session séparée, worktree détaché **lecture seule**,
-auteur ≠ doubleur. Numérotation `R0xx` continue (`state.json.next_revue_id` relu à l'instant T),
+**Niveau de relecture**, choisi par l'orchestrateur à la pose (`niveau:` du frontmatter, absent = N2) :
+
+- **N1 léger** (UX, texte, style, petit composant sans logique métier) : tests et preuve d'écran par
+  l'auteur ; relecture par un sous-agent FRAIS de la même session, une passe, rapport court
+  (`verdict:`, `tip:`, `niveau: N1`) ; jamais de re-relecture.
+- **N2 standard** : doublage indépendant (session ou sous-agent frais), une passe ; au plus une
+  re-relecture, et seulement sur réserve bloquante.
+- **N3 critique** : tout ce paragraphe, sans allègement (doublage en chaîne, loi des deux patchs).
+
+Plancher : clé `niveaux` de la config (`critiques[]`, `n1_max_lignes`), liste établie et tenue par
+le Cowork du projet. Le hook `pre-push` refuse un merge qui touche un chemin critique hors N3, un N1
+sans liste ou au-delà du plafond (« passe en N2 »).
+
+**Réserve bloquante ou remarque** (tous niveaux) : une réserve ne bloque que si un test rouge la
+prouve (en N3, aussi un axe ⛔ que ce paragraphe exige : budget, preuve d'écran, symptôme non
+résolu). Tout le reste est une remarque : issue GitHub ouverte par la session, jamais un nouveau
+tour. Le doubleur classe chaque point ; `verdict: RESERVE` exige au moins une réserve bloquante.
+
+Doublage N2/N3 **indépendant** : session séparée ou sous-agent frais, worktree détaché **lecture
+seule**, auteur ≠ doubleur. Numérotation `R0xx` continue (`state.json.next_revue_id` relu à l'instant T),
 rapport dans `vault/revues/AAAA-MM-JJ-R0xx-<slug>.md`. Ce rapport est committé dans le scratch de merge, après le
 `merge --no-ff` et avant le `ff-only`, pour partir dans le même push que le merge (gabarit §9).
 
@@ -273,8 +294,8 @@ vide) — **jamais** « `<principale>` n'a pas bougé », qui produit des STOP �
 working tree de la racine. Vérifier `git log -1 -- <echanges>/Fxx.md` (un échange jamais committé
 est un piège classique). Un STOP en voie de mandat → footer `BLOCKED`, jamais `READY`.
 
-Verdict **par axe**, avec la RAISON vérifiée : ✅ GO / ⚠️ mergeable avec réserves / ⛔ CASSÉ.
-⛔ → correction puis doublage **EN CHAÎNE** (R0xx suivant) sur le tip corrigé.
+Verdict **par axe**, avec la RAISON vérifiée : ✅ GO / ⚠️ remarque (issue) / ⛔ réserve bloquante.
+⛔ → correction puis re-relecture sur le tip corrigé : N2 une seule, N3 **EN CHAÎNE** (R0xx suivant).
 
 **Loi des deux patchs** : 2 correctifs successifs sur la même classe de défaut = le MÉCANISME est en
 cause, on reconçoit, on ne patche plus. « Préexistant, hors périmètre » au 3e rapport = mandat dédié.

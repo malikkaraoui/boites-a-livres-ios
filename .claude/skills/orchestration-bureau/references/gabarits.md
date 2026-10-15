@@ -24,11 +24,14 @@ statut: en-pose
 commande: cd '<racine>' && claude --disallowedTools ScheduleWakeup,CronCreate --settings '<hooks du superviseur>' --model '<modele>' --effort '<effort>' 'Va lire ton prompt dans <echanges>/Fxx.md et exécute-le. Applique strictement les rituels décrits.'
 worktree: <projet.racine>/<chemins.worktrees>/Fxx-Mxxxx
 branche: <nom-de-branche>
+niveau: <N1 | N2 | N3>
 derniere_maj: AAAA-MM-JJTHH:MM:SS+ZZ:ZZ
 ---
 ```
 
-`mandat_id` = `state.json.next_mandat_id` **relu à l'instant T**. `derniere_maj` = sortie exacte de
+`mandat_id` = `state.json.next_mandat_id` **relu à l'instant T**. `niveau` = relecture choisie (SKILL.md
+§9) : N1 seulement hors des `niveaux.critiques` de la config et sous `n1_max_lignes` ; chemin critique
+touché = N3 ; doute = N2 (valeur absente = N2 ; autre valeur : `LANCEMENT_REFUSE mandat-invalide`). `derniere_maj` = sortie exacte de
 `TZ=<projet.timezone> date +%Y-%m-%dT%H:%M:%S%z`, en dernier geste avant chaque écriture. `statut` :
 `en-pose`, puis `pret-a-lancer` en tout dernier geste (§6), ou `prompt-disponible` (manuel, §5).
 `commande` = UNE ligne, **exécutée telle quelle** par le superviseur : modèle et effort s'y lisent
@@ -225,7 +228,8 @@ Le rapport de doublage GO est committé dans le scratch **après** le `merge --n
 `<principale>` qui introduit un merge sans rapport GO pour le tip mergé dans l'arbre poussé.
 Un rapport de doublage couvre une seule branche ; son frontmatter, fermé par `---`, porte
 **exactement une** ligne `verdict: GO` **et exactement une** ligne `tip: <sha 40>` (SHA complet du tip
-de cette branche, `git rev-parse <tip>`) ; une citation du tip dans le corps ne compte pas.
+de cette branche, `git rev-parse <tip>`), plus au plus une ligne `niveau: N1|N2|N3` (absente = N2) ;
+une citation du tip dans le corps ne compte pas.
 Avant ce bloc, `git -C $R rev-parse $P origin/$P` rend deux fois le même SHA : des commits du vault
 restés locaux (`git.pousser_vault: false`) sont poussés d'abord, sinon le `ff-only` est refusé.
 Commits directs sur la principale : seulement des chemins `vault/` ; tout le reste passe par une
