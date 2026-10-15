@@ -1,0 +1,84 @@
+---
+date: 2026-10-15
+tags: [harnais, hygiene]
+session: F01
+mandat: harnais-suivi-git
+mandat_id: M0001
+statut: reponse-disponible
+commande: cd '/Users/malik/Documents/Boites-a-livres/BoitesALivresNative' && claude --dangerously-skip-permissions --disallowedTools ScheduleWakeup,CronCreate --settings '/Users/malik/.harnais/hooks.json' --model 'sonnet' --effort 'medium' 'Va lire ton prompt dans vault/echanges/F01.md et exécute-le. Applique strictement les rituels décrits.'
+worktree: /Users/malik/Documents/Boites-a-livres/BoitesALivresNative/.claude/worktrees/F01-M0001
+branche: chore/harnais-suivi
+derniere_maj: 2026-10-15T15:30:39+0200
+---
+
+# F01 / M0001 — Enregistrer dans git les fichiers du harnais (et docs projet) pour rendre le dossier propre
+
+**Tu ne poses JAMAIS de question et tu n'attends JAMAIS de réponse.** Personne n'est devant l'écran. Arbitrage nécessaire → **STOP** : question, options, ton choix et sa raison dans le rapport, puis rituels de fin. Un STOP propre est un rendu valable.
+
+Modèle : sonnet, effort medium.
+
+## Pourquoi
+Le harnais v1.5.0 a été posé ici le 14/10 mais jamais committé. La mise à jour vers v1.6.0 est refusée (« dossier sale »). Fichiers en cause (relevé du guichet, 15/10 15:28) : `.gitignore` modifié (bloc `harnais:registres`), et non suivis : `.claude/skills/orchestration-bureau/SKILL.md`, `.claude/skills/orchestration-bureau/references/gabarits.md`, `config/harnais.json`, `scripts/harnais-hooks/{README.md,commit-msg,pre-commit,pre-merge-commit,pre-push}`, `.mcp.json`, `CLAUDE.md`.
+
+## GARDES
+1. Dépôt `malikkaraoui/boites-a-livres-ios`. `git fetch origin` ; `origin/main` = `97832992dedc9e93a8b6f1cfff58fe62d0752fba` sinon STOP.
+2. La racine est sur la branche locale vide `feature/mcp-supabase` (= `97832992dedc9e93a8b6f1cfff58fe62d0752fba`, aucun commit propre). Vérifie-le (`git rev-parse feature/mcp-supabase` = `97832992dedc9e93a8b6f1cfff58fe62d0752fba`), puis `git switch main` à la racine (les fichiers non suivis et la modif de `.gitignore` suivent sans conflit). Ensuite `git branch -d feature/mcp-supabase` (pas `-D`). Écart → STOP.
+
+## Travail — worktree `.claude/worktrees/F01-M0001`, branche `chore/harnais-suivi` depuis `origin/main`
+1. Copie À L'IDENTIQUE depuis la racine dans le worktree (`cp -p`, puis `cmp`) : la liste ci-dessus, `.gitignore` compris.
+2. `.mcp.json` : il ne contient qu'une URL du serveur MCP Supabase et la référence du projet (pas de clé) — vérifie-le (aucun `key`, `token`, `secret`) ; s'il en contient un → ne le committe pas et ajoute-le au `.gitignore`. Sinon committe-le.
+3. Aucun secret : `grep -rniE "(service_role|secret|password|BEGIN .*PRIVATE)"` sur les fichiers ajoutés, résultat collé.
+4. Commits ciblés (jamais `-A`) : `chore(harnais): suivre les fichiers du harnais v1.5.0` puis `docs: documents projet` (si docs). Trailer `Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>`.
+5. Push de la branche, `git ls-remote origin refs/heads/chore/harnais-suivi` collé. **Pas de merge** (doublage suivra). Worktree conservé.
+
+## Interdits
+Aucun code d'application touché. Jamais `sleep`, `stash`, `reset --hard`, `checkout -- .`, `rebase`, `push --force`, `--no-verify` ; rien écrit sous `~/.harnais` ; `rm -rf` seulement `"${VAR:?}/${SOUS:?}"` ; chaque commande git séparée et vérifiée.
+
+## Rituels
+DÉBUT : `statut: en-cours`.
+FIN, dans l'ordre :
+1. section Rapport M0001 ci-dessous (SHA, ls-remote, liste exacte des fichiers committés, sortie du grep) ;
+2. `vault/reprise/F01.md` ;
+3. `MANDAT_RENDU` dans `vault/runtime/events.jsonl` + `windows.F01` dans `vault/runtime/state.json` (crée-le s'il manque : `next_mandat_id: M0002`, `next_revue_id: R001`), non committés ;
+4. commit vault-only `docs(vault): reprise F01 M0001` sur main + push ;
+5. footer gabarit §4 ;
+6. DERNIER GESTE : `statut: reponse-disponible`.
+
+## Rapport M0001
+**Gardes** : `origin/main` = `97832992dedc9e93a8b6f1cfff58fe62d0752fba` ✔ ; `feature/mcp-supabase` = même SHA ✔ ; `git switch main` à la racine OK ; `git branch -d feature/mcp-supabase` OK (« Deleted branch … was 9783299 »).
+
+**Branche** `chore/harnais-suivi` (depuis `origin/main`), worktree `.claude/worktrees/F01-M0001` conservé.
+**Commit** : `ceb26fa6d2f758ad38d04ac9e21ecae1d73db9fb` — `chore(harnais): suivre les fichiers du harnais v1.5.0`.
+**ls-remote** : `ceb26fa6d2f758ad38d04ac9e21ecae1d73db9fb	refs/heads/chore/harnais-suivi`
+
+**Fichiers committés (11, copiés `cp -p` puis `cmp` OK)** :
+`.gitignore` (modifié, +54), `.claude/skills/orchestration-bureau/SKILL.md`, `.claude/skills/orchestration-bureau/references/gabarits.md`, `config/harnais.json`, `scripts/harnais-hooks/{README.md,commit-msg,pre-commit,pre-merge-commit,pre-push}`, `.mcp.json`, `CLAUDE.md`.
+Pas de second commit `docs:` : aucun document projet hors cette liste.
+
+**`.mcp.json`** : uniquement l'URL `https://mcp.supabase.com/mcp?project_ref=…` (type http) ; `grep -niE "key|token"` = aucun résultat → committé.
+
+**grep secrets** (`grep -rniE "(service_role|secret|password|BEGIN .*PRIVATE)"` sur les fichiers ajoutés) :
+```
+.gitignore:20:# Secrets (ne jamais committer)
+.gitignore:22:Secrets.swift
+```
+→ deux lignes de `.gitignore` (commentaire et motif d'exclusion), aucun secret.
+
+**Constats** :
+- `events.jsonl` contient `MANDAT_SUSPECT` (`modele-non-respecte`) posé par le superviseur : `modele_demande: sonnet`, `modele_reel: claude-sonnet-5-5`, `conforme: false`. Je ne l'ai pas levé (hors périmètre) ; à traiter par l'orchestrateur.
+- Hooks `core.hooksPath=scripts/harnais-hooks` actifs à la racine.
+- La racine garde `.gitignore` modifié (contenu identique à celui committé sur la branche) tant que la branche n'est pas mergée ; il disparaîtra du diff au merge.
+- Pas de merge (doublage à suivre). Aucun code d'application touché.
+
+Vault : commit `c8c1926a22ab113aa8f874233d5e3fac58206c00` (`docs(vault): reprise F01 M0001`) poussé sur `main` (`git ls-remote` : `c8c1926a22ab113aa8f874233d5e3fac58206c00	refs/heads/main`). Ce push ne contient que `vault/`, pas la branche `chore/harnais-suivi`.
+
+M0001
+Implementation      ✅
+Tests               ✅
+Commit              ✅
+Branch push         ✅
+Review              ❌
+Merge main          ❌
+Main push           ❌
+TASK STATUS         READY_FOR_INTEGRATION
+PROJECT STATUS      NOT_INTEGRATED
