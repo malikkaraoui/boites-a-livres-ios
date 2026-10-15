@@ -12,7 +12,7 @@ Quatre hooks, tous en `sh` POSIX, sans dépendance :
 | `pre-commit` | Refuse un commit qui ferait dépasser la limite d'octets à l'index de reprise, ou qui fait sortir un fichier chargé d'office (`CLAUDE.md`, rules, `SKILL.md`, index, carnet) de son budget : taille en caractères, largeur de ligne. **Imprime le remède.** | Oui (c'est son objet) |
 | `pre-merge-commit` | Rejoue `pre-commit` sur le résultat d'un merge sans conflit (git ne le fait pas). | Oui |
 | `commit-msg` | Impose le trailer de signature du projet, quelle que soit la signature proposée par l'outil appelant. | **Jamais** (`exit 0` en toute circonstance) |
-| `pre-push` | Sur la branche principale, ne laisse passer que les merges couverts par un rapport de doublage GO (`tip:` = le tip mergé) et les commits qui ne touchent que `vault/`. | Oui, **sur la branche principale seulement** |
+| `pre-push` | Sur la branche principale, ne laisse passer que les merges couverts par un rapport de doublage GO (`tip:` = le tip mergé) d'un niveau qui couvre les chemins touchés (`niveau:`, `niveaux` de la config), et les commits qui ne touchent que `vault/`. | Oui, **sur la branche principale seulement** |
 
 ## Activation
 
@@ -282,16 +282,40 @@ Pour chaque ligne visant `refs/heads/<branche principale>` :
    - porte **exactement une** ligne `verdict:`, égale à `GO` (O2) ;
    - porte **exactement une** ligne `tip:`, égale au **SHA complet** (40 caractères) de `T` (O1).
 
+   - porte **au plus une** ligne `niveau:`, égale à `N1`, `N2` ou `N3` ; absente = `N2` (M0292).
+
    Le corps du rapport ne compte plus : un SHA cité en passant ne couvre rien (P24), un SHA court non
-   plus (P25). Un rapport malformé ou contradictoire est ignoré, jamais une erreur (P26, P27).
+   plus (P25). Un rapport malformé ou contradictoire est ignoré, jamais une erreur (P26, P27, N8).
    **Exception** (option B, décision Malik du 2026-09-24 00:28, « go pour b ») : si `T` est **déjà
    publié** — ancêtre de `remote` quand il est non nul, sinon atteignable depuis une ref
    `refs/remotes/*` — le merge est ignoré : il n'introduit aucun travail non doublé. C'est le cas
    d'un merge de la principale **dans** une branche (base périmée, convention §8 ; témoins P13, P16).
    Un tip poussé sur une *autre* branche distante n'est **pas** « publié » au sens de cette règle
    quand `remote` est connu : le merge final d'une branche doublée reste exigé (témoin P17) ;
-4. sinon refus (`exit 1`) : le commit fautif et **un** chemin hors `vault/`, ou le merge et le SHA
-   de `T` qui manque, puis la marche à suivre.
+4. **niveau (M0292, décision Malik du 2026-10-15)** : plusieurs rapports GO pour `T` → le plus haut
+   niveau compte (N11). `N3` passe. Sinon le diff du merge (`M^1..M`, `--no-renames`) est confronté à
+   `niveaux.critiques`, lue dans la config du working tree **et** dans celles des arbres `M^1` et `M`
+   (union : une branche ne retire pas son propre chemin de la liste, N10). **Aucun nom de fichier
+   n'est relu dans une sortie de git pour décider** (loi des deux patchs, R166-1 puis R167-1) : git
+   confronte lui-même le diff aux motifs, passés en pathspec `:(glob)<motif>` à `git diff --quiet`
+   (1 = touché, 0 = non, autre = erreur → refus, R167-3). Motifs relatifs à la racine, grammaire des
+   pathspecs glob de git : `**` traverse les dossiers, `*`, `?` et `[ab]` non, un motif couvre aussi
+   tout ce qui est sous lui (`wallet` = `wallet/**`) ; `*.sol` ne vaut qu'à la racine, `**/*.sol`
+   partout (N9) ; un motif que git rejette (`/wallet`) fait refuser le push. Chemin critique touché
+   hors N3 → refus (N1, N6, R166-1, R167-1). `N1` exige en plus une liste non vide **dans une config que la branche ne
+   peut pas écrire** — l'arbre `M^1`, ou `HARNAIS_CONFIG` s'il est absolu ; jamais le working tree ni
+   l'arbre `M` (R166-2) — (N4, N4b) et un diff hors
+   `vault/` (exclu par pathspec) d'au plus `niveaux.n1_max_lignes` lignes ajoutées + retirées, lues
+   par `git diff --numstat` sans `-z` : un nom, cité par git, tient sur sa ligne (R167-2) ; défaut 300,
+   la plus petite valeur lue ; binaire = 1 ligne ; N3, N3b) → sinon refus « passe en N2 ». Sans clé `niveaux` et sans
+   ligne `niveau:`, rien ne change (N7). **Ce que git lit et que la branche peut écrire est neutralisé
+   (M0293, R168)** : chaque motif est aussi passé en `:(glob)<motif>/**` (`wallet/*` couvre
+   `wallet/sous/x.ts`, R168-1) ; `--ignore-submodules=none` (un `.gitmodules` `ignore = all` ne cache pas
+   un sous-module, R168-2) ; `--numstat` lu avec `git --attr-source=<arbre vide>` (un `.gitattributes`
+   `binary` / `-diff` ne réduit pas le compte, R168-3) ; `GIT_*_PATHSPECS` effacées (R168-4). **Le
+   plafond N1 exige git ≥ 2.40** : en dessous, N1 est refusé avec un message clair (M0293-V1) ;
+5. sinon refus (`exit 1`) : le commit fautif et **un** chemin hors `vault/`, ou le merge et le SHA
+   de `T` qui manque, ou le chemin critique et le motif, ou le plafond N1, puis la marche à suivre.
 
 Forme attendue d'un rapport de doublage (gabarit §9) :
 
@@ -299,6 +323,7 @@ Forme attendue d'un rapport de doublage (gabarit §9) :
 ---
 verdict: GO
 tip: <SHA complet, 40 caractères, du tip doublé>
+niveau: <N1 | N2 | N3>   # facultatif, absent = N2
 ---
 ```
 
@@ -331,6 +356,8 @@ Limites connues, assumées :
 - merge « truqué » : le contenu propre d'un commit de merge (résolution, ou modification ajoutée au
   moment du merge) n'est pas inspecté ; seul le rapport GO du second parent est exigé ;
 - seul le second parent est contrôlé (un merge octopus n'est couvert que pour son deuxième parent) ;
+- `pre-merge-commit` ne contrôle pas le niveau : au moment du merge, le rapport n'est pas encore
+  committé (il l'est juste après, dans le scratch) ; la garde du niveau vit au push ;
 - distant nul (premier push de la principale vers un distant) : la plage est `local --not --remotes`.
   « Publié » = atteignable depuis n'importe quelle ref `refs/remotes/*`, y compris une branche de
   travail déjà poussée — plus permissif que le cas nominal. Et sans aucune ref `refs/remotes/*`,
