@@ -241,13 +241,23 @@ actor SupabaseService {
         return all.filter { $0.box_id == boxId }
     }
 
-    // Fetch deletion requests submitted from this device
+    // Mes demandes de suppression via RPC SECURITY DEFINER, cloisonnées par device_token (issue #6).
+    // Plus aucune lecture directe de la table : sans token push, la liste est vide.
+    // RPC absente en base (404 PGRST202) ou toute autre erreur HTTP → liste vide + log.
     func fetchMyDeletionRequests() async throws -> [DeletionRequestRecord] {
-        guard let token = NotificationService.shared.getPushToken() else { return [] }
-        let encoded = token.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? token
-        let req = makeRequest(path: "/rest/v1/deletion_requests?device_token=eq.\(encoded)&order=created_at.desc&limit=5")
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else { return [] }
+        let body = try JSONEncoder().encode(["p_device_token": token])
+        let req = makeRequest(path: "/rest/v1/rpc/my_deletion_requests", method: "POST", body: body)
         let (data, response) = try await URLSession.shared.data(for: req)
-        if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            let msg = String(data: data, encoding: .utf8) ?? ""
+            if http.statusCode == 404 && msg.contains("PGRST202") {
+                print("[Supabase] RPC my_deletion_requests absente (PGRST202) : liste vide")
+            } else {
+                print("[Supabase] my_deletion_requests HTTP \(http.statusCode) : liste vide")
+            }
+            return []
+        }
         return (try? JSONDecoder().decode([DeletionRequestRecord].self, from: data)) ?? []
     }
 
