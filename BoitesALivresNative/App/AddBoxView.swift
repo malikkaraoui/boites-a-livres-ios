@@ -308,6 +308,8 @@ struct AddBoxView: View {
             Button("Prendre une photo") { showCamera = true }
             Button("Choisir dans la bibliothèque") { showLibrary = true }
             Button("Annuler", role: .cancel) {}
+        } message: {
+            Text("Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées.")
         }
         .alert("Ajouter une photo ?", isPresented: $showNoPhotoWarning) {
             Button("Ajouter une photo") { showPhotoOptions = true }

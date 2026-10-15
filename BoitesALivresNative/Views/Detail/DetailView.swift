@@ -433,6 +433,23 @@ struct DetailView: View {
         return String(format: NSLocalizedString("Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo.", comment: ""), formatted)
     }
 
+    // Avertissement droit à l'image, affiché avant la prise ou le choix de la photo (issue #4)
+    private var noPeopleWarning: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "person.crop.circle.badge.xmark")
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.orange)
+            Text("Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées.")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Color(.label))
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .background(Color.orange.opacity(0.12))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
     private var photoPickerSheet: some View {
         VStack(spacing: 0) {
             VStack(spacing: 4) {
@@ -443,7 +460,11 @@ struct DetailView: View {
                     .foregroundStyle(.secondary)
             }
             .padding(.top, 24)
-            .padding(.bottom, 20)
+            .padding(.bottom, 16)
+
+            noPeopleWarning
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
 
             VStack(spacing: 12) {
                 Button {
@@ -515,7 +536,7 @@ struct DetailView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
         }
-        .presentationDetents([.height(330)])
+        .presentationDetents([.height(410)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.ultraThinMaterial)
         .presentationCornerRadius(28)
