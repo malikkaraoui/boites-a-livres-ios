@@ -1,0 +1,5 @@
+fiche 227 stable: bouton 'Voir le détail' exists=true frame=(27.203980099502488, 790.4643449419568, 347.5920398009951, 40.32835820895525) écran=(402.0, 874.0)
+fiche 14183 stable: bouton 'Voir le détail' exists=true frame=(20.0, 566.3333333333333, 362.0, 42.0) écran=(402.0, 874.0)
+titre 14183 visible=false titre 227 visible=false
+fiche 227 stable (retour): bouton 'Voir le détail' exists=true frame=(20.0, 566.3333333333333, 362.0, 42.0) écran=(402.0, 874.0)
+titre 227 visible=false titre 14183 visible=false

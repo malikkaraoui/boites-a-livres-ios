@@ -1,0 +1,12 @@
+Timestamp               Ty Process[PID:TID]
+2026-10-18 20:52:14.556 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] MAPTAP handling=false selected=-1
+2026-10-18 20:52:14.556 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:52:14.588 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] SELECTED -1 -> 14183
+2026-10-18 20:52:14.698 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] PROBE box=14183 vc=4227765115109268562 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 h=354 y=0 presenting=true
+2026-10-18 20:52:17.520 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] MAPTAP handling=false selected=14183
+2026-10-18 20:52:17.521 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:52:17.545 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] SELECTED 14183 -> 227
+2026-10-18 20:52:17.551 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] PROBE box=227 vc=4227765115109268562 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 h=354 y=0 presenting=false
+2026-10-18 20:52:22.441 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] SELECTED 227 -> -1
+2026-10-18 20:52:23.189 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] PROBE box=227 vc=4227765115109268562 detents=[Fraction:0.75,Height:320.0] selected=Fraction:0.75 h=-1 y=-1 presenting=false
+2026-10-18 20:52:23.192 Df BoitesALivresNative[67279:3371e1e] [R015:sheet] ONDISMISS

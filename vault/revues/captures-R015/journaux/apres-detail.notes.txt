@@ -1,0 +1,2 @@
+textes détail: ["#227 — Annecy", "Carte", "Liste", "Réglages", "#227 — Annecy", "LOCALISATION", "ADRESSE"]
+retour: fiche présente=false

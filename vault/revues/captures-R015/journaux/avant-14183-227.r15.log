@@ -1,0 +1,11 @@
+Timestamp               Ty Process[PID:TID]
+2026-10-18 20:48:43.286 Df BoitesALivresNative[63793:336cf56] [R015:sheet] MAPTAP handling=false selected=-1
+2026-10-18 20:48:43.287 Df BoitesALivresNative[63793:336cf56] [R015:sheet] SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:48:43.312 Df BoitesALivresNative[63793:336cf56] [R015:sheet] SELECTED -1 -> 14183
+2026-10-18 20:48:43.417 Df BoitesALivresNative[63793:336cf56] [R015:sheet] PROBE box=14183 vc=-5814912336230172141 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 h=354 y=0 presenting=true
+2026-10-18 20:48:46.952 Df BoitesALivresNative[63793:336cf56] [R015:sheet] MAPTAP handling=false selected=14183
+2026-10-18 20:48:46.953 Df BoitesALivresNative[63793:336cf56] [R015:sheet] SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:48:46.968 Df BoitesALivresNative[63793:336cf56] [R015:sheet] SELECTED 14183 -> 227
+2026-10-18 20:48:47.491 Df BoitesALivresNative[63793:336cf56] [R015:sheet] PROBE box=14183 vc=-5814912336230172141 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 h=-1 y=-1 presenting=false
+2026-10-18 20:48:47.499 Df BoitesALivresNative[63793:336cf56] [R015:sheet] PROBE box=227 vc=-5814912336230172141 detents=[com.apple.UIKit.large] selected=Height:320.0 h=-1 y=-1 presenting=true
+2026-10-18 20:48:47.519 Df BoitesALivresNative[63793:336cf56] [R015:sheet] PROBE box=227 vc=-5814912336230172141 detents=[com.apple.UIKit.large] selected=Height:320.0 h=812 y=0 presenting=true
