@@ -9,7 +9,7 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 11. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 12. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
@@ -36,6 +36,10 @@ Build 11. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - « Mes soumissions » : la date n'apparaît plus brute (« 2026-10-17T14:03:35.035649+00:00 ») mais
   en relatif court (« il y a 1 j »). Les fractions de seconde de 1 à 6 chiffres sont lues.
 - Réglages : le numéro de build est affiché à côté de la version (« v1.3.0 (11) »).
+- Carte : toucher un autre point quand une fiche est ouverte n'ouvre plus la nouvelle fiche
+  presque plein écran et floue. La fiche reste ouverte à sa petite hauteur et change de boîte sur
+  place. Quand la photo d'une boîte se recharge depuis les photos validées, sa place reste réservée
+  et la fiche ne saute plus. (build 12)
 
 ### Prérequis de publication
 
@@ -57,6 +61,8 @@ Nouveautés de la version 1.3.0
 • « Mes soumissions » affiche désormais le motif de modération d'une photo refusée, et des dates lisibles.
 
 • Réglages affiche désormais la version et le numéro de build de l'app.
+
+• Carte : passer d'une boîte à une autre est désormais fluide. La fiche reste à sa place et affiche directement la nouvelle boîte.
 
 Merci d'alimenter la carte des boîtes à livres !
 ```
