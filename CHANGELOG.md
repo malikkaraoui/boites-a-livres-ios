@@ -9,7 +9,7 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 10. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 11. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
@@ -35,6 +35,7 @@ Build 10. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
   préfixé « Motif : » (FR) / « Reason: » (EN). Rien si le motif est vide.
 - « Mes soumissions » : la date n'apparaît plus brute (« 2026-10-17T14:03:35.035649+00:00 ») mais
   en relatif court (« il y a 1 j »). Les fractions de seconde de 1 à 6 chiffres sont lues.
+- Réglages : le numéro de build est affiché à côté de la version (« v1.3.0 (11) »).
 
 ### Prérequis de publication
 
@@ -54,6 +55,8 @@ Nouveautés de la version 1.3.0
 • Les photos des boîtes affichent désormais uniquement les photos validées. Les photos en attente de validation ne sont plus visibles par tous.
 
 • « Mes soumissions » affiche désormais le motif de modération d'une photo refusée, et des dates lisibles.
+
+• Réglages affiche désormais la version et le numéro de build de l'app.
 
 Merci d'alimenter la carte des boîtes à livres !
 ```
