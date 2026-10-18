@@ -149,3 +149,4 @@
 "Vous êtes à %d m de la boîte ✓" = "You're %d m from the box ✓";
 "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m." = "Too far to review — you're %@ from the box. Get within 100 m.";
 "Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées." = "No people may appear in the photo. Photos showing people are rejected.";
+"Motif : %@" = "Reason: %@";

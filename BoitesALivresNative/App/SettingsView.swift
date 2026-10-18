@@ -3,6 +3,34 @@ import UIKit
 import UserNotifications
 import StoreKit
 
+// MARK: - Dates ISO 8601 (Supabase)
+
+// MARK: ISODateParser BEGIN
+// Postgres renvoie la fraction de seconde sans zéros de fin, de 1 à 6 chiffres
+// (« 2026-10-17T14:03:35.035649+00:00 », « …35.03+00:00 », « …35+00:00 »).
+// ISO8601DateFormatter ne lit que les millisecondes : on normalise la fraction à 3 chiffres.
+enum ISODateParser {
+    static func date(from string: String) -> Date? {
+        let normalized = normalizeFraction(string)
+        let withFraction = ISO8601DateFormatter()
+        withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = withFraction.date(from: normalized) { return date }
+        let plain = ISO8601DateFormatter()
+        plain.formatOptions = [.withInternetDateTime]
+        return plain.date(from: normalized)
+    }
+
+    static func normalizeFraction(_ string: String) -> String {
+        guard let dot = string.firstIndex(of: ".") else { return string }
+        let digitsStart = string.index(after: dot)
+        let digitsEnd = string[digitsStart...].firstIndex(where: { !("0"..."9" ~= $0) }) ?? string.endIndex
+        let millis = String(string[digitsStart..<digitsEnd].prefix(3))
+            .padding(toLength: 3, withPad: "0", startingAt: 0)
+        return String(string[..<dot]) + "." + millis + String(string[digitsEnd...])
+    }
+}
+// MARK: ISODateParser END
+
 // MARK: - Settings View
 
 struct SettingsView: View {
@@ -262,7 +290,8 @@ struct SettingsView: View {
                 }
                 rowBody(
                     title: NSLocalizedString("Photo", comment: "") + " · " + boxTitle(p.box_id),
-                    subtitle: relativeDate(from: p.submitted_at)
+                    subtitle: relativeDate(from: p.submitted_at),
+                    note: p.status == "pending" ? nil : p.review_notes
                 )
                 statusChip(p.status)
             }
@@ -305,10 +334,15 @@ struct SettingsView: View {
         }
     }
 
-    private func rowBody(title: String, subtitle: String) -> some View {
+    private func rowBody(title: String, subtitle: String, note: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(title).font(.system(size: 14, weight: .semibold))
             Text(subtitle).font(.system(size: 12)).foregroundStyle(.secondary)
+            if let note, !note.isEmpty {
+                Text(String(format: NSLocalizedString("Motif : %@", comment: ""), note))
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -515,13 +549,10 @@ struct SettingsView: View {
     }
 
     private func relativeDate(from iso8601String: String) -> String {
-        let formatter = ISO8601DateFormatter()
-        if let date = formatter.date(from: iso8601String) {
-            let relative = RelativeDateTimeFormatter()
-            relative.unitsStyle = .short
-            return relative.localizedString(for: date, relativeTo: Date())
-        }
-        return iso8601String
+        guard let date = ISODateParser.date(from: iso8601String) else { return "—" }
+        let relative = RelativeDateTimeFormatter()
+        relative.unitsStyle = .short
+        return relative.localizedString(for: date, relativeTo: Date())
     }
 
     private func boxTitle(_ id: Int) -> String {
