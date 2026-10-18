@@ -1,56 +1,48 @@
 ---
-date: AAAA-MM-JJ
+date: 2026-10-18
 tags: [cartographie, branches, worktrees]
-genere_par: <Fxx> <Mxxxx|R0xx> (lecture git réelle : fetch --prune, for-each-ref, worktree list, branch -vv, branch --merged/--no-merged origin/<principale>, rev-list ahead/behind)
-derniere_maj: AAAA-MM-JJTHH:MM:SS+00:00
+genere_par: F03 M0019 (lecture git réelle : fetch --prune, for-each-ref, worktree list, branch -vv, merge-base --is-ancestor, rev-list --left-right --count origin/main...<branche>)
+derniere_maj: 2026-10-18T21:01:32+0200
 ---
 
-# Cartographie branches / worktrees vs `<principale>`
+# Cartographie branches / worktrees vs `main`
 
-> **Ce fichier se régénère par LECTURE GIT RÉELLE, jamais de mémoire.** Une cartographie
-> recopiée depuis la version précédente ou reconstituée « de tête » est un faux document : elle
-> a l'apparence d'une preuve et la valeur d'un souvenir. Chaque régénération remplace
-> INTÉGRALEMENT la version antérieure, et `genere_par:` dit par quel mandat et avec quelles
-> commandes. Une ligne que la lecture git ne confirme pas ne figure pas dans le tableau.
+> Régénéré par lecture git réelle, remplace intégralement la version précédente (qui n'était
+> que le gabarit). Une ligne que git ne confirme pas ne figure pas ici.
 
-Commandes de régénération (à rejouer dans cet ordre, sortie à la source du tableau) :
-
-```
-git fetch --prune
-git for-each-ref --format='%(refname:short) %(objectname:short)' refs/heads
-git worktree list
-git branch -vv
-git branch --merged origin/<principale> ; git branch --no-merged origin/<principale>
-git rev-list --left-right --count origin/<principale>...<branche>
-```
-
-`<principale>` = `origin/<principale>` = `<sha>` au moment de la lecture.
-Ahead/behind = `git rev-list --count` contre `origin/<principale>`.
+`origin/main` = `1e73f95` au moment de la lecture. Colonne « vs origin/main » = behind / ahead.
 
 ## Branches actives / récentes
 
-| Branche | Tip | vs origin/<principale> | Statut RÉEL |
+| Branche | Tip | vs origin/main | Statut RÉEL |
 |---|---|---|---|
-| `<branche>` | `<sha>` | ahead <n> / behind <n> | **<MERGÉE / NON MERGÉE>** — <ce qu'elle porte, quel mandat, quel doublage l'attend ou l'a passée, quel worktree lui est attaché> |
+| `fix/fiche-carte-changement` | `b7c3fc8` | behind 2 / ahead 0 | **MERGÉE** — M0019, fiche carte + build 12, merge `a4a58b3`, R015 GO `1e73f95` |
+| `fix/version-et-fiche-carte` | `260e3c3` | behind 9 / ahead 1 | **NON MERGÉE** — M0017, R013 RESERVE ; remplacée par M0018 (version) et M0019 (fiche) ; worktrees `F02-M0017`, `R013-M0017` |
+| `fix/version-build-11` | `a7f0afa` | behind 8 / ahead 0 | **MERGÉE** — M0018, build 11 |
+| `fix/reglages-motif-date` | `a05ca65` | behind 18 / ahead 0 | **MERGÉE** |
+| `fix/apercu-photos-validees` | `7c7a735` | behind 13 / ahead 0 | **MERGÉE** |
+| `fix/photos-validees` | `66123e8` | behind 27 / ahead 0 | **MERGÉE** |
+| `chore/harnais-v1.6.6` | `c86a208` | behind 26 / ahead 0 | **MERGÉE** |
 
-<!--
-« Statut RÉEL » = ce que git dit, pas ce que le rapport annonçait :
-- MERGÉE  → le commit de merge existe sur la principale (donner son SHA).
-- NON MERGÉE → dire ce qui bloque (doublage attendu, verdict NO-GO, arbitrage humain).
-Un « ahead 0 / behind n » n'est PAS une preuve de merge : le contenu peut avoir été repris
-autrement. Vérifier, puis écrire.
--->
+## Branches anciennes, sans activité récente
 
-## Branches anciennes, sans activité récente (non mergées, non arbitrées)
-
-<!-- Liste courte, avec tip et date, sans commentaire : c'est une dette à arbitrer, pas un sujet. -->
+Toutes MERGÉES (ahead 0) : `base/pre-mvp-polish` 7154add (2026-05-07), `review/mvp-polish-2026-05-08`
+2e88ff7, `chore/harnais-v1.6.0` 8a197e9, `chore/niveaux` bb366bc, `chore/version-1.3.0` 2776e48,
+`fix/6-mes-demandes-suppression` bf8adbc, `fix/ios-defauts` 520caff (2026-10-15).
 
 ## Branches distantes supprimées (`gone`, locales orphelines)
 
-<!-- Issues de `git branch -vv` (marqueur `gone`). Ne rien supprimer ici : signaler seulement. -->
+`chore/harnais-suivi` ceb26fa, `chore/signature` 71f62cd — toutes deux mergées. Signalées, non supprimées.
 
 ## Worktrees
 
 | Worktree | Branche | À retirer ? |
 |---|---|---|
-| `<chemin>` | `<branche>` | <oui/non + pourquoi> |
+| `.claude/worktrees/F02-M0017` | `fix/version-et-fiche-carte` | à arbitrer (M0017 non mergé, remplacé) |
+| `.claude/worktrees/R013-M0017` | détaché `260e3c3` | oui après arbitrage M0017 |
+| `.claude/worktrees/F01-M0005` | `fix/ios-defauts` (mergée) | oui |
+| `.claude/worktrees/F01-M0010` | `fix/photos-validees` (mergée) | oui |
+| `.claude/worktrees/F02-M0004` | `chore/harnais-v1.6.0` (mergée) | oui |
+| `.claude/worktrees/F02-M0009` | `chore/version-1.3.0` (mergée) | oui |
+| `.claude/worktrees/F01-M0008` | détaché `111e063` | oui |
+| `.claude/worktrees/F03-R003` | détaché `d78c177` | oui |
