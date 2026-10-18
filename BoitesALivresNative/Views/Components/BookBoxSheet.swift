@@ -22,8 +22,12 @@ struct BookBoxSheet: View {
         PreviewPhotoPicker.current(candidates: candidates, failed: failedUrls).flatMap { URL(string: $0) }
     }
 
-    // Liste chargée et plus aucune candidate affichable : bloc image masqué
-    private var hidePhoto: Bool { listLoaded && imageURL == nil }
+    // Bloc photo affiché tant qu'une photo est attendue : candidate en cours, ou photo_url en échec
+    // pendant la recherche des photos validées (place réservée, la fiche ne saute pas).
+    // Liste chargée et plus aucune candidate affichable : bloc masqué.
+    private var showsPhotoBlock: Bool {
+        imageURL != nil || (box.photo_url != nil && !listLoaded)
+    }
 
     private var needsList: Bool {
         !listLoaded && (box.photo_url == nil || !failedUrls.isEmpty)
@@ -31,15 +35,21 @@ struct BookBoxSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if let url = imageURL, !hidePhoto {
-                CachedAsyncImage(url: url, onFailure: { failedUrls.insert(url.absoluteString) }) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image.resizable().aspectRatio(contentMode: .fill)
-                    case .failure:
-                        Color(.systemGray5)
-                            .overlay(Image(systemName: "photo").font(.system(size: 30)).foregroundStyle(.secondary))
-                    case .empty:
+            if showsPhotoBlock {
+                Group {
+                    if let url = imageURL {
+                        CachedAsyncImage(url: url, onFailure: { failedUrls.insert(url.absoluteString) }) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image.resizable().aspectRatio(contentMode: .fill)
+                            case .failure:
+                                Color(.systemGray5)
+                                    .overlay(Image(systemName: "photo").font(.system(size: 30)).foregroundStyle(.secondary))
+                            case .empty:
+                                Color(.systemGray6).overlay(ProgressView())
+                            }
+                        }
+                    } else {
                         Color(.systemGray6).overlay(ProgressView())
                     }
                 }
