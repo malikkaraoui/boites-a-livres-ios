@@ -12,6 +12,8 @@ enum CachedImagePhase {
 // AsyncImage wrapper using ImageCacheService for two-tier memory/disk caching
 struct CachedAsyncImage<Content: View>: View {
     let url: URL?
+    // Appelé une fois quand le chargement échoue (URL absente ou image injoignable)
+    var onFailure: (() -> Void)? = nil
     @ViewBuilder let content: (CachedImagePhase) -> Content
 
     @State private var phase: CachedImagePhase = .empty
@@ -27,6 +29,7 @@ struct CachedAsyncImage<Content: View>: View {
     private func load() async {
         guard let url else {
             phase = .failure
+            onFailure?()
             return
         }
         phase = .empty
@@ -34,6 +37,7 @@ struct CachedAsyncImage<Content: View>: View {
             phase = .success(Image(uiImage: img))
         } else {
             phase = .failure
+            onFailure?()
         }
     }
 }
