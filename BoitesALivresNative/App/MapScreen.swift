@@ -173,7 +173,8 @@ struct MapScreen: View {
             .fullScreenCover(isPresented: $showAddBox) {
                 AddBoxView()
             }
-            .sheet(item: $vm.selectedBox) { box in
+            .sheet(item: sheetItem) { item in
+                let box = item.box
                 let small: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
                 let trigger: PresentationDetent = .fraction(0.75)
                 BookBoxSheet(box: box) {
@@ -181,6 +182,7 @@ struct MapScreen: View {
                     vm.selectedBox = nil
                     path.append(id)
                 }
+                .id(box.id) // état de l'aperçu (photos essayées) remis à zéro à chaque boîte
                 .presentationDetents([small, trigger], selection: $sheetDetent)
                 .presentationDragIndicator(.visible)
                 .presentationBackground(.ultraThinMaterial)
@@ -234,24 +236,30 @@ struct MapScreen: View {
         }
     }
 
-    // Handle annotation tap: close sheet for previous box before showing sheet for new box
+    // Une seule fiche pour toutes les boîtes : son identité ne change pas, seul son contenu change.
+    // Avec sheet(item: $vm.selectedBox), passer d'une boîte à l'autre dans la même mise à jour
+    // (le toucher carte passe avant celui du point) remplaçait la feuille, présentée alors en
+    // détente .large : fiche plein écran, floue, contenu au milieu (M0019).
+    private struct SheetItem: Identifiable {
+        let box: BookBox
+        var id: Int { 0 }
+    }
+
+    private var sheetItem: Binding<SheetItem?> {
+        Binding(
+            get: { vm.selectedBox.map(SheetItem.init) },
+            set: { vm.selectedBox = $0?.box }
+        )
+    }
+
+    // Toucher un point : la fiche ouverte change de boîte sur place et revient à sa petite hauteur
     private func selectBox(_ box: BookBox) {
         isHandlingAnnotationTap = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             isHandlingAnnotationTap = false
         }
-
-        let initial: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
-        if let current = vm.selectedBox, current.id != box.id {
-            vm.selectedBox = nil
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.32) {
-                sheetDetent = initial
-                vm.selectedBox = box
-            }
-        } else {
-            sheetDetent = initial
-            vm.selectedBox = box
-        }
+        sheetDetent = .height(box.photo_url != nil ? 320 : 200)
+        vm.selectedBox = box
     }
 }
 

@@ -1,0 +1,171 @@
+# apres-1 (correctif instrumenté)
+2026-10-18 20:39:33.002 Df MAPTAP handling=false selected=-1
+2026-10-18 20:39:33.003 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:39:33.030 Df SELECTED -1 -> 14183
+2026-10-18 20:39:33.046 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:39:33.095 Df CONTENT appear box=14183 h=354
+2026-10-18 20:39:33.098 Df PROBE box=0 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:39:33.273 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:39:33.389 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:39:33.532 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:39:36.519 Df MAPTAP handling=false selected=14183
+2026-10-18 20:39:36.519 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:39:36.533 Df SELECTED 14183 -> 227
+2026-10-18 20:39:36.536 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:39:40.719 Df MAPTAP handling=false selected=227
+2026-10-18 20:39:40.720 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:39:40.737 Df SELECTED 227 -> 14183
+2026-10-18 20:39:40.739 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:39:40.865 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:39:40.962 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:39:41.068 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+# apres-2-inverse (correctif instrumenté)
+2026-10-18 20:40:00.753 Df MAPTAP handling=false selected=-1
+2026-10-18 20:40:00.753 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:40:00.786 Df SELECTED -1 -> 227
+2026-10-18 20:40:00.806 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:40:00.860 Df CONTENT appear box=227 h=354
+2026-10-18 20:40:00.862 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:40:04.326 Df MAPTAP handling=false selected=227
+2026-10-18 20:40:04.326 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:40:04.345 Df SELECTED 227 -> 14183
+2026-10-18 20:40:04.347 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:40:04.491 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:40:04.592 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:40:04.673 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:40:08.652 Df MAPTAP handling=false selected=14183
+2026-10-18 20:40:08.652 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:40:08.667 Df SELECTED 14183 -> 227
+2026-10-18 20:40:08.670 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+# apres-3-photo-vers-sans (correctif instrumenté)
+2026-10-18 20:40:27.352 Df MAPTAP handling=false selected=-1
+2026-10-18 20:40:27.353 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:40:27.380 Df SELECTED -1 -> 14183
+2026-10-18 20:40:27.397 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:40:27.447 Df CONTENT appear box=14183 h=354
+2026-10-18 20:40:27.450 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:40:27.644 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:40:27.722 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:40:27.894 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:40:30.902 Df MAPTAP handling=false selected=14183
+2026-10-18 20:40:30.903 Df SELECTBOX box=10504 current=-1 handling=false
+2026-10-18 20:40:30.920 Df SELECTED 14183 -> 10504
+2026-10-18 20:40:30.934 Df DETENT PresentationDetent(id: Height 320.0) -> PresentationDetent(id: Height 200.0)
+2026-10-18 20:40:30.937 Df SHEETBODY box=10504 url=false block=false listLoaded=false failed=0
+2026-10-18 20:40:30.940 Df CONTENT box=10504 h=202
+2026-10-18 20:40:31.042 Df SHEETBODY box=10504 url=true block=true listLoaded=true failed=0
+2026-10-18 20:40:31.045 Df CONTENT box=10504 h=354
+2026-10-18 20:40:31.185 Df SHEETBODY box=10504 url=false block=false listLoaded=true failed=1
+2026-10-18 20:40:31.186 Df CONTENT box=10504 h=202
+2026-10-18 20:40:35.136 Df MAPTAP handling=false selected=10504
+2026-10-18 20:40:35.136 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:40:35.153 Df SELECTED 10504 -> 14183
+2026-10-18 20:40:35.153 Df DETENT PresentationDetent(id: Height 200.0) -> PresentationDetent(id: Height 320.0)
+2026-10-18 20:40:35.155 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:40:35.159 Df CONTENT box=14183 h=354
+2026-10-18 20:40:35.276 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:40:35.389 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:40:35.491 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+# apres-3b-sans-vers-photo (correctif instrumenté)
+2026-10-18 20:40:53.819 Df MAPTAP handling=false selected=-1
+2026-10-18 20:40:53.819 Df SELECTBOX box=10504 current=-1 handling=false
+2026-10-18 20:40:53.843 Df SELECTED -1 -> 10504
+2026-10-18 20:40:53.852 Df DETENT PresentationDetent(id: Height 320.0) -> PresentationDetent(id: Height 200.0)
+2026-10-18 20:40:53.867 Df SHEETBODY box=10504 url=false block=false listLoaded=false failed=0
+2026-10-18 20:40:53.897 Df CONTENT appear box=10504 h=202
+2026-10-18 20:40:53.900 Df PROBE box=0 detents=[Fraction:0.75,Height:200.0] selected=Height:200.0 vcHeight=234 beingPresented=true
+2026-10-18 20:40:53.955 Df SHEETBODY box=10504 url=true block=true listLoaded=true failed=0
+2026-10-18 20:40:53.978 Df CONTENT box=10504 h=354
+2026-10-18 20:40:54.065 Df SHEETBODY box=10504 url=false block=false listLoaded=true failed=1
+2026-10-18 20:40:54.066 Df CONTENT box=10504 h=202
+2026-10-18 20:40:57.285 Df MAPTAP handling=false selected=10504
+2026-10-18 20:40:57.286 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:40:57.303 Df SELECTED 10504 -> 227
+2026-10-18 20:40:57.303 Df DETENT PresentationDetent(id: Height 200.0) -> PresentationDetent(id: Height 320.0)
+2026-10-18 20:40:57.306 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:40:57.312 Df CONTENT box=227 h=354
+2026-10-18 20:41:01.452 Df MAPTAP handling=false selected=227
+2026-10-18 20:41:01.452 Df SELECTBOX box=10504 current=-1 handling=false
+2026-10-18 20:41:01.467 Df SELECTED 227 -> 10504
+2026-10-18 20:41:01.467 Df DETENT PresentationDetent(id: Height 320.0) -> PresentationDetent(id: Height 200.0)
+2026-10-18 20:41:01.469 Df SHEETBODY box=10504 url=false block=false listLoaded=false failed=0
+2026-10-18 20:41:01.471 Df CONTENT box=10504 h=202
+2026-10-18 20:41:01.557 Df SHEETBODY box=10504 url=true block=true listLoaded=true failed=0
+2026-10-18 20:41:01.559 Df CONTENT box=10504 h=354
+2026-10-18 20:41:02.182 Df SHEETBODY box=10504 url=false block=false listLoaded=true failed=1
+2026-10-18 20:41:02.183 Df CONTENT box=10504 h=202
+# apres-4-rapide (correctif instrumenté)
+2026-10-18 20:41:19.602 Df MAPTAP handling=false selected=-1
+2026-10-18 20:41:19.603 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:41:19.627 Df SELECTED -1 -> 14183
+2026-10-18 20:41:19.643 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:41:19.695 Df CONTENT appear box=14183 h=354
+2026-10-18 20:41:19.699 Df PROBE box=0 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:41:19.833 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:41:20.445 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:41:20.589 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:41:22.469 Df MAPTAP handling=false selected=14183
+2026-10-18 20:41:22.470 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:41:22.487 Df SELECTED 14183 -> 227
+2026-10-18 20:41:22.490 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:41:22.869 Df MAPTAP handling=false selected=227
+2026-10-18 20:41:22.870 Df SELECTBOX box=764 current=-1 handling=false
+2026-10-18 20:41:22.886 Df SELECTED 227 -> 764
+2026-10-18 20:41:22.896 Df DETENT PresentationDetent(id: Height 320.0) -> PresentationDetent(id: Height 200.0)
+2026-10-18 20:41:22.898 Df SHEETBODY box=764 url=false block=false listLoaded=false failed=0
+2026-10-18 20:41:22.901 Df CONTENT box=764 h=202
+2026-10-18 20:41:23.264 Df SHEETBODY box=764 url=false block=false listLoaded=true failed=0
+# apres-5-glisser (correctif instrumenté)
+2026-10-18 20:41:40.686 Df MAPTAP handling=false selected=-1
+2026-10-18 20:41:40.686 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:41:40.709 Df SELECTED -1 -> 14183
+2026-10-18 20:41:40.726 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:41:40.776 Df CONTENT appear box=14183 h=354
+2026-10-18 20:41:40.779 Df PROBE box=0 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:41:40.886 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:41:41.000 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:41:41.083 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:41:45.870 Df DETENT PresentationDetent(id: Height 320.0) -> PresentationDetent(id: Fraction 0.75)
+2026-10-18 20:41:45.880 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:41:45.916 Df SELECTED 14183 -> -1
+2026-10-18 20:41:45.916 Df DETENT PresentationDetent(id: Fraction 0.75) -> PresentationDetent(id: Height 320.0)
+2026-10-18 20:41:46.704 Df PROBE box=0 detents=[Height:320.0,Fraction:0.75] selected=Fraction:0.75 vcHeight=-1 beingPresented=false
+2026-10-18 20:41:46.707 Df ONDISMISS
+2026-10-18 20:41:46.710 Df CONTENT disappear box=14183
+# apres-6-bouton (correctif instrumenté)
+2026-10-18 20:42:07.219 Df MAPTAP handling=false selected=-1
+2026-10-18 20:42:07.219 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:42:07.243 Df SELECTED -1 -> 14183
+2026-10-18 20:42:07.259 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:42:07.310 Df CONTENT appear box=14183 h=354
+2026-10-18 20:42:07.314 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:42:07.464 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:42:07.531 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:42:07.640 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:42:10.052 Df MAPTAP handling=false selected=14183
+2026-10-18 20:42:10.053 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:42:10.070 Df SELECTED 14183 -> 227
+2026-10-18 20:42:10.073 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:42:12.619 Df SELECTED 227 -> -1
+2026-10-18 20:42:13.252 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+2026-10-18 20:42:13.255 Df ONDISMISS
+2026-10-18 20:42:13.256 Df CONTENT disappear box=227
+# apres-7-fermer (correctif instrumenté)
+2026-10-18 20:42:30.302 Df MAPTAP handling=false selected=-1
+2026-10-18 20:42:30.303 Df SELECTBOX box=14183 current=-1 handling=false
+2026-10-18 20:42:30.328 Df SELECTED -1 -> 14183
+2026-10-18 20:42:30.344 Df SHEETBODY box=14183 url=true block=true listLoaded=false failed=0
+2026-10-18 20:42:30.394 Df CONTENT appear box=14183 h=354
+2026-10-18 20:42:30.397 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+2026-10-18 20:42:30.508 Df SHEETBODY box=14183 url=false block=true listLoaded=false failed=1
+2026-10-18 20:42:30.660 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=1
+2026-10-18 20:42:30.782 Df SHEETBODY box=14183 url=true block=true listLoaded=true failed=2
+2026-10-18 20:42:33.152 Df MAPTAP handling=false selected=14183
+2026-10-18 20:42:33.152 Df SELECTBOX box=227 current=-1 handling=false
+2026-10-18 20:42:33.171 Df SELECTED 14183 -> 227
+2026-10-18 20:42:33.173 Df SHEETBODY box=227 url=true block=true listLoaded=false failed=0
+2026-10-18 20:42:35.585 Df MAPTAP handling=false selected=227
+2026-10-18 20:42:35.599 Df SELECTED 227 -> -1
+2026-10-18 20:42:36.108 Df PROBE box=0 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+2026-10-18 20:42:36.110 Df ONDISMISS
+2026-10-18 20:42:36.111 Df CONTENT disappear box=227

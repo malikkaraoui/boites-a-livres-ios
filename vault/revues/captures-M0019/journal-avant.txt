@@ -1,0 +1,58 @@
+# avant-1 (code origin/main instrumenté)
+20:19:07.920 Df MAPTAP handling=false selected=-1
+20:19:07.921 Df SELECTBOX box=14183 current=-1 handling=false
+20:19:07.947 Df SELECTED -1 -> 14183
+20:19:08.061 Df CONTENT appear box=14183 h=354
+20:19:08.063 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+20:19:08.202 Df CONTENT box=14183 h=202
+20:19:08.310 Df CONTENT box=14183 h=354
+20:19:11.536 Df MAPTAP handling=false selected=14183
+20:19:11.536 Df SELECTBOX box=227 current=-1 handling=false
+20:19:11.554 Df SELECTED 14183 -> 227
+20:19:12.073 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+20:19:12.104 Df CONTENT disappear box=227
+20:19:12.108 Df PROBE box=14183 detents=[com.apple.UIKit.large] selected=Height:320.0 vcHeight=812 beingPresented=true
+20:19:12.111 Df CONTENT appear box=227 h=354
+# avant-2-inverse (code origin/main instrumenté)
+20:23:38.686 Df MAPTAP handling=false selected=-1
+20:23:38.686 Df SELECTBOX box=227 current=-1 handling=false
+20:23:38.713 Df SELECTED -1 -> 227
+20:23:38.779 Df CONTENT appear box=227 h=354
+20:23:38.783 Df PROBE box=227 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+20:23:42.202 Df MAPTAP handling=false selected=227
+20:23:42.202 Df SELECTBOX box=14183 current=-1 handling=false
+20:23:42.216 Df SELECTED 227 -> 14183
+20:23:42.741 Df PROBE box=227 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+20:23:42.765 Df CONTENT disappear box=14183
+20:23:42.770 Df PROBE box=227 detents=[com.apple.UIKit.large] selected=Height:320.0 vcHeight=812 beingPresented=true
+20:23:42.774 Df CONTENT appear box=14183 h=354
+20:23:42.815 Df CONTENT box=14183 h=202
+20:23:43.012 Df CONTENT box=14183 h=354
+# e1-delai-pris (code origin/main instrumenté)
+20:22:23.720 Df MAPTAP handling=false selected=-1
+20:22:23.720 Df SELECTBOX box=14183 current=-1 handling=false
+20:22:23.748 Df SELECTED -1 -> 14183
+20:22:23.871 Df CONTENT appear box=14183 h=354
+20:22:23.874 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=true
+20:22:23.989 Df CONTENT box=14183 h=202
+20:22:24.117 Df CONTENT box=14183 h=354
+20:22:27.319 Df MAPTAP handling=false selected=14183
+20:22:27.319 Df SELECTBOX box=227 current=14183 handling=false
+20:22:27.334 Df SELECTED 14183 -> -1
+20:22:27.654 Df REOPEN after 0.32 box=227
+20:22:27.670 Df SELECTED -1 -> 227
+20:22:27.839 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+20:22:27.842 Df ONDISMISS
+20:22:27.871 Df CONTENT disappear box=227
+20:22:27.874 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=354 beingPresented=false
+20:22:27.877 Df CONTENT appear box=227 h=354
+20:22:31.852 Df MAPTAP handling=false selected=227
+20:22:31.853 Df SELECTBOX box=14183 current=227 handling=false
+20:22:31.866 Df SELECTED 227 -> -1
+20:22:32.188 Df REOPEN after 0.32 box=14183
+20:22:32.204 Df SELECTED -1 -> 14183
+20:22:32.375 Df PROBE box=14183 detents=[Fraction:0.75,Height:320.0] selected=Height:320.0 vcHeight=-1 beingPresented=false
+20:22:32.377 Df ONDISMISS
+20:22:32.402 Df CONTENT disappear box=14183
+20:22:32.405 Df PROBE box=14183 detents=[Height:320.0,Fraction:0.75] selected=Height:320.0 vcHeight=354 beingPresented=false
+20:22:32.408 Df CONTENT appear box=14183 h=354
