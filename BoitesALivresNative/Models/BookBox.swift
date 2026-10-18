@@ -86,6 +86,19 @@ enum PhotoList {
     }
 }
 
+// Aperçu carte : candidats = photo_url puis photos validées (slot croissant), sans doublon.
+// On affiche la première candidate qui n'a pas encore échoué ; nil = rien à afficher.
+enum PreviewPhotoPicker {
+    static func candidates(photoUrl: String?, validated: [String]) -> [String] {
+        var seen = Set<String>()
+        return ([photoUrl].compactMap { $0 } + validated).filter { seen.insert($0).inserted }
+    }
+
+    static func current(candidates: [String], failed: Set<String>) -> String? {
+        candidates.first { !failed.contains($0) }
+    }
+}
+
 // Photo filter options: all boxes, only with photos, only without photos
 enum PhotoFilter: String, CaseIterable, Identifiable {
     case all = "Toutes"
