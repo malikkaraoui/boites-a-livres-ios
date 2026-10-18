@@ -8,25 +8,31 @@ struct BookBoxSheet: View {
 
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
-    // photo_url morte : on bascule sur la première photo validée de la boîte
-    @State private var photoFailed = false
-    @State private var validatedURL: URL? = nil
-    // Plus rien d'affichable : bloc image masqué
-    @State private var hidePhoto = false
+    // Photos validées de la boîte, chargées une fois, seulement si photo_url manque ou échoue
+    @State private var validatedUrls: [String] = []
+    @State private var listLoaded = false
+    // URL déjà essayées et en échec ; on passe à la candidate suivante
+    @State private var failedUrls = Set<String>()
 
-    private var imageURL: URL? {
-        if photoFailed { return validatedURL }
-        return box.photo_url.flatMap { URL(string: $0) }
+    private var candidates: [String] {
+        PreviewPhotoPicker.candidates(photoUrl: box.photo_url, validated: validatedUrls)
     }
 
-    private func imageFailed() {
-        if photoFailed { hidePhoto = true } else { photoFailed = true }
+    private var imageURL: URL? {
+        PreviewPhotoPicker.current(candidates: candidates, failed: failedUrls).flatMap { URL(string: $0) }
+    }
+
+    // Liste chargée et plus aucune candidate affichable : bloc image masqué
+    private var hidePhoto: Bool { listLoaded && imageURL == nil }
+
+    private var needsList: Bool {
+        !listLoaded && (box.photo_url == nil || !failedUrls.isEmpty)
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let url = imageURL, !hidePhoto {
-                CachedAsyncImage(url: url, onFailure: { imageFailed() }) { phase in
+                CachedAsyncImage(url: url, onFailure: { failedUrls.insert(url.absoluteString) }) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -101,10 +107,11 @@ struct BookBoxSheet: View {
             .buttonStyle(ScaleButtonStyle())
         }
         .padding(20)
-        .task(id: photoFailed) {
-            guard photoFailed else { return }
+        .task(id: needsList) {
+            guard needsList else { return }
             let published = try? await SupabaseService.shared.listPhotos(for: box.id)
-            validatedURL = published?.first.flatMap { URL(string: $0.url) }
+            validatedUrls = (published ?? []).map(\.url)
+            listLoaded = true
         }
     }
 

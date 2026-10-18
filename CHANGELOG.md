@@ -9,7 +9,7 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 9. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 10. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
@@ -29,6 +29,8 @@ Build 9. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - Photos d'une boîte : le carrousel n'affiche plus que les photos validées. Les photos en attente de
   modération ne sont plus montrées au public. Une photo qui ne se charge pas est retirée de
   l'affichage, et la limite de 3 photos compte les photos validées.
+- Aperçu de la carte : quand la photo d'une boîte ne se charge plus, l'aperçu essaie les photos
+  validées suivantes au lieu de disparaître. Il ne se masque que si aucune photo ne s'affiche.
 - « Mes soumissions » : le motif de modération d'une photo (ex. refus) s'affiche sous la ligne,
   préfixé « Motif : » (FR) / « Reason: » (EN). Rien si le motif est vide.
 - « Mes soumissions » : la date n'apparaît plus brute (« 2026-10-17T14:03:35.035649+00:00 ») mais
