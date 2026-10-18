@@ -51,9 +51,8 @@ final class DetailViewModel {
     func refresh(boxId: Int) async {
         guard let fresh = try? await supabase.fetchById(boxId) else { return }
         box = fresh
-        if let ph = try? await supabase.listPhotos(for: boxId, fallbackUrl: fresh.photo_url), !ph.isEmpty {
-            photos = ph
-        }
+        // listPhotos ne lève pas : en cas d'échec il renvoie photo_url seule
+        photos = (try? await supabase.listPhotos(for: boxId, fallbackUrl: fresh.photo_url)) ?? photos
     }
 
     // Validate photo limit before handling; implementation delegated to View pickers

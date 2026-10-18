@@ -8,11 +8,25 @@ struct BookBoxSheet: View {
 
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
+    // photo_url morte : on bascule sur la première photo validée de la boîte
+    @State private var photoFailed = false
+    @State private var validatedURL: URL? = nil
+    // Plus rien d'affichable : bloc image masqué
+    @State private var hidePhoto = false
+
+    private var imageURL: URL? {
+        if photoFailed { return validatedURL }
+        return box.photo_url.flatMap { URL(string: $0) }
+    }
+
+    private func imageFailed() {
+        if photoFailed { hidePhoto = true } else { photoFailed = true }
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if let urlStr = box.photo_url, let url = URL(string: urlStr) {
-                CachedAsyncImage(url: url) { phase in
+            if let url = imageURL, !hidePhoto {
+                CachedAsyncImage(url: url, onFailure: { imageFailed() }) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -87,6 +101,11 @@ struct BookBoxSheet: View {
             .buttonStyle(ScaleButtonStyle())
         }
         .padding(20)
+        .task(id: photoFailed) {
+            guard photoFailed else { return }
+            let published = try? await SupabaseService.shared.listPhotos(for: box.id)
+            validatedURL = published?.first.flatMap { URL(string: $0.url) }
+        }
     }
 
     private func formatDistance(_ meters: Double) -> String {

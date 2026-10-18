@@ -74,6 +74,18 @@ struct BoxPhoto: Identifiable {
     let url: String
 }
 
+// Ordre d'affichage des photos publiées : slots validés, photo_url en tête si absente, sans doublon
+enum PhotoList {
+    static func merge(slotUrls: [String], fallbackUrl: String?) -> [String] {
+        var urls = slotUrls
+        if let fallback = fallbackUrl, !urls.contains(fallback) {
+            urls.insert(fallback, at: 0)
+        }
+        var seen = Set<String>()
+        return urls.filter { seen.insert($0).inserted }
+    }
+}
+
 // Photo filter options: all boxes, only with photos, only without photos
 enum PhotoFilter: String, CaseIterable, Identifiable {
     case all = "Toutes"

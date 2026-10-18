@@ -9,7 +9,7 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 8. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 9. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
@@ -26,6 +26,9 @@ Build 8. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - « Mes demandes de suppression » : même cloisonnement par jeton d'appareil, via la RPC
   `my_deletion_requests`. Si la RPC est absente ou en erreur, la liste est vide. (#6, commit
   `aff63ab`, PR #10)
+- Photos d'une boîte : le carrousel n'affiche plus que les photos validées. Les photos en attente de
+  modération ne sont plus montrées au public. Une photo qui ne se charge pas est retirée de
+  l'affichage, et la limite de 3 photos compte les photos validées.
 
 ### Prérequis de publication
 
@@ -41,6 +44,8 @@ Nouveautés de la version 1.3.0
 • Avant de prendre ou de choisir une photo de boîte à livres, l'app vous rappelle qu'aucune personne ne doit apparaître sur la photo. Les photos montrant des personnes sont refusées.
 
 • « Mes soumissions » et « Mes demandes de suppression » n'affichent plus que ce que vous avez envoyé depuis votre téléphone. Vos envois restent privés.
+
+• Les photos des boîtes affichent désormais uniquement les photos validées. Les photos en attente de validation ne sont plus visibles par tous.
 
 Merci d'alimenter la carte des boîtes à livres !
 ```

@@ -124,35 +124,23 @@ actor SupabaseService {
         return all.filter { $0.id != id }.prefix(Constants.nearbyLimit).map { $0 }
     }
 
-    // List all approved photos in storage for a box (with fallback scraped URL)
+    // Photos publiées d'une boîte : slots validés (book_box_photos, ordre des slots), photo_url en tête
+    // si elle n'y figure pas. Les photos en attente de modération (préfixe <boxId>/ du stockage) ne sont
+    // jamais listées. Échec de la requête : seule photo_url reste.
     func listPhotos(for boxId: Int, fallbackUrl: String? = nil) async throws -> [BoxPhoto] {
-        struct Body: Encodable { let prefix: String; let limit: Int; let offset: Int }
-        let body = try JSONEncoder().encode(Body(prefix: "\(boxId)/", limit: 50, offset: 0))
-        var req = makeRequest(path: "/storage/v1/object/list/boites-photos", method: "POST", body: body)
-        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let (data, response) = try await URLSession.shared.data(for: req)
-        struct StorageFile: Codable { let name: String }
-
-        var result: [BoxPhoto] = []
-
-        // Include original scraped photo first, always at top
-        if let url = fallbackUrl {
-            result.append(BoxPhoto(id: "base_\(boxId)", url: url))
-        }
-
-        // Append user-submitted approved photos from storage
-        if let http = response as? HTTPURLResponse, http.statusCode < 400,
-           let files = try? JSONDecoder().decode([StorageFile].self, from: data) {
-            result += files.map { file in
-                BoxPhoto(
-                    id: file.name,
-                    url: "\(baseURL)/storage/v1/object/public/boites-photos/\(boxId)/\(file.name)"
-                )
+        struct Row: Decodable { let slot: Int; let url: String }
+        var slotUrls: [String] = []
+        do {
+            let req = makeRequest(path: "/rest/v1/book_box_photos?box_id=eq.\(boxId)&select=slot,url&order=slot.asc")
+            let (data, response) = try await URLSession.shared.data(for: req)
+            if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+                throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
             }
+            slotUrls = try JSONDecoder().decode([Row].self, from: data).map(\.url)
+        } catch {
+            slotUrls = []
         }
-
-        return result
+        return PhotoList.merge(slotUrls: slotUrls, fallbackUrl: fallbackUrl).map { BoxPhoto(id: $0, url: $0) }
     }
 
     // Upload photo to storage bucket (not yet approved, pending review)
