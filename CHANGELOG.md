@@ -9,7 +9,7 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 10. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 11. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
@@ -35,6 +35,15 @@ Build 10. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
   préfixé « Motif : » (FR) / « Reason: » (EN). Rien si le motif est vide.
 - « Mes soumissions » : la date n'apparaît plus brute (« 2026-10-17T14:03:35.035649+00:00 ») mais
   en relatif court (« il y a 1 j »). Les fractions de seconde de 1 à 6 chiffres sont lues.
+- Carte : passer d'une boîte à une autre en touchant un point ne fait plus apparaître la fiche
+  presque plein écran et floue. La fiche garde une hauteur unique (320 pt) pour toutes les boîtes.
+- Réglages : la version affichée inclut le numéro de build, par exemple « v1.3.0 (11) ».
+
+### Notes App Store (FR)
+
+Boîtes à livres vous aide à trouver les boîtes à livres près de vous, à voir leur photo et à
+donner votre avis. Cette version corrige l'affichage de la fiche d'une boîte quand on passe d'une
+boîte à une autre sur la carte, et affiche le numéro de build dans les Réglages.
 
 ### Prérequis de publication
 

@@ -16,6 +16,10 @@ struct MapScreen: View {
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private let greenMuted = Color(red: 0.102, green: 0.718, blue: 0.608).opacity(0.45)
 
+    // Hauteur de repli unique pour toutes les fiches : la détente sélectionnée reste dans la liste
+    // quelle que soit la boîte, et la feuille ne change pas de taille quand la photo arrive.
+    static let sheetSmallDetent: PresentationDetent = .height(320)
+
     private func radiusLabel(_ km: Double) -> String {
         useImperialUnits ? "\(Int((km / 1.60934).rounded())) mi" : "\(Int(km)) km"
     }
@@ -174,7 +178,7 @@ struct MapScreen: View {
                 AddBoxView()
             }
             .sheet(item: $vm.selectedBox) { box in
-                let small: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
+                let small: PresentationDetent = Self.sheetSmallDetent
                 let trigger: PresentationDetent = .fraction(0.75)
                 BookBoxSheet(box: box) {
                     let id = box.id
@@ -241,7 +245,7 @@ struct MapScreen: View {
             isHandlingAnnotationTap = false
         }
 
-        let initial: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
+        let initial = Self.sheetSmallDetent
         if let current = vm.selectedBox, current.id != box.id {
             vm.selectedBox = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.32) {

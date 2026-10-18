@@ -510,7 +510,8 @@ struct SettingsView: View {
 
     private var versionLabel: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
-        return "v\(version)"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        return "v\(version) (\(build))"
     }
 
     private var notifStatusKey: LocalizedStringKey {
