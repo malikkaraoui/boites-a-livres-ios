@@ -29,6 +29,10 @@ Build 9. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - Photos d'une boîte : le carrousel n'affiche plus que les photos validées. Les photos en attente de
   modération ne sont plus montrées au public. Une photo qui ne se charge pas est retirée de
   l'affichage, et la limite de 3 photos compte les photos validées.
+- « Mes soumissions » : le motif de modération d'une photo (ex. refus) s'affiche sous la ligne,
+  préfixé « Motif : » (FR) / « Reason: » (EN). Rien si le motif est vide.
+- « Mes soumissions » : la date n'apparaît plus brute (« 2026-10-17T14:03:35.035649+00:00 ») mais
+  en relatif court (« il y a 1 j »). Les fractions de seconde de 1 à 6 chiffres sont lues.
 
 ### Prérequis de publication
 
@@ -46,6 +50,8 @@ Nouveautés de la version 1.3.0
 • « Mes soumissions » et « Mes demandes de suppression » n'affichent plus que ce que vous avez envoyé depuis votre téléphone. Vos envois restent privés.
 
 • Les photos des boîtes affichent désormais uniquement les photos validées. Les photos en attente de validation ne sont plus visibles par tous.
+
+• « Mes soumissions » affiche désormais le motif de modération d'une photo refusée, et des dates lisibles.
 
 Merci d'alimenter la carte des boîtes à livres !
 ```
