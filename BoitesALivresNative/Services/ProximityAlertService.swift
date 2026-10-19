@@ -80,7 +80,8 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         }
     }
 
-    // Une seule notification par présence ; anti-répétition 30 j ; tout est journalisé localement
+    // Une seule notification par présence ; anti-répétition 30 j ; tout est journalisé localement.
+    // Une alerte affichée compte comme vue : la date est posée à l'envoi, sans attendre une réponse (F01 M0024)
     private func notifyIfAllowed(boxId: Int, origin: String) {
         ProximityJournal.add("dans le rayon de la boîte \(boxId) (\(origin))")
         guard !handledInside.contains(boxId) else { return }
@@ -91,6 +92,8 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
             return
         }
         ProximityJournal.add("notification envoyée : boîte \(boxId)")
+        LocationPromptLog.mark(boxId: boxId)
+        ProximityJournal.add("anti-répétition posée : boîte \(boxId), 30 j")
         scheduleNotification(boxId: boxId)
     }
 
