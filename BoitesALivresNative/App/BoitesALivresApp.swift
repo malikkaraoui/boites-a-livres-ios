@@ -8,6 +8,8 @@ struct BoitesALivresApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @AppStorage("colorSchemeIndex") private var colorSchemeIndex = 0
     @AppStorage("textSizeIndex") private var textSizeIndex = 0
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var versionGate = AppVersionGate.shared
 
     init() {
         // Purge any previously forced language — let iOS use system language
@@ -21,8 +23,18 @@ struct BoitesALivresApp: App {
             // assure déjà la transition visuelle au démarrage. Pas de splash SwiftUI
             // pour éviter de bloquer le first-frame derrière l'init de MapKit.
             ContentView()
+                // Version minimale (F01 M0025) : écran bloquant par-dessus l'app si version < min_version
+                .overlay {
+                    if versionGate.mustUpdate { ForceUpdateView() }
+                }
                 .preferredColorScheme(resolvedColorScheme)
                 .environment(\.dynamicTypeSize, resolvedTypeSize)
+                .task {
+                    await versionGate.check()
+                }
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .active { Task { await versionGate.check() } }
+                }
                 .task {
                     Task.detached(priority: .background) {
                         try? await Task.sleep(nanoseconds: 2_000_000_000)

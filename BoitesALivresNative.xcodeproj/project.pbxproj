@@ -44,6 +44,9 @@
 		EB263BF3CF48598ED438B515 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419FBBB1FC3622D7BE3DAA7F /* NotificationService.swift */; };
 		5BECB0A2B7AA4D899D364F2C /* ProximityAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */; };
 		FB83CFA7DA884F00AB11E6C6 /* LocationUpdateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F101 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F001 /* AppVersion.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F102 /* AppVersionGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F002 /* AppVersionGate.swift */; };
+		B7C1D2E3F4A5B6C7D8E9F103 /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C1D2E3F4A5B6C7D8E9F003 /* ForceUpdateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +91,9 @@
 		FD3FCB977248E0876A160BF5 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
 		A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityAlertService.swift; sourceTree = "<group>"; };
 		5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdateSheet.swift; sourceTree = "<group>"; };
+		B7C1D2E3F4A5B6C7D8E9F001 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
+		B7C1D2E3F4A5B6C7D8E9F002 /* AppVersionGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionGate.swift; sourceTree = "<group>"; };
+		B7C1D2E3F4A5B6C7D8E9F003 /* ForceUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -103,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */,
+				B7C1D2E3F4A5B6C7D8E9F003 /* ForceUpdateView.swift */,
 				B0FE5181E5A24C90A9F2D4E2 /* ReviewSubmitSheet.swift */,
 				AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */,
 				D541733523FE0747B494016D /* BookBoxSheet.swift */,
@@ -191,6 +198,8 @@
 			children = (
 				39306270781382E3D32CFE76 /* DeepLinkRouter.swift */,
 				A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */,
+				B7C1D2E3F4A5B6C7D8E9F001 /* AppVersion.swift */,
+				B7C1D2E3F4A5B6C7D8E9F002 /* AppVersionGate.swift */,
 				4290B7F3239EDD24E5C7FBC7 /* ImageCacheService.swift */,
 				EB31CC2ED30D6102C7CEE268 /* LocalCacheService.swift */,
 				CE81952E301B38F4C1E5A61F /* LocationService.swift */,
@@ -300,6 +309,9 @@
 				B8D8223DCEBBDDE31111DC0D /* ListViewModel.swift in Sources */,
 				D06262B86E6EAD6F191B68E3 /* LocalCacheService.swift in Sources */,
 				5BECB0A2B7AA4D899D364F2C /* ProximityAlertService.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F101 /* AppVersion.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F102 /* AppVersionGate.swift in Sources */,
+				B7C1D2E3F4A5B6C7D8E9F103 /* ForceUpdateView.swift in Sources */,
 				82CDF367B969E08900FB884B /* LocationService.swift in Sources */,
 				798FE547395A4ED9DE0D6528 /* MapScreen.swift in Sources */,
 				1F2108D2A03DAC6E058DCCE1 /* MapViewModel.swift in Sources */,

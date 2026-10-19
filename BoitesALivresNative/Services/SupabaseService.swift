@@ -98,6 +98,20 @@ actor SupabaseService {
         return box
     }
 
+    // Version minimale : ligne id = 1 de app_config (lecture seule pour la clé anon)
+    struct AppConfigRecord: Decodable { let min_version: String; let current_version: String }
+
+    func fetchAppConfig() async throws -> AppConfigRecord {
+        let req = makeRequest(path: "/rest/v1/app_config?id=eq.1&select=min_version,current_version")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+        let arr = try JSONDecoder().decode([AppConfigRecord].self, from: data)
+        guard let config = arr.first else { throw SupabaseError.httpError(404, "app_config vide") }
+        return config
+    }
+
     // Submit a deletion request for a box (pending admin validation)
     func submitDeletionRequest(boxId: Int, reason: String) async throws {
         struct Body: Encodable { let box_id: Int; let reason: String; let device_token: String? }
