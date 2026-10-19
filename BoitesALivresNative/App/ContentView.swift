@@ -1,5 +1,6 @@
 import SwiftUI
 import StoreKit
+import UIKit
 
 // MARK: - Content View
 
@@ -11,6 +12,9 @@ struct ContentView: View {
     @State private var listPath = NavigationPath()
     @Environment(\.requestReview) private var requestReview
     @AppStorage("reviewPromptShownForVersion") private var reviewPromptShownForVersion = ""
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
+    @State private var proximityReminder: String? = nil
 
     private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
     private let reviewPromptDelay: UInt64 = 90 * 1_000_000_000
@@ -51,6 +55,21 @@ struct ContentView: View {
         }
         .onChange(of: router.pendingBoxId) { _, newValue in
             if newValue != nil { selectedTab = 0 }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            // Retour au premier plan : rappel si l'alerte de proximité est incomplète (F01 M0023, #29)
+            if phase == .active { proximityReminder = ProximityReminder.message() }
+        }
+        .alert("Alerte près d'une boîte désactivée", isPresented: Binding(
+            get: { proximityReminder != nil },
+            set: { if !$0 { proximityReminder = nil } }
+        )) {
+            Button("Annuler", role: .cancel) { ProximityReminder.snooze() }
+            Button("Réglages") {
+                if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+            }
+        } message: {
+            Text(proximityReminder ?? "")
         }
         .task {
             // Demande de notation auto après 90s d'usage — une fois par version max.
