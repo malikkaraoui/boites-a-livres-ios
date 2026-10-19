@@ -3,8 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, verify as cryptoVerify } from 'node:crypto';
 import {
-  AscError, assertConfirmed, compareVersions, makeClient, makeToken, parseEnvFile,
-  planControls, readLocalVersions, waitForBuild,
+  AscError, assertConfirmed, compareVersions, listVersions, makeClient, makeToken, parseEnvFile,
+  planControls, publish, readLocalVersions, waitForBuild,
 } from './asc.mjs';
 
 const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
@@ -94,4 +94,44 @@ test('attente du build : VALID rend la main, FAILED arrête, borne respectée', 
 
   const slowClient = { get: async () => ({ data: [{ id: 'b3', attributes: { version: '16', processingState: 'PROCESSING' } }] }) };
   await assert.rejects(waitForBuild(slowClient, 'app', '16', { sleepFn: noSleep, log: quiet, tries: 3, ms: 0 }), /3 essais/);
+});
+
+// Régression : la version en ligne est en 11e position (au-delà de l'ancienne limite de 10).
+const APP = 'APP1';
+const v = (id, versionString, appStoreState) => ({ id, attributes: { versionString, appStoreState } });
+function pagedClient() {
+  const first = Array.from({ length: 10 }, (_, i) => v(`r${i}`, `1.0.${i}`, 'REJECTED'));
+  const second = [v('live', '1.3.0', 'READY_FOR_SALE')];
+  return {
+    get: async (path) => {
+      const p = String(path);
+      if (p === '/v1/apps') return { data: [{ id: APP, attributes: { name: 'x' } }] };
+      if (p.includes('cursor=2')) return { data: second, links: {} };
+      if (p.includes(`/v1/apps/${APP}/appStoreVersions`)) {
+        return { data: first, links: { next: `${API}/v1/apps/${APP}/appStoreVersions?cursor=2` } };
+      }
+      if (p === '/v1/builds') return { data: [] };
+      throw new Error(`appel inattendu en test : ${p}`);
+    },
+    post: async () => { throw new Error('écriture inattendue en test'); },
+    patch: async () => { throw new Error('écriture inattendue en test'); },
+  };
+}
+
+test('listVersions lit toutes les pages (version en ligne en 11e position)', async () => {
+  const all = await listVersions(pagedClient(), APP);
+  assert.equal(all.length, 11);
+  assert.ok(all.some((x) => x.attributes.appStoreState === 'READY_FOR_SALE'));
+});
+
+test('publish refuse AVANT tout xcodebuild si la version locale n\'est pas supérieure à la version en ligne', async () => {
+  await assert.rejects(
+    publish({ client: pagedClient(), cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE', log: () => {} }),
+    (e) => /contrôle des numéros refusé/.test(e.message) && !/arrêt à l'étape/.test(e.message),
+  );
+});
+
+test('listVersions refuse une pagination trop longue au lieu de tronquer', async () => {
+  const endless = { get: async () => ({ data: [v('x', '1.0.0', 'REJECTED')], links: { next: `${API}/next` } }) };
+  await assert.rejects(listVersions(endless, APP, 3), /trop longue/);
 });

@@ -169,9 +169,17 @@ async function findApp(client) {
   return app;
 }
 
-async function listVersions(client, appId) {
-  const r = await client.get(`/v1/apps/${appId}/appStoreVersions`, { 'filter[platform]': 'IOS', limit: 10 });
-  return r.data ?? [];
+// Lit TOUTES les pages : une liste tronquée ferait manquer la version en ligne et fausserait les contrôles.
+export async function listVersions(client, appId, maxPages = 20) {
+  const out = [];
+  let r = await client.get(`/v1/apps/${appId}/appStoreVersions`, { 'filter[platform]': 'IOS', limit: 200 });
+  for (let page = 1; ; page++) {
+    out.push(...(r.data ?? []));
+    const next = r.links?.next;
+    if (!next) return out;
+    if (page >= maxPages) throw new Error(`liste des versions trop longue (plus de ${maxPages} pages) : contrôle impossible`);
+    r = await client.get(next);
+  }
 }
 
 async function listBuilds(client, appId, limit) {
