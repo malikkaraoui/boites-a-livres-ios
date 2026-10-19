@@ -1,29 +1,19 @@
 # CARNET DE BORD — instantané (1 minute)
 
-Dernière mise à jour : AAAA-MM-JJ HH:MM (<qui>) — <état en trois mots>
-
-<!--
-Ce fichier est le PREMIER lu à toute reprise : il doit se lire en une minute, et ne dire que
-ce qui est vrai maintenant. On le RÉÉCRIT, on ne l'allonge pas — l'historique vit dans
-`vault/reprise/00_INDEX.md` et `vault/runtime/events.jsonl`. C'est une DÉCLARATION : en cas
-d'écart avec les registres ou avec une preuve git, ce fichier a tort.
--->
+Dernière mise à jour : 2026-10-19 23:35 (orchestrateur Cowork) — build 16 sur iPhone, rien publié
 
 ## Où on en est
 
-- `<branche principale>` = `<sha>` — <ce que ce SHA contient, en une ligne>
-- <ce qui est en vol : mandat, fenêtre, branche — ou « RIEN »>
-- <la prochaine échéance datée, s'il y en a une>
+- `origin/main` = `838ab5e` (lu 23:48) : builds 14, 15, 16 mergés, commande de publication (R023), préflight Apple avant archive/envoi M0028 (R025 BLOQUE puis R026 GO). #33 ouverte (remarques 2 et 4).
+- iPhone du fondateur : 1.3.0 (16). App Store en ligne : 1.2.0 (5). Publication seulement sur « OK Apple », pas avant les tests terrain du 20/10.
+- En vol : rien. Nettoyage GitHub iOS (worktrees, branches fusionnées) pas encore posé. Passation complète : `BoitesALivres/vault/reprise/2026-10-19-PASSATION-soiree.md`.
 
 ## Références à ne pas toucher
 
-<!-- Les fichiers de fenêtre qui servent de référence auteur/doubleur d'une chaîne en cours :
-     les écraser détruit la pièce sur laquelle un doublage s'appuie. -->
-
-- `vault/echanges/<Fxx>.md` (<mandat>) — <pourquoi il est gelé>
+- Clé App Store Connect : `~/.appstoreconnect/` (hors dépôt, jamais committée ni affichée).
 
 ## Rappels
 
-- <interdit ou garde propre au projet, daté>
-- Source de vérité : `vault/reprise/00_INDEX.md` + `vault/runtime/state.json` / `events.jsonl`
-  — et, au-dessus d'eux, la preuve git rejouée à l'instant.
+- Modèle par défaut des mandats : Haiku 5.5 medium.
+- Notes de version : pas de puce ni tiret en début de ligne ; FR + EN ; remerciements aux contributeurs.
+- Source de vérité : `vault/reprise/00_INDEX.md` + `vault/runtime/state.json` / `events.jsonl`, et au-dessus la preuve git rejouée à l'instant.
