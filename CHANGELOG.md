@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 15
+
+- Alerte de proximité : une alerte affichée compte comme vue. La boîte n'est plus signalée pendant
+  30 jours, même si la notification est ignorée ou balayée.
+
 ### Build 14
 
 - Localisation : la précision et la position se mettent à jour en temps réel pendant l'écran
