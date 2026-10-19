@@ -6,10 +6,7 @@ import SwiftUI
 struct AddBoxView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var vm = AddBoxViewModel()
-    @State private var showPhotoOptions = false
     @State private var showCamera = false
-    @State private var showLibrary = false
-    @State private var showNoPhotoWarning = false
     @FocusState private var isNotesFocused: Bool
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
@@ -37,12 +34,12 @@ struct AddBoxView: View {
             }
             .ignoresSafeArea()
         }
-        .sheet(isPresented: $showLibrary) {
-            LibraryPickerView { image in
-                showLibrary = false
-                if let image { vm.selectedImage = image }
-            }
+        .onAppear {
+            // Position précise pendant la saisie : contrôle de présence sur place (F01 M0023, #31)
+            LocationService.shared.requestAuthorization()
+            LocationService.shared.beginPrecisionUpdates()
         }
+        .onDisappear { LocationService.shared.endPrecisionUpdates() }
     }
 
     // MARK: Step 1 — Map
@@ -148,7 +145,7 @@ struct AddBoxView: View {
 
                 // Photo section
                 VStack(alignment: .leading, spacing: 10) {
-                    fieldLabel("Photo (optionnel)")
+                    fieldLabel("Photo (obligatoire, prise sur place)")
 
                     if let image = vm.selectedImage {
                         ZStack(alignment: .topTrailing) {
@@ -172,7 +169,7 @@ struct AddBoxView: View {
                         }
                         Button {
                             lightHaptic()
-                            showPhotoOptions = true
+                            showCamera = true
                         } label: {
                             Label("Changer la photo", systemImage: "arrow.triangle.2.circlepath")
                                 .font(.system(size: 14, weight: .semibold))
@@ -182,7 +179,7 @@ struct AddBoxView: View {
                     } else {
                         Button {
                             lightHaptic()
-                            showPhotoOptions = true
+                            showCamera = true
                         } label: {
                             HStack(spacing: 10) {
                                 Image(systemName: "camera.fill")
@@ -192,7 +189,7 @@ struct AddBoxView: View {
                                     Text("Ajouter une photo")
                                         .font(.system(size: 15, weight: .semibold))
                                         .foregroundStyle(Color(.label))
-                                    Text("Aide à identifier la boîte sur la carte")
+                                    Text("Prends-la sur place. Aucune personne sur la photo.")
                                         .font(.system(size: 12))
                                         .foregroundStyle(.secondary)
                                 }
@@ -270,13 +267,9 @@ struct AddBoxView: View {
 
                 Button {
                     mediumHaptic()
-                    if vm.selectedImage == nil {
-                        showNoPhotoWarning = true
-                    } else {
-                        Task {
-                            let token = NotificationService.shared.getPushToken()
-                            await vm.submit(deviceToken: token)
-                        }
+                    Task {
+                        let token = NotificationService.shared.getPushToken()
+                        await vm.submit(deviceToken: token)
                     }
                 } label: {
                     HStack {
@@ -291,7 +284,16 @@ struct AddBoxView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
                 .buttonStyle(ScaleButtonStyle())
-                .disabled(vm.isSubmitting)
+                .disabled(vm.isSubmitting || !vm.canSubmit)
+                .opacity(vm.canSubmit ? 1 : 0.5)
+
+                if let hint = vm.submitHint {
+                    Text(hint)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.orange)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 16)
+                }
 
                 Text("Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision.")
                     .font(.system(size: 12))
@@ -304,25 +306,6 @@ struct AddBoxView: View {
         .scrollDismissesKeyboard(.immediately)
         .onTapGesture { isNotesFocused = false }
         .navigationTitle("Étape 2 / 2 — Détails")
-        .confirmationDialog("Ajouter une photo", isPresented: $showPhotoOptions, titleVisibility: .visible) {
-            Button("Prendre une photo") { showCamera = true }
-            Button("Choisir dans la bibliothèque") { showLibrary = true }
-            Button("Annuler", role: .cancel) {}
-        } message: {
-            Text("Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées.")
-        }
-        .alert("Ajouter une photo ?", isPresented: $showNoPhotoWarning) {
-            Button("Ajouter une photo") { showPhotoOptions = true }
-            Button("Soumettre quand même", role: .destructive) {
-                Task {
-                    let token = NotificationService.shared.getPushToken()
-                    await vm.submit(deviceToken: token)
-                }
-            }
-            Button("Annuler", role: .cancel) {}
-        } message: {
-            Text("Une photo aide les autres utilisateurs à reconnaître la boîte. Les soumissions sans photo sont souvent refusées.")
-        }
     }
 
     // MARK: Success
