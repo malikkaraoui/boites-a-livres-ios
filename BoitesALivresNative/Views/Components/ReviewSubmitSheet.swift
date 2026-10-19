@@ -101,6 +101,7 @@ struct ReviewSubmitSheet: View {
     @State private var authorName = ""
     @State private var comment = ""
     @State private var bookCount: Int = 10
+    @State private var bookCountText = "10"
     @State private var includeBookCount = true
     @State private var submitting = false
     @State private var showSuccess = false
@@ -108,6 +109,7 @@ struct ReviewSubmitSheet: View {
     @State private var userLocation: CLLocation? = nil
     @State private var locationError: String? = nil
     @FocusState private var commentFocused: Bool
+    @FocusState private var bookCountFocused: Bool
 
     private let maxComment = 150
     private let maxName = 30
@@ -149,6 +151,31 @@ struct ReviewSubmitSheet: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
+        // Bouton OK au-dessus du clavier numérique du nombre de livres (#21)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                if bookCountFocused {
+                    Spacer()
+                    Button("OK") { bookCountFocused = false }
+                        .fontWeight(.semibold)
+                }
+            }
+        }
+        // Le nombre et son champ restent synchronisés, avec − / + et la saisie au clavier (#21)
+        .onChange(of: bookCount) { _, value in
+            bookCountText = String(value)
+        }
+        .onChange(of: bookCountText) { _, text in
+            let value = BookCountInput.parse(text, previous: bookCount)
+            bookCount = value
+            if !text.isEmpty && Int(text) != value {
+                bookCountText = String(value)
+            }
+        }
+        .onChange(of: bookCountFocused) { _, focused in
+            // Sortie du champ : valeur vide ou hors bornes ramenée à la valeur effective
+            if !focused { bookCountText = String(bookCount) }
+        }
         .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
@@ -265,11 +292,16 @@ struct ReviewSubmitSheet: View {
             }
             if includeBookCount {
                 HStack {
-                    Stepper("", value: $bookCount, in: 0...200).labelsHidden()
+                    Stepper("", value: $bookCount, in: BookCountInput.range).labelsHidden()
                     Spacer()
-                    Text("\(bookCount)")
+                    TextField("0", text: $bookCountText)
+                        .keyboardType(.numberPad)
+                        .focused($bookCountFocused)
+                        .multilineTextAlignment(.trailing)
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(green)
+                        .frame(maxWidth: 120)
+                        .accessibilityLabel("Nombre estimé de livres")
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)

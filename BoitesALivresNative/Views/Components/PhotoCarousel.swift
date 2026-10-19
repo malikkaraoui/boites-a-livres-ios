@@ -9,24 +9,19 @@ struct PhotoCarousel: View {
     let uploading: Bool
     var onTap: ((Int) -> Void)? = nil
     @State private var currentPage = 0
-    // Photos dont le chargement a échoué : retirées de l'affichage
-    @State private var deadURLs: Set<String> = []
-
-    private var visiblePhotos: [BoxPhoto] {
-        photos.filter { !deadURLs.contains($0.url) }
-    }
 
     // Count includes approved photos plus local preview or upload placeholder
+    // Même liste que la visionneuse : une photo en échec reste affichée (placeholder), jamais retirée (#22)
     private var totalCount: Int {
-        var count = visiblePhotos.count
+        var count = photos.count
         if localImage != nil { count += 1 }
-        else if uploading && visiblePhotos.isEmpty { count += 1 }
+        else if uploading && photos.isEmpty { count += 1 }
         return count
     }
 
     var body: some View {
         Group {
-            if visiblePhotos.isEmpty && localImage == nil && !uploading {
+            if photos.isEmpty && localImage == nil && !uploading {
                 // Plus rien à montrer : carré gris
                 Color(.systemGray5)
                     .frame(height: 220)
@@ -42,8 +37,8 @@ struct PhotoCarousel: View {
 
     private var pages: some View {
         TabView(selection: $currentPage) {
-            ForEach(Array(visiblePhotos.enumerated()), id: \.offset) { index, photo in
-                CachedAsyncImage(url: URL(string: photo.url), onFailure: { deadURLs.insert(photo.url) }) { phase in
+            ForEach(Array(photos.enumerated()), id: \.offset) { index, photo in
+                CachedAsyncImage(url: URL(string: photo.url)) { phase in
                     switch phase {
                     case .success(let image):
                         image.resizable().aspectRatio(contentMode: .fill)
@@ -68,8 +63,8 @@ struct PhotoCarousel: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(height: 220)
                     .clipped()
-                    .tag(visiblePhotos.count)
-            } else if uploading && visiblePhotos.isEmpty {
+                    .tag(photos.count)
+            } else if uploading && photos.isEmpty {
                 Color(.systemGray5)
                     .frame(height: 220)
                     .overlay(ProgressView().scaleEffect(1.5))

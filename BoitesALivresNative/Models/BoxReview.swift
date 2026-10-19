@@ -41,3 +41,14 @@ struct BoxReview: Codable, Identifiable, Hashable {
     static func == (lhs: BoxReview, rhs: BoxReview) -> Bool { lhs.id == rhs.id }
     func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
+
+// Saisie du nombre estimé de livres (#21) : entier 0...max, texte vide ou non numérique → valeur précédente
+enum BookCountInput {
+    static let range = 0...200
+
+    static func parse(_ text: String, previous: Int) -> Int {
+        let digits = text.filter(\.isNumber)
+        guard let value = Int(digits) else { return previous }
+        return min(max(value, range.lowerBound), range.upperBound)
+    }
+}
