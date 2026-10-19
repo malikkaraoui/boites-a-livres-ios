@@ -9,6 +9,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        // Dès le lancement, synchrone : un événement de région peut relancer l'app en arrière-plan (F01 M0020)
+        ProximityAlertService.shared.start()
         return true
     }
 
@@ -44,6 +46,18 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
            let boxId = userInfo["boxId"] as? Int {
             Task { @MainActor in
                 DeepLinkRouter.shared.pendingBoxId = boxId
+            }
+        }
+
+        // Alerte de proximité : « Plus tard » ferme le rappel 30 jours ; le tap ouvre la fiche et le parcours
+        if type == ProximityAlertService.notifType, let boxId = userInfo["boxId"] as? Int {
+            if response.actionIdentifier == ProximityAlertService.laterActionId {
+                LocationPromptLog.mark(boxId: boxId)
+            } else if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
+                Task { @MainActor in
+                    DeepLinkRouter.shared.pendingLocationBoxId = boxId
+                    DeepLinkRouter.shared.pendingBoxId = boxId
+                }
             }
         }
         completionHandler()

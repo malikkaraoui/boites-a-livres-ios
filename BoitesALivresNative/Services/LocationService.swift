@@ -54,6 +54,16 @@ final class LocationService: NSObject, ObservableObject {
         isUpdating = true
     }
 
+    // Précision maximale pendant l'écran de localisation seulement (F01 M0020), puis retour au réglage économe
+    func beginPrecisionUpdates() {
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        startUpdatingIfAuthorized()
+    }
+
+    func endPrecisionUpdates() {
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    }
+
     // Get current location: return cached if < 60s old, else request fresh with 15s timeout
     func requestCurrentLocation() async throws -> CLLocation {
         // Return the cached location immediately if it is less than 60 seconds old

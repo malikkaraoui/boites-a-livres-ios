@@ -316,6 +316,48 @@ actor SupabaseService {
         if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
         return (try? JSONDecoder().decode([BoxSubmissionRecord].self, from: data)) ?? []
     }
+
+    // MARK: - Localisation (F01 M0020)
+
+    // Proposer une localisation pour une boîte : seules les colonnes accordées à anon sont envoyées.
+    // Aucun champ de position de l'utilisateur : lat/lng sont la position PROPOSÉE pour la boîte.
+    func insertLocationUpdate(boxId: Int, kind: String, lat: Double?, lng: Double?,
+                              address: String?, city: String?, postalCode: String?, department: String?,
+                              source: String?, accuracyM: Double?, deviceToken: String) async throws {
+        struct Body: Encodable {
+            let box_id: Int
+            let kind: String
+            let lat: Double?, lng: Double?
+            let address: String?, city: String?, postal_code: String?, department: String?
+            let source: String?
+            let accuracy_m: Double?
+            let device_token: String
+            let platform: String
+        }
+        let body = try JSONEncoder().encode(Body(
+            box_id: boxId, kind: kind, lat: lat, lng: lng,
+            address: address, city: city, postal_code: postalCode, department: department,
+            source: source, accuracy_m: accuracyM, device_token: deviceToken, platform: "ios"
+        ))
+        var req = makeRequest(path: "/rest/v1/location_updates", method: "POST", body: body)
+        req.setValue("return=minimal", forHTTPHeaderField: "Prefer")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 {
+            throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
+        }
+    }
+
+    // Mes propositions de localisation via RPC SECURITY DEFINER filtrée par device_token.
+    // Absente en base (migration non appliquée) ou erreur HTTP : liste vide, sans bloquer le reste.
+    func fetchMyLocationUpdates() async throws -> [LocationUpdateRecord] {
+        guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else { return [] }
+        let body = try JSONEncoder().encode(["p_device_token": token])
+        var req = makeRequest(path: "/rest/v1/rpc/my_location_updates", method: "POST", body: body)
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, http.statusCode >= 400 { return [] }
+        return (try? JSONDecoder().decode([LocationUpdateRecord].self, from: data)) ?? []
+    }
 }
 
 // MARK: - Data Models

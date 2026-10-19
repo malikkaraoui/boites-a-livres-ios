@@ -38,6 +38,8 @@ struct SettingsView: View {
     @AppStorage("colorSchemeIndex") private var colorSchemeIndex = 0
     @AppStorage("textSizeIndex") private var textSizeIndex = 0
     @AppStorage("useImperialUnits") private var useImperialUnits = false
+    @AppStorage(ProximityAlertService.enabledKey) private var proximityEnabled = false
+    @State private var showProximityExplanation = false
     @Environment(\.requestReview) private var requestReview
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
@@ -51,6 +53,7 @@ struct SettingsView: View {
                 accessibilitySection
                 shareSection
                 notificationsSection
+                locationSection
                 submissionsSection
                 deletionRequestsSection
                 aboutSection
@@ -224,17 +227,57 @@ struct SettingsView: View {
         }
     }
 
-    // Agrège mes photos, mes nouvelles boîtes, mes avis — triés par date desc.
+    // Section Localisation : alerte de proximité (F01 M0020), désactivée par défaut
+    private var locationSection: some View {
+        Section {
+            Toggle("Alerte près d'une boîte", isOn: Binding(
+                get: { proximityEnabled },
+                set: { on in
+                    if on {
+                        showProximityExplanation = true
+                    } else {
+                        ProximityAlertService.shared.disable()
+                    }
+                }
+            ))
+            .tint(green)
+            if proximityEnabled && CLLocationManager().authorizationStatus != .authorizedAlways {
+                Text("Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.orange)
+                Button("Ouvrir les Réglages") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .foregroundStyle(green)
+            }
+        } header: {
+            Text("Localisation")
+        } footer: {
+            Text("Un rappel apparaît quand tu passes à moins de 50 m d'une boîte. Ta position reste sur ton téléphone.")
+        }
+        .alert("Alerte près d'une boîte", isPresented: $showProximityExplanation) {
+            Button("Continuer") { ProximityAlertService.shared.enable() }
+            Button("Annuler", role: .cancel) {}
+        } message: {
+            Text("Boîtes à Livres peut t'envoyer un rappel quand tu passes près d'une boîte, même application fermée. Ta position ne quitte pas ton téléphone. Pour cela, iOS te demandera l'accès « Toujours ».")
+        }
+    }
+
+    // Agrège mes photos, mes nouvelles boîtes, mes avis, mes localisations — triés par date desc.
     private enum MySubmissionEntry: Identifiable {
         case photo(PhotoSubmission)
         case box(BoxSubmissionRecord)
         case review(BoxReview)
+        case location(LocationUpdateRecord)
 
         var id: String {
             switch self {
             case .photo(let p): return "photo-\(p.id)"
             case .box(let b): return "box-\(b.id)"
             case .review(let r): return "review-\(r.id)"
+            case .location(let l): return "location-\(l.id)"
             }
         }
 
@@ -243,15 +286,16 @@ struct SettingsView: View {
             case .photo(let p): return p.submitted_at
             case .box(let b): return b.submitted_at
             case .review(let r): return r.created_at
+            case .location(let l): return l.submitted_at
             }
         }
     }
 
     private var allMySubmissions: [MySubmissionEntry] {
-        let merged: [MySubmissionEntry] =
-            vm.submissions.map { .photo($0) }
-            + vm.myBoxSubmissions.map { .box($0) }
-            + vm.myReviews.map { .review($0) }
+        var merged: [MySubmissionEntry] = vm.submissions.map { .photo($0) }
+        merged += vm.myBoxSubmissions.map { .box($0) }
+        merged += vm.myReviews.map { .review($0) }
+        merged += vm.myLocationUpdates.map { .location($0) }
         return merged.sorted { $0.submittedAt > $1.submittedAt }
     }
 
@@ -305,6 +349,18 @@ struct SettingsView: View {
                     subtitle: relativeDate(from: b.submitted_at)
                 )
                 statusChip(b.status)
+            }
+            .padding(.vertical, 4)
+
+        case .location(let l):
+            HStack(spacing: 12) {
+                typedIconTile(systemName: "mappin.and.ellipse", color: .teal)
+                rowBody(
+                    title: NSLocalizedString("Localisation", comment: "") + " · " + boxTitle(l.box_id),
+                    subtitle: relativeDate(from: l.submitted_at),
+                    note: l.status == "pending" ? nil : l.review_notes
+                )
+                statusChip(l.status)
             }
             .padding(.vertical, 4)
 

@@ -14,6 +14,8 @@ struct DetailView: View {
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     @State private var showDeletionSheet = false
     @State private var showReviewSheet = false
+    @State private var showLocationSheet = false
+    @ObservedObject private var locationService = LocationService.shared
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -36,6 +38,7 @@ struct DetailView: View {
                                 sectionTitle("Localisation")
                                 coordToggleRow(box: box)
                                 mapsButton(box: box)
+                                locationUpdateButton(box: box)
                             }
                         }
 
@@ -123,7 +126,14 @@ struct DetailView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .task { await vm.load(boxId: boxId) }
+        .task {
+            await vm.load(boxId: boxId)
+            // Tap sur la notification de proximité : parcours « Localisation » directement (F01 M0020)
+            if DeepLinkRouter.shared.pendingLocationBoxId == boxId {
+                DeepLinkRouter.shared.pendingLocationBoxId = nil
+                showLocationSheet = true
+            }
+        }
         .alert(vm.alertTitle, isPresented: $vm.showAlert) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -140,6 +150,11 @@ struct DetailView: View {
                 ReviewSubmitSheet(boxId: boxId, boxCoordinate: box.coordinate) {
                     Task { await vm.reloadReviews(boxId: boxId) }
                 }
+            }
+        }
+        .sheet(isPresented: $showLocationSheet) {
+            if let box = vm.box {
+                LocationUpdateSheet(box: box)
             }
         }
         .sheet(isPresented: $vm.showPhotoModal) {
@@ -368,6 +383,34 @@ struct DetailView: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .shadow(color: green.opacity(0.35), radius: 8, y: 4)
+        }
+    }
+
+    // Bouton « Localisation » : actif seulement à 50 m ou moins de la boîte (présence vérifiée sur le téléphone)
+    @ViewBuilder
+    private func locationUpdateButton(box: BookBox) -> some View {
+        let nearEnough = (distanceFromUser(to: box) ?? .greatestFiniteMagnitude) <= LocationRules.proximityMeters
+        VStack(spacing: 6) {
+            Button {
+                lightHaptic()
+                showLocationSheet = true
+            } label: {
+                Label("Localisation", systemImage: "mappin.and.ellipse")
+                    .font(.system(size: 15, weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(nearEnough ? green.opacity(0.12) : Color(.systemGray6))
+                    .foregroundStyle(nearEnough ? green : .secondary)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .disabled(!nearEnough)
+            if !nearEnough {
+                Text("Approche-toi à moins de 50 m pour signaler la position de cette boîte.")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
         }
     }
 

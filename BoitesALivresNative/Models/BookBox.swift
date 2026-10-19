@@ -160,3 +160,82 @@ struct PendingPhotoSubmission: Codable, Identifiable {
         case pending, approved, rejected
     }
 }
+
+// MARK: - Localisation (F01 M0020)
+
+// Ma proposition de localisation (RPC my_location_updates) : statut, motif, sans position
+struct LocationUpdateRecord: Codable, Identifiable, Hashable {
+    let id: Int
+    let box_id: Int
+    let kind: String
+    let status: String
+    let address: String?
+    let city: String?
+    let submitted_at: String
+    let reviewed_at: String?
+    let review_notes: String?
+}
+
+// Règles pures de la localisation : seuils, barres de précision, sélection des régions
+enum LocationRules {
+    static let proximityMeters: Double = 50
+    static let moveMaxMeters: Double = 500
+    static let confirmMaxAccuracyMeters: Double = 10
+    static let regionLimit = 20
+    static let repeatWindowSeconds: TimeInterval = 30 * 86_400
+
+    // Barres de précision : ≤5 m = 5, ≤10 m = 4, ≤20 m = 3, ≤50 m = 2, sinon 1 ; précision inconnue (<0) = 1
+    static func precisionBars(accuracy: Double) -> Int {
+        guard accuracy >= 0 else { return 1 }
+        switch accuracy {
+        case ...5: return 5
+        case ...10: return 4
+        case ...20: return 3
+        case ...50: return 2
+        default: return 1
+        }
+    }
+
+    // Envoi possible seulement avec 10 m de précision ou mieux (4 à 5 barres)
+    static func canSend(accuracy: Double) -> Bool {
+        accuracy >= 0 && accuracy <= confirmMaxAccuracyMeters
+    }
+
+    // Anti-répétition : une boîte proposée il y a moins de 30 jours n'alerte plus
+    static func isBlocked(lastPrompt: Date?, now: Date) -> Bool {
+        guard let last = lastPrompt else { return false }
+        return now.timeIntervalSince(last) < repeatWindowSeconds
+    }
+
+    // Les `limit` boîtes les plus proches (à vol d'oiseau), hors anti-répétition
+    static func regionCandidates(boxes: [BookBox], origin: CLLocationCoordinate2D,
+                                 prompts: [Int: Date], now: Date, limit: Int = regionLimit) -> [BookBox] {
+        let here = CLLocation(latitude: origin.latitude, longitude: origin.longitude)
+        return boxes
+            .filter { !isBlocked(lastPrompt: prompts[$0.id], now: now) }
+            .map { box in (box, here.distance(from: CLLocation(latitude: box.lat, longitude: box.lng))) }
+            .sorted { $0.1 < $1.1 }
+            .prefix(limit)
+            .map { $0.0 }
+    }
+}
+
+// Journal des dates de rappel par boîte, sur le téléphone seulement (UserDefaults)
+enum LocationPromptLog {
+    private static let key = "locationPromptTimes"
+
+    static func all() -> [Int: Date] {
+        let raw = UserDefaults.standard.dictionary(forKey: key) as? [String: Double] ?? [:]
+        var out: [Int: Date] = [:]
+        for (id, time) in raw {
+            if let boxId = Int(id) { out[boxId] = Date(timeIntervalSince1970: time) }
+        }
+        return out
+    }
+
+    static func mark(boxId: Int, at now: Date = Date()) {
+        var raw = UserDefaults.standard.dictionary(forKey: key) as? [String: Double] ?? [:]
+        raw["\(boxId)"] = now.timeIntervalSince1970
+        UserDefaults.standard.set(raw, forKey: key)
+    }
+}

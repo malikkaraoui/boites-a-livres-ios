@@ -9,4 +9,6 @@ final class DeepLinkRouter {
 
     // Box ID to navigate to when deep link is received; observed for navigation stack updates
     var pendingBoxId: Int?
+    // Fiche à ouvrir avec le parcours « Localisation » (tap sur la notification de proximité)
+    var pendingLocationBoxId: Int?
 }
