@@ -183,6 +183,13 @@ enum LocationRules {
     static let confirmMaxAccuracyMeters: Double = 10
     static let regionLimit = 20
     static let repeatWindowSeconds: TimeInterval = 30 * 86_400
+    static let deletionMaxMeters: Double = 100
+
+    // « Signaler une suppression » : distance inconnue = refusé
+    static func canReportDeletion(distance: Double?) -> Bool {
+        guard let distance else { return false }
+        return distance <= deletionMaxMeters
+    }
 
     // Barres de précision : ≤5 m = 5, ≤10 m = 4, ≤20 m = 3, ≤50 m = 2, sinon 1 ; précision inconnue (<0) = 1
     static func precisionBars(accuracy: Double) -> Int {
