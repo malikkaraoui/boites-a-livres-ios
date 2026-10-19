@@ -292,7 +292,7 @@ export async function publish({
   assertConfirmed(confirm);
   // Préflight d'abord : un refus ici = rien d'archivé, rien d'envoyé.
   const pf = await preflight({ client, log, local: localOverride, notesPath });
-  const { plan } = pf;
+  const { plan, app } = pf;
   const local = pf.local;
 
   let step = 'archive';

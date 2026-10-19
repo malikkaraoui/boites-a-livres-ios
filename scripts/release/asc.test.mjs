@@ -164,6 +164,13 @@ test('preflight refuse une version en revue située sur la 2e page, avant tout a
   assert.deepEqual(writes, [], 'aucune écriture App Store Connect');
 });
 
+test('preflight refuse chacun des cinq états d\'attente ou de revue', async () => {
+  for (const state of ['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'PENDING_APPLE_RELEASE']) {
+    const client = pagedClient([v('rev', '1.4.0', state)]);
+    await assert.rejects(preflight({ client, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('ok') }), new RegExp(state), state);
+  }
+});
+
 test('preflight refuse des notes vides ou trop longues', async () => {
   const client = pagedClient();
   await assert.rejects(preflight({ client, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('  \n') }), /vide/);
@@ -183,6 +190,44 @@ test('preflight accepte une configuration valide (lecture seule)', async () => {
 test('preflight refuse une clé rejetée par Apple, sans rien lancer', async () => {
   const rejected = { get: async () => { throw Object.assign(new Error('HTTP 401'), { status: 401 }); } };
   await assert.rejects(preflight({ client: rejected, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('ok') }), /clé refusée/);
+});
+
+// Chemin complet : préflight OK, puis archive, envoi, traitement, version, notes, soumission. Témoin du défaut
+// « app is not defined » (étape traitement) que les tests de refus ne voyaient pas.
+function happyClient(writes) {
+  const base = pagedClient([v('live', '1.3.0', 'READY_FOR_SALE')], { writes });
+  return {
+    get: async (path, query) => {
+      if (path === '/v1/builds' && query?.['filter[version]']) {
+        return { data: [{ id: 'b16', attributes: { version: '16', processingState: 'VALID' } }] };
+      }
+      if (path === '/v1/builds') return { data: [] };
+      if (String(path).endsWith('/appStoreVersionLocalizations')) return { data: [] };
+      return base.get(path, query);
+    },
+    post: async (p) => {
+      writes.push(`POST ${p}`);
+      if (p === '/v1/appStoreVersions') return { data: { id: 'new-v' } };
+      if (p === '/v1/reviewSubmissions') return { data: { id: 'rs1' } };
+      return { data: { id: 'x' } };
+    },
+    patch: async (p) => { writes.push(`PATCH ${p}`); return { data: {} }; },
+  };
+}
+
+test('publish : chemin complet (préflight OK) va jusqu\'à la soumission', async () => {
+  const writes = [];
+  const calls = [];
+  const logs = [];
+  await publish({
+    client: happyClient(writes), cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE',
+    log: (m) => logs.push(m), sleepFn: async () => {}, localOverride: LOCAL_1_4,
+    notesPath: notesFile('Corrections.'), runXcodeFn: (args, label) => calls.push(label),
+  });
+  assert.deepEqual(calls, ['archive', 'exportArchive']);
+  assert.ok(writes.includes('POST /v1/appStoreVersions'));
+  assert.ok(writes.includes('PATCH /v1/reviewSubmissions/rs1'));
+  assert.ok(logs.some((m) => /Soumis à la revue : version 1\.4\.0, build 17/.test(m)), 'étape soumission atteinte');
 });
 
 test('listVersions refuse une pagination trop longue au lieu de tronquer', async () => {

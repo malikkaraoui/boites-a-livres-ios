@@ -25,7 +25,7 @@ Ne lancer `make release` qu'après le « OK Apple » explicite du fondateur.
    3. la version locale (`MARKETING_VERSION`) est supérieure à la version en ligne, le build (`CURRENT_PROJECT_VERSION`) supérieur au dernier build reçu, et aucune autre version en préparation ne porte un numéro différent ;
    4. `release-notes/fr-FR.txt` est présent, non vide et ≤ 4000 caractères.
 
-   `make release-check` affiche ce même verdict (il ne fait que des GET). Le préflight ne lit pas la clé `.p8` au-delà de son chargement et n'affiche aucun jeton.
+   `make release-check` affiche ce même verdict (il ne fait que des GET). La clé `.p8` est chargée une fois au démarrage, avant le préflight ; aucun jeton signé n'est affiché.
 1. **Archive** Release (`xcodebuild archive`, authentification par la clé).
 2. **Envoi** du build (`xcodebuild -exportArchive`, `destination upload`, options dans `scripts/release/ExportOptions.plist`).
 3. **Attente** du traitement du build par Apple : sondage borné (40 essais, 30 s d'intervalle), arrêt net si Apple le refuse.
