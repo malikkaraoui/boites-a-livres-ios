@@ -23,10 +23,6 @@ struct BoitesALivresApp: App {
             // assure déjà la transition visuelle au démarrage. Pas de splash SwiftUI
             // pour éviter de bloquer le first-frame derrière l'init de MapKit.
             ContentView()
-                // Version minimale (F01 M0025) : écran bloquant par-dessus l'app si version < min_version
-                .overlay {
-                    if versionGate.mustUpdate { ForceUpdateView() }
-                }
                 .preferredColorScheme(resolvedColorScheme)
                 .environment(\.dynamicTypeSize, resolvedTypeSize)
                 .task {
