@@ -201,6 +201,17 @@ enum LocationRules {
         accuracy >= 0 && accuracy <= confirmMaxAccuracyMeters
     }
 
+    // Repère placé à la main : précision GPS jusqu'à 50 m (accepté en production, source = manual)
+    static let manualMaxAccuracyMeters: Double = 50
+    static func canSendManual(accuracy: Double) -> Bool {
+        accuracy >= 0 && accuracy <= manualMaxAccuracyMeters
+    }
+
+    // Source envoyée au serveur : « gps » seulement si GPS précis (≤ 10 m) ET repère posé sur la position GPS
+    static func source(accuracy: Double, pinIsGPS: Bool) -> String {
+        (canSend(accuracy: accuracy) && pinIsGPS) ? "gps" : "manual"
+    }
+
     // Anti-répétition : une boîte proposée il y a moins de 30 jours n'alerte plus
     static func isBlocked(lastPrompt: Date?, now: Date) -> Bool {
         guard let last = lastPrompt else { return false }

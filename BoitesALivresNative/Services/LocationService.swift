@@ -54,14 +54,18 @@ final class LocationService: NSObject, ObservableObject {
         isUpdating = true
     }
 
-    // Précision maximale pendant l'écran de localisation seulement (F01 M0020), puis retour au réglage économe
+    // Précision maximale et position à chaque mouvement pendant l'écran de localisation seulement
+    // (F01 M0023, retour terrain 19/10 : précision figée à ± 14 m faute de distanceFilter levé)
     func beginPrecisionUpdates() {
         manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.distanceFilter = kCLDistanceFilterNone
         startUpdatingIfAuthorized()
     }
 
+    // Retour au réglage économe (F01 M0020 / M0023)
     func endPrecisionUpdates() {
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = 50
     }
 
     // Get current location: return cached if < 60s old, else request fresh with 15s timeout

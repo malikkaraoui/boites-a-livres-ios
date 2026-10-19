@@ -154,7 +154,11 @@ struct DetailView: View {
         }
         .sheet(isPresented: $showLocationSheet) {
             if let box = vm.box {
-                LocationUpdateSheet(box: box)
+                LocationUpdateSheet(box: box) {
+                    // Ferme la feuille puis ouvre le circuit photo existant (F01 M0023, point 4)
+                    showLocationSheet = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { vm.showPhotoModal = true }
+                }
             }
         }
         .sheet(isPresented: $vm.showPhotoModal) {
