@@ -66,19 +66,7 @@ struct DetailView: View {
                                     .font(.system(size: 12))
                                     .foregroundStyle(.secondary)
                                     .padding(.top, 4)
-                                Button {
-                                    lightHaptic()
-                                    showDeletionSheet = true
-                                } label: {
-                                    Label("Signaler une suppression", systemImage: "trash")
-                                        .font(.system(size: 14, weight: .semibold))
-                                        .foregroundStyle(.red)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 11)
-                                        .background(Color.red.opacity(0.08))
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                                }
-                                .buttonStyle(.plain)
+                                deletionButton(box: box)
                             }
                         }
 
@@ -411,6 +399,33 @@ struct DetailView: View {
             .disabled(!nearEnough)
             if !nearEnough {
                 Text("Approche-toi à moins de 50 m pour signaler la position de cette boîte.")
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func deletionButton(box: BookBox) -> some View {
+        let canReport = LocationRules.canReportDeletion(distance: distanceFromUser(to: box))
+        VStack(spacing: 6) {
+            Button {
+                lightHaptic()
+                showDeletionSheet = true
+            } label: {
+                Label("Signaler une suppression", systemImage: "trash")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(canReport ? Color.red : Color.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 11)
+                    .background(canReport ? Color.red.opacity(0.08) : Color(.systemGray6))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+            .buttonStyle(.plain)
+            .disabled(!canReport)
+            if !canReport {
+                Text("Approche-toi à moins de 100 m de la boîte pour signaler sa suppression.")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)

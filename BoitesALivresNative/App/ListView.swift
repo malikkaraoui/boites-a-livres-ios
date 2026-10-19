@@ -1,4 +1,5 @@
 import SwiftUI
+import CoreLocation
 
 private struct IdentifiableInt: Identifiable { let value: Int; var id: Int { value } }
 
@@ -49,6 +50,7 @@ struct ListView: View {
                                 } label: {
                                     Label("Supprimer", systemImage: "trash")
                                 }
+                                .disabled(!canReportDeletion(box))
                             }
                         }
 
@@ -108,6 +110,13 @@ struct ListView: View {
                 DeletionRequestSheet(boxId: item.value)
             }
         }
+    }
+
+    // Même règle que « Signaler une suppression » de la fiche : 100 m ou moins, position connue (F01 M0026)
+    private func canReportDeletion(_ box: BookBox) -> Bool {
+        guard let loc = locationService.currentLocation else { return false }
+        let distance = loc.distance(from: CLLocation(latitude: box.lat, longitude: box.lng))
+        return LocationRules.canReportDeletion(distance: distance)
     }
 
     // Filter controls: radius chips and photo availability toggle
