@@ -1,0 +1,13 @@
+Version 1.3.0 (build 16)
+
+Mise à jour obligatoire : si ta version est trop ancienne, un écran te demande de mettre l'app à jour avant de continuer.
+
+Localisation des boîtes : tu peux confirmer qu'une boîte est bien là, ou proposer la position exacte sur la carte, quand tu es assez près d'elle. Les positions proposées sont vérifiées avant d'être publiées.
+
+Alerte près d'une boîte (désactivée par défaut, Réglages › Localisation) : un rappel quand tu passes à moins de 50 m d'une boîte. Ta position reste sur ton téléphone. Une alerte déjà vue ne revient plus pendant 30 jours.
+
+Suppression : le bouton de signalement n'est actif qu'à 100 m ou moins de la boîte.
+
+Photos : une nouvelle boîte demande une photo prise sur place. Aucune personne ne doit apparaître sur la photo.
+
+Corrections : aperçu et carrousel des photos, « Mes soumissions » et « Mes demandes de suppression », affichage du numéro de build dans les réglages.

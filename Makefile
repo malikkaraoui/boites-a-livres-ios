@@ -5,7 +5,7 @@ BUILD_DIR = .build
 DEVICE_UDID = 00008101-001278EA36E9001E
 DEVICE_CORE_ID = C3CFC878-6C8D-5B87-8B35-1CB108A4922A
 
-.PHONY: build run device test clean doctor archive help
+.PHONY: build run device test clean doctor archive help release-check release
 
 help:
 	@echo "Cibles disponibles:"
@@ -16,6 +16,8 @@ help:
 	@echo "  make clean   - Supprime le dossier de build"
 	@echo "  make doctor  - Diagnostic de l'environnement"
 	@echo "  make archive - Archive pour l'App Store"
+	@echo "  make release-check - Lecture seule : clé App Store Connect, version en ligne, builds"
+	@echo "  make release CONFIRMER=OK-APPLE - Envoie le build et soumet à la revue (après OK d'Apple)"
 
 build:
 	xcodebuild -scheme "$(SCHEME)" \
@@ -91,3 +93,17 @@ archive:
 		-derivedDataPath "$(BUILD_DIR)" \
 		archive \
 		-archivePath "$(SCHEME).xcarchive"
+
+# ---------- Publication App Store Connect (scripts/release/README.md) ----------
+# Config hors dépôt : ~/.appstoreconnect/config.env (ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH).
+ASC_CONFIG ?= $(HOME)/.appstoreconnect/config.env
+CONFIRMER ?=
+
+release-check:
+	@test -r "$(ASC_CONFIG)" || { echo "Config absente : $(ASC_CONFIG) (voir scripts/release/README.md)"; exit 1; }
+	@set -a; . "$(ASC_CONFIG)"; set +a; node scripts/release/asc.mjs check
+
+release:
+	@test "$(CONFIRMER)" = "OK-APPLE" || { echo "Refus : make release exige CONFIRMER=OK-APPLE exactement. Aucune action lancée."; exit 1; }
+	@test -r "$(ASC_CONFIG)" || { echo "Config absente : $(ASC_CONFIG) (voir scripts/release/README.md)"; exit 1; }
+	@set -a; . "$(ASC_CONFIG)"; set +a; node scripts/release/asc.mjs publish --confirm "$(CONFIRMER)"
