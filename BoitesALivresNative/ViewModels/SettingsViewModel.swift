@@ -12,6 +12,7 @@ final class SettingsViewModel {
     var deletionRequests: [DeletionRequestRecord] = []
     var myReviews: [BoxReview] = []
     var myBoxSubmissions: [BoxSubmissionRecord] = []
+    var myLocationUpdates: [LocationUpdateRecord] = []
     var showCacheClearAlert = false
     var cacheClearDone = false
 
@@ -24,10 +25,12 @@ final class SettingsViewModel {
         async let dels = (try? await SupabaseService.shared.fetchMyDeletionRequests()) ?? []
         async let revs = (try? await SupabaseService.shared.fetchMyReviews()) ?? []
         async let boxes = (try? await SupabaseService.shared.fetchMyBoxSubmissions()) ?? []
+        async let locs = (try? await SupabaseService.shared.fetchMyLocationUpdates()) ?? []
         submissions = await subs
         deletionRequests = await dels
         myReviews = await revs
         myBoxSubmissions = await boxes
+        myLocationUpdates = await locs
     }
 
     // Request notification permission and refresh status

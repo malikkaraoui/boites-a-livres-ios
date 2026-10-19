@@ -9,10 +9,17 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 ## [1.3.0] - non publiée
 
-Build 12. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Ajouté
 
+- Localisation d'une boîte : sur la fiche, le bouton « Localisation » (actif à 50 m ou moins de la
+  boîte) permet de confirmer qu'elle est là, ou de placer le repère sur la carte. La précision GPS doit
+  être de 10 m au plus. Rien ne change sur la carte avant la validation par un administrateur.
+- Alerte près d'une boîte (Réglages › Localisation, désactivée par défaut) : un rappel « La boîte
+  est-elle bien ici ? » quand tu passes à moins de 50 m, même application fermée. Ta position ne quitte
+  pas ton téléphone. Après « Plus tard », la même boîte n'alerte plus pendant 30 jours.
+- « Mes soumissions » affiche tes propositions de localisation, avec leur statut.
 - Avertissement « Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes
   sont refusées. » avant la prise ou le choix d'une photo : encadré dans la feuille « Ajouter une
   photo » d'une boîte existante, et message de la boîte de dialogue photo à la création d'une
@@ -20,6 +27,10 @@ Build 12. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Corrigé
 
+- Avis : le nombre estimé de livres se saisit au clavier numérique, avec un bouton OK ; les boutons
+  − / + restent synchronisés (#21).
+- Fiche : l'aperçu affiche toutes les photos de la boîte, dans le même ordre que la visionneuse. Une
+  erreur réseau passagère ne retire plus une photo de l'aperçu (#22).
 - « Mes soumissions » photo : la liste ne montre plus que les soumissions de l'appareil. Elle passe
   par la RPC `my_photo_submissions`, cloisonnée par jeton d'appareil, au lieu d'une lecture directe
   de la table. (#2, commit `ef324ee`, PR #7)
@@ -46,6 +57,11 @@ Build 12. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - Les migrations `supabase/migrations/20261014_my_photo_submissions.sql` et
   `supabase/migrations/20261015_my_deletion_requests.sql` doivent être appliquées en base avant la
   mise en ligne. Sans elles, les deux listes ci-dessus restent vides.
+- La migration `supabase/migrations/20261019120000_location_updates.sql` doit être appliquée en base
+  avant la mise en ligne du build 13 (table `location_updates`, RPC `my_location_updates`). Sans elle,
+  le bouton « Localisation » envoie un message d'indisponibilité et « Mes soumissions » n'affiche pas
+  les propositions de localisation.
+
 
 ### Notes App Store (FR, ≤ 4000 car.)
 
@@ -55,6 +71,10 @@ Nouveautés de la version 1.3.0
 • Avant de prendre ou de choisir une photo de boîte à livres, l'app vous rappelle qu'aucune personne ne doit apparaître sur la photo. Les photos montrant des personnes sont refusées.
 
 • « Mes soumissions » et « Mes demandes de suppression » n'affichent plus que ce que vous avez envoyé depuis votre téléphone. Vos envois restent privés.
+
+• Localisation : sur la fiche d'une boîte, confirmez qu'elle est bien là ou placez-la sur la carte. Votre position reste sur votre téléphone ; un administrateur valide chaque proposition avant tout changement.
+
+• Alerte près d'une boîte (Réglages) : un rappel « La boîte est-elle bien ici ? » quand vous passez à moins de 50 m, même application fermée. Désactivé par défaut.
 
 • Les photos des boîtes affichent désormais uniquement les photos validées. Les photos en attente de validation ne sont plus visibles par tous.
 

@@ -42,6 +42,8 @@
 		D06262B86E6EAD6F191B68E3 /* LocalCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB31CC2ED30D6102C7CEE268 /* LocalCacheService.swift */; };
 		E87612981CE9503A22BCE18C /* DeepLinkRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39306270781382E3D32CFE76 /* DeepLinkRouter.swift */; };
 		EB263BF3CF48598ED438B515 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 419FBBB1FC3622D7BE3DAA7F /* NotificationService.swift */; };
+		5BECB0A2B7AA4D899D364F2C /* ProximityAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */; };
+		FB83CFA7DA884F00AB11E6C6 /* LocationUpdateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,8 @@
 		F2A41BB2D8AC2D7C8C363610 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FABE634523BD886953FEE1EC /* CachedAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedAsyncImage.swift; sourceTree = "<group>"; };
 		FD3FCB977248E0876A160BF5 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+		A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityAlertService.swift; sourceTree = "<group>"; };
+		5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationUpdateSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -106,6 +110,7 @@
 				BB1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift */,
 				A530FD1A72EA2FF2155F8910 /* PhotoCarousel.swift */,
 				93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */,
+				5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -185,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				39306270781382E3D32CFE76 /* DeepLinkRouter.swift */,
+				A9EFFC2974A54CE990AD5A64 /* ProximityAlertService.swift */,
 				4290B7F3239EDD24E5C7FBC7 /* ImageCacheService.swift */,
 				EB31CC2ED30D6102C7CEE268 /* LocalCacheService.swift */,
 				CE81952E301B38F4C1E5A61F /* LocationService.swift */,
@@ -293,6 +299,7 @@
 				06145687E8FB5A0A46040D3F /* ListView.swift in Sources */,
 				B8D8223DCEBBDDE31111DC0D /* ListViewModel.swift in Sources */,
 				D06262B86E6EAD6F191B68E3 /* LocalCacheService.swift in Sources */,
+				5BECB0A2B7AA4D899D364F2C /* ProximityAlertService.swift in Sources */,
 				82CDF367B969E08900FB884B /* LocationService.swift in Sources */,
 				798FE547395A4ED9DE0D6528 /* MapScreen.swift in Sources */,
 				1F2108D2A03DAC6E058DCCE1 /* MapViewModel.swift in Sources */,
@@ -307,6 +314,7 @@
 				1AA21E8BA32F6CEC6647E2B5 /* AddBoxView.swift in Sources */,
 				C71A925C50B067E4D8505E0A /* AddBoxViewModel.swift in Sources */,
 				93C0A0AF024FD9C0CF22ECE8 /* PhotoSubmittedView.swift in Sources */,
+				FB83CFA7DA884F00AB11E6C6 /* LocationUpdateSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +342,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -417,7 +425,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;

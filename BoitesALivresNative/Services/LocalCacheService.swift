@@ -47,6 +47,21 @@ actor LocalCacheService {
         try? FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
     }
 
+    // Toutes les boîtes déjà en cache (mémoire + disque), sans réseau : base des régions de proximité
+    func allCachedBoxes() -> [BookBox] {
+        var byId: [Int: BookBox] = [:]
+        for entry in cache.values {
+            for box in entry.boxes { byId[box.id] = box }
+        }
+        let files = (try? FileManager.default.contentsOfDirectory(at: cacheDir, includingPropertiesForKeys: nil)) ?? []
+        for file in files {
+            guard let data = try? Data(contentsOf: file),
+                  let entry = try? JSONDecoder().decode(CachedBoxesEntry.self, from: data) else { continue }
+            for box in entry.boxes { byId[box.id] = box }
+        }
+        return Array(byId.values)
+    }
+
     // Generate zone cache key from rounded coordinates and radius
     static func zoneKey(lat: Double, lng: Double, radiusKm: Double) -> String {
         let rLat = (lat * 10).rounded() / 10

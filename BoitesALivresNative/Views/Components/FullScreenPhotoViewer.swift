@@ -4,8 +4,6 @@ struct FullScreenPhotoViewer: View {
     let photos: [BoxPhoto]
     let startIndex: Int
     @State private var currentPage: Int
-    // Photos dont le chargement a échoué : retirées de l'affichage
-    @State private var deadURLs: Set<String> = []
     @Environment(\.dismiss) private var dismiss
 
     init(photos: [BoxPhoto], startIndex: Int) {
@@ -14,17 +12,13 @@ struct FullScreenPhotoViewer: View {
         self._currentPage = State(initialValue: startIndex)
     }
 
-    private var visiblePhotos: [BoxPhoto] {
-        photos.filter { !deadURLs.contains($0.url) }
-    }
-
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Color.black.ignoresSafeArea()
 
             TabView(selection: $currentPage) {
-                ForEach(Array(visiblePhotos.enumerated()), id: \.offset) { index, photo in
-                    CachedAsyncImage(url: URL(string: photo.url), onFailure: { deadURLs.insert(photo.url) }) { phase in
+                ForEach(Array(photos.enumerated()), id: \.offset) { index, photo in
+                    CachedAsyncImage(url: URL(string: photo.url)) { phase in
                         switch phase {
                         case .success(let image):
                             image
@@ -46,9 +40,9 @@ struct FullScreenPhotoViewer: View {
                     .tag(index)
                 }
             }
-            .tabViewStyle(.page(indexDisplayMode: visiblePhotos.count > 1 ? .always : .never))
+            .tabViewStyle(.page(indexDisplayMode: photos.count > 1 ? .always : .never))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .onChange(of: visiblePhotos.count) { _, count in
+            .onChange(of: photos.count) { _, count in
                 currentPage = min(currentPage, max(count - 1, 0))
             }
 
