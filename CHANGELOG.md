@@ -11,6 +11,17 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 14
+
+- Localisation : la précision et la position se mettent à jour en temps réel pendant l'écran
+  « La boîte est-elle bien ici ? ». Entre 10 et 50 m, tu peux placer le repère toi-même ; au-delà de
+  50 m, l'envoi est refusé avec un message clair.
+- Après l'envoi, l'écran « Merci ! » est centré et propose d'ajouter une photo.
+- Alerte de proximité : déjà à côté d'une boîte au moment de l'activation, l'alerte part aussi.
+  Réglages › Localisation › « Diagnostic des alertes » affiche un journal local (200 lignes au plus).
+- Nouvelle boîte : photo obligatoire, prise sur place (appareil photo uniquement), et présence à 50 m
+  au plus du point proposé, avec un GPS précis à 10 m. La position n'est jamais envoyée au serveur.
+
 ### Ajouté
 
 - Localisation d'une boîte : sur la fiche, le bouton « Localisation » (actif à 50 m ou moins de la
