@@ -241,6 +241,8 @@ struct SettingsView: View {
                 }
             ))
             .tint(green)
+            NavigationLink("Diagnostic des alertes") { ProximityDiagnosticView() }
+                .foregroundStyle(green)
             if proximityEnabled && CLLocationManager().authorizationStatus != .authorizedAlways {
                 Text("Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS.")
                     .font(.system(size: 12))
@@ -614,5 +616,38 @@ struct SettingsView: View {
 
     private func boxTitle(_ id: Int) -> String {
         String(format: NSLocalizedString("Boîte #%lld", comment: ""), id)
+    }
+}
+
+// MARK: - Diagnostic des alertes (F01 M0023 B2)
+
+// Lecture seule du journal local (200 lignes max), rien n'est envoyé au serveur
+struct ProximityDiagnosticView: View {
+    @State private var lines = ProximityJournal.lines()
+
+    var body: some View {
+        List {
+            if lines.isEmpty {
+                Text("Aucun événement pour le moment.")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(Array(lines.reversed().enumerated()), id: \.offset) { _, line in
+                    Text(line)
+                        .font(.system(size: 13, design: .monospaced))
+                }
+            }
+        }
+        .navigationTitle("Diagnostic des alertes")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Effacer") {
+                    ProximityJournal.clear()
+                    lines = []
+                }
+                .disabled(lines.isEmpty)
+            }
+        }
+        .onAppear { lines = ProximityJournal.lines() }
     }
 }

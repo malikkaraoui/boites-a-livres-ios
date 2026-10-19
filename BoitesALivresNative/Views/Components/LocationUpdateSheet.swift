@@ -30,9 +30,16 @@ struct LocationUpdateSheet: View {
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
+    // Photo ajoutée depuis l'écran « Merci ! » : la fiche ouvre le circuit photo existant
+    var onAddPhoto: (() -> Void)? = nil
+
     private var gps: CLLocation? { locationService.currentLocation }
     private var accuracy: Double { gps?.horizontalAccuracy ?? -1 }
-    private var gpsOK: Bool { gps != nil && LocationRules.canSend(accuracy: accuracy) }
+    // Oui : GPS à 10 m ou mieux. Repère manuel : jusqu'à 50 m (F01 M0023)
+    private var accuracyOK: Bool {
+        kind == .move ? LocationRules.canSendManual(accuracy: accuracy) : LocationRules.canSend(accuracy: accuracy)
+    }
+    private var gpsOK: Bool { gps != nil && accuracyOK }
     private var boxLocation: CLLocation { CLLocation(latitude: box.lat, longitude: box.lng) }
 
     // Distance téléphone -> boîte : calculée sur le téléphone uniquement
@@ -108,6 +115,14 @@ struct LocationUpdateSheet: View {
 
         precisionRow
 
+        if gps != nil && !LocationRules.canSendManual(accuracy: accuracy) {
+            notice("Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.", color: .orange)
+        } else if kind != .move && gps != nil && !LocationRules.canSend(accuracy: accuracy) {
+            Button("Placer le repère moi-même") { select(.move) }
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(green)
+        }
+
         if kind == .move {
             moveSection
         }
@@ -123,8 +138,10 @@ struct LocationUpdateSheet: View {
         submitButton
     }
 
+    // Écran « Merci ! » centré (F01 M0023, retour terrain 5) ; photo proposée après l'envoi (point 4)
     private var sentView: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .center, spacing: 14) {
+            Spacer(minLength: 24)
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 44))
                 .foregroundStyle(green)
@@ -133,13 +150,37 @@ struct LocationUpdateSheet: View {
             Text("Ta proposition sera vérifiée par un administrateur.")
                 .font(.system(size: 16))
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            if let onAddPhoto {
+                if box.has_photo {
+                    Button("Ajouter une photo") { onAddPhoto() }
+                        .buttonStyle(.bordered)
+                        .tint(green)
+                } else {
+                    Button {
+                        onAddPhoto()
+                    } label: {
+                        Label("Ajouter une photo de la boîte", systemImage: "camera.fill")
+                            .font(.system(size: 16, weight: .semibold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .foregroundStyle(.white)
+                            .background(green)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .buttonStyle(ScaleButtonStyle())
+                }
+            }
             Button("Fermer") { dismiss() }
-                .buttonStyle(.borderedProminent)
-                .tint(green)
+                .buttonStyle(.bordered)
+                .tint(.secondary)
+            Spacer(minLength: 24)
         }
+        .frame(maxWidth: .infinity)
+        .multilineTextAlignment(.center)
     }
 
-    // Indicateur 5 barres et précision ; envoi seulement à 10 m ou mieux
+    // Indicateur 5 barres et précision ; envoi direct à 10 m ou mieux, repère manuel jusqu'à 50 m
     private var precisionRow: some View {
         let bars = gps == nil ? 0 : LocationRules.precisionBars(accuracy: accuracy)
         return VStack(alignment: .leading, spacing: 6) {
@@ -155,7 +196,7 @@ struct LocationUpdateSheet: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(gpsOK ? Color(.label) : .orange)
             }
-            if gps != nil && !gpsOK {
+            if gps != nil && !accuracyOK {
                 Text("Patiente, le GPS affine ta position…")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
@@ -277,12 +318,12 @@ struct LocationUpdateSheet: View {
                 )
             case .move:
                 let pin = pinCenter ?? gps.coordinate
-                let fromGPS = CLLocation(latitude: pin.latitude, longitude: pin.longitude).distance(from: gps) < 1
+                let pinIsGPS = CLLocation(latitude: pin.latitude, longitude: pin.longitude).distance(from: gps) < 1
                 try await SupabaseService.shared.insertLocationUpdate(
                     boxId: box.id, kind: kind.rawValue,
                     lat: pin.latitude, lng: pin.longitude,
                     address: place.address, city: place.city, postalCode: place.postalCode, department: place.department,
-                    source: fromGPS ? "gps" : "manual", accuracyM: accuracy, deviceToken: token
+                    source: LocationRules.source(accuracy: accuracy, pinIsGPS: pinIsGPS), accuracyM: accuracy, deviceToken: token
                 )
             }
             // Anti-répétition 30 jours après un envoi réussi
