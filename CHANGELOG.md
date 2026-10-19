@@ -11,6 +11,13 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 16
+
+- Mise à jour obligatoire : l'équipe fixe une version minimale. Si ta version de l'app est en
+  dessous, un écran « Mise à jour nécessaire » bloque l'app jusqu'à la mise à jour (bouton vers
+  l'App Store). La vérification a lieu au lancement et à chaque retour au premier plan. Si elle
+  échoue (hors ligne, erreur), l'app reste utilisable.
+
 ### Build 15
 
 - Alerte de proximité : une alerte affichée compte comme vue. La boîte n'est plus signalée pendant
