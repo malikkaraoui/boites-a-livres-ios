@@ -2,9 +2,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { generateKeyPairSync, verify as cryptoVerify } from 'node:crypto';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import {
-  AscError, assertConfirmed, compareVersions, listVersions, makeClient, makeToken, parseEnvFile,
-  planControls, publish, readLocalVersions, waitForBuild,
+  AscError, assertConfirmed, checkNotes, compareVersions, listVersions, makeClient, makeToken, parseEnvFile,
+  planControls, preflight, publish, readLocalVersions, waitForBuild,
 } from './asc.mjs';
 
 const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve: 'P-256' });
@@ -99,9 +102,10 @@ test('attente du build : VALID rend la main, FAILED arrête, borne respectée', 
 // Régression : la version en ligne est en 11e position (au-delà de l'ancienne limite de 10).
 const APP = 'APP1';
 const v = (id, versionString, appStoreState) => ({ id, attributes: { versionString, appStoreState } });
-function pagedClient() {
-  const first = Array.from({ length: 10 }, (_, i) => v(`r${i}`, `1.0.${i}`, 'REJECTED'));
-  const second = [v('live', '1.3.0', 'READY_FOR_SALE')];
+// Première page : dix versions anciennes, « non éditables » (la cause du refus doit être la règle de version).
+// Seconde page : la version en ligne en 11e position, ou une version en revue si `second` la remplace.
+function pagedClient(second = [v('live', '1.3.0', 'READY_FOR_SALE')], { writes = [] } = {}) {
+  const first = Array.from({ length: 10 }, (_, i) => v(`r${i}`, `1.0.${i}`, 'REPLACED_WITH_NEW_VERSION'));
   return {
     get: async (path) => {
       const p = String(path);
@@ -113,9 +117,17 @@ function pagedClient() {
       if (p === '/v1/builds') return { data: [] };
       throw new Error(`appel inattendu en test : ${p}`);
     },
-    post: async () => { throw new Error('écriture inattendue en test'); },
-    patch: async () => { throw new Error('écriture inattendue en test'); },
+    post: async (p) => { writes.push(`POST ${p}`); throw new Error('écriture inattendue en test'); },
+    patch: async (p) => { writes.push(`PATCH ${p}`); throw new Error('écriture inattendue en test'); },
   };
+}
+
+const LOCAL_1_4 = { marketingVersion: '1.4.0', buildNumber: '17' };
+function notesFile(text) {
+  const dir = mkdtempSync(join(tmpdir(), 'asc-notes-'));
+  const file = join(dir, 'fr-FR.txt');
+  writeFileSync(file, text);
+  return file;
 }
 
 test('listVersions lit toutes les pages (version en ligne en 11e position)', async () => {
@@ -125,10 +137,97 @@ test('listVersions lit toutes les pages (version en ligne en 11e position)', asy
 });
 
 test('publish refuse AVANT tout xcodebuild si la version locale n\'est pas supérieure à la version en ligne', async () => {
+  const calls = [];
   await assert.rejects(
-    publish({ client: pagedClient(), cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE', log: () => {} }),
-    (e) => /contrôle des numéros refusé/.test(e.message) && !/arrêt à l'étape/.test(e.message),
+    publish({
+      client: pagedClient(), cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE', log: () => {},
+      localOverride: { marketingVersion: '1.3.0', buildNumber: '16' },
+      runXcodeFn: (args) => calls.push(args),
+    }),
+    (e) => /version locale 1\.3\.0 non supérieure/.test(e.message) && !/arrêt à l'étape/.test(e.message),
   );
+  assert.equal(calls.length, 0);
+});
+
+test('preflight refuse une version en revue située sur la 2e page, avant tout archive', async () => {
+  const writes = [];
+  const calls = [];
+  const client = pagedClient([v('rev', '1.4.0', 'WAITING_FOR_REVIEW')], { writes });
+  await assert.rejects(
+    publish({
+      client, cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE', log: () => {},
+      localOverride: LOCAL_1_4, notesPath: notesFile('Corrections.'), runXcodeFn: (args) => calls.push(args),
+    }),
+    (e) => /WAITING_FOR_REVIEW/.test(e.message) && /Rien n'a été envoyé/.test(e.message),
+  );
+  assert.equal(calls.length, 0, 'aucun xcodebuild lancé');
+  assert.deepEqual(writes, [], 'aucune écriture App Store Connect');
+});
+
+test('preflight refuse chacun des cinq états d\'attente ou de revue', async () => {
+  for (const state of ['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'PENDING_APPLE_RELEASE']) {
+    const client = pagedClient([v('rev', '1.4.0', state)]);
+    await assert.rejects(preflight({ client, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('ok') }), new RegExp(state), state);
+  }
+});
+
+test('preflight refuse des notes vides ou trop longues', async () => {
+  const client = pagedClient();
+  await assert.rejects(preflight({ client, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('  \n') }), /vide/);
+  await assert.rejects(preflight({ client, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('x'.repeat(4001)) }), /trop longues/);
+  assert.equal(checkNotes('Bonjour').ok, true);
+  assert.equal(checkNotes('x'.repeat(4000)).ok, true);
+});
+
+test('preflight accepte une configuration valide (lecture seule)', async () => {
+  const writes = [];
+  const pf = await preflight({ client: pagedClient([v('live', '1.3.0', 'READY_FOR_SALE')], { writes }), log: () => {}, local: LOCAL_1_4, notesPath: notesFile('Corrections.') });
+  assert.equal(pf.plan.ok, true);
+  assert.equal(pf.notes, 'Corrections.');
+  assert.deepEqual(writes, []);
+});
+
+test('preflight refuse une clé rejetée par Apple, sans rien lancer', async () => {
+  const rejected = { get: async () => { throw Object.assign(new Error('HTTP 401'), { status: 401 }); } };
+  await assert.rejects(preflight({ client: rejected, log: () => {}, local: LOCAL_1_4, notesPath: notesFile('ok') }), /clé refusée/);
+});
+
+// Chemin complet : préflight OK, puis archive, envoi, traitement, version, notes, soumission. Témoin du défaut
+// « app is not defined » (étape traitement) que les tests de refus ne voyaient pas.
+function happyClient(writes) {
+  const base = pagedClient([v('live', '1.3.0', 'READY_FOR_SALE')], { writes });
+  return {
+    get: async (path, query) => {
+      if (path === '/v1/builds' && query?.['filter[version]']) {
+        return { data: [{ id: 'b16', attributes: { version: '16', processingState: 'VALID' } }] };
+      }
+      if (path === '/v1/builds') return { data: [] };
+      if (String(path).endsWith('/appStoreVersionLocalizations')) return { data: [] };
+      return base.get(path, query);
+    },
+    post: async (p) => {
+      writes.push(`POST ${p}`);
+      if (p === '/v1/appStoreVersions') return { data: { id: 'new-v' } };
+      if (p === '/v1/reviewSubmissions') return { data: { id: 'rs1' } };
+      return { data: { id: 'x' } };
+    },
+    patch: async (p) => { writes.push(`PATCH ${p}`); return { data: {} }; },
+  };
+}
+
+test('publish : chemin complet (préflight OK) va jusqu\'à la soumission', async () => {
+  const writes = [];
+  const calls = [];
+  const logs = [];
+  await publish({
+    client: happyClient(writes), cfg: { keyPath: '/inexistant.p8' }, confirm: 'OK-APPLE',
+    log: (m) => logs.push(m), sleepFn: async () => {}, localOverride: LOCAL_1_4,
+    notesPath: notesFile('Corrections.'), runXcodeFn: (args, label) => calls.push(label),
+  });
+  assert.deepEqual(calls, ['archive', 'exportArchive']);
+  assert.ok(writes.includes('POST /v1/appStoreVersions'));
+  assert.ok(writes.includes('PATCH /v1/reviewSubmissions/rs1'));
+  assert.ok(logs.some((m) => /Soumis à la revue : version 1\.4\.0, build 17/.test(m)), 'étape soumission atteinte');
 });
 
 test('listVersions refuse une pagination trop longue au lieu de tronquer', async () => {

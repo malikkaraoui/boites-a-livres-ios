@@ -26,6 +26,10 @@ const BUILD_DIR = join(ROOT, '.build', 'release');
 const ARCHIVE = join(BUILD_DIR, `${SCHEME}.xcarchive`);
 const EXPORT_DIR = join(BUILD_DIR, 'export');
 const EXPORT_PLIST = join(ROOT, 'scripts', 'release', 'ExportOptions.plist');
+const PBXPROJ = join(ROOT, 'BoitesALivresNative.xcodeproj', 'project.pbxproj');
+export const NOTES_PATH = join(ROOT, 'release-notes', `${LOCALE}.txt`);
+// États d'attente ou de revue : tant qu'une version est là, on n'envoie rien (doc Apple : appStoreState).
+export const EN_ATTENTE = ['WAITING_FOR_REVIEW', 'IN_REVIEW', 'PENDING_DEVELOPER_RELEASE', 'PROCESSING_FOR_APP_STORE', 'PENDING_APPLE_RELEASE'];
 
 export class AscError extends Error {
   constructor(status, message) {
@@ -160,6 +164,13 @@ export function planControls({ marketingVersion, buildNumber, liveVersion, maxBu
   return { ok: true, reuseVersionId: same?.id ?? null };
 }
 
+export function checkNotes(text) {
+  const notes = String(text).trim();
+  if (!notes) return { ok: false, reason: 'release-notes/fr-FR.txt est vide' };
+  if (notes.length > NOTES_MAX) return { ok: false, reason: `notes trop longues (${notes.length} > ${NOTES_MAX} caractères)` };
+  return { ok: true, notes };
+}
+
 // ---------- lectures (aucune écriture) ----------
 
 async function findApp(client) {
@@ -215,7 +226,52 @@ export async function check(client, log = console.log) {
   }
   if (!builds.length) log('Aucun build reçu');
   log('Lecture seule : aucune version, note ni soumission créée.');
+  const pf = await preflight({ client, log });
+  log(`Préflight OK : version ${pf.plan.reuseVersionId ? 'en préparation réutilisée' : 'à créer'}, en ligne ${pf.live?.attributes.versionString ?? 'aucune'}, dernier build reçu ${pf.maxBuild ?? 'aucun'}, notes ${pf.notes.length} caractères.`);
   return { app, versions, builds };
+}
+
+// ---------- préflight (lecture seule, exécuté en premier par `publish`) ----------
+
+// Ordre fixe : clé acceptée, aucune version en attente de revue, numéros, notes. Un échec lève une erreur
+// avant toute archive ou envoi. Ne fait que des GET.
+export async function preflight({ client, log = console.log, local, notesPath = NOTES_PATH } = {}) {
+  let app;
+  try {
+    app = await findApp(client);
+  } catch (err) {
+    throw new Error(`clé refusée ou App Store Connect injoignable : ${err.message}. Rien n'a été envoyé.`);
+  }
+  const versions = await listVersions(client, app.id);
+  const enAttente = versions.find((v) => EN_ATTENTE.includes(v.attributes.appStoreState));
+  if (enAttente) {
+    throw new Error(`version ${enAttente.attributes.versionString} en état ${enAttente.attributes.appStoreState} : attendre la fin de la revue Apple avant de publier. Rien n'a été envoyé.`);
+  }
+  const localVersions = local ?? readLocalVersions(readFileSync(PBXPROJ, 'utf8'));
+  const live = versions.find((v) => v.attributes.appStoreState === LIVE);
+  const builds = await listBuilds(client, app.id, 20);
+  const maxBuild = builds.map((b) => b.attributes.version).reduce((acc, v) => (acc == null || compareVersions(v, acc) > 0 ? v : acc), null);
+  const editable = versions
+    .filter((v) => EDITABLE.includes(v.attributes.appStoreState))
+    .map((v) => ({ id: v.id, versionString: v.attributes.versionString, appStoreState: v.attributes.appStoreState }));
+  const plan = planControls({
+    marketingVersion: localVersions.marketingVersion,
+    buildNumber: localVersions.buildNumber,
+    liveVersion: live?.attributes.versionString ?? null,
+    maxBuild,
+    editable,
+  });
+  if (!plan.ok) throw new Error(`contrôle des numéros refusé : ${plan.reason}. Rien n'a été envoyé.`);
+  let notesText;
+  try {
+    notesText = readFileSync(notesPath, 'utf8');
+  } catch {
+    throw new Error(`notes absentes : ${notesPath}. Rien n'a été envoyé.`);
+  }
+  const notes = checkNotes(notesText);
+  if (!notes.ok) throw new Error(`${notes.reason}. Rien n'a été envoyé.`);
+  log(`Contrôles OK : version ${localVersions.marketingVersion} (build ${localVersions.buildNumber}), en ligne ${live?.attributes.versionString ?? 'aucune'}, dernier build reçu ${maxBuild ?? 'aucun'}.`);
+  return { app, live, maxBuild, plan, local: localVersions, notes: notes.notes };
 }
 
 // ---------- publication (appelée seulement via `make release CONFIRMER=OK-APPLE`) ----------
@@ -229,35 +285,24 @@ function runXcode(args, label) {
   if (r.status !== 0) throw new Error(`xcodebuild ${label} a échoué (code ${r.status ?? 'inconnu'})`);
 }
 
-export async function publish({ client, cfg, confirm, log = console.log, sleepFn = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
+export async function publish({
+  client, cfg, confirm, log = console.log, sleepFn = (ms) => new Promise((r) => setTimeout(r, ms)),
+  runXcodeFn = runXcode, localOverride, notesPath = NOTES_PATH,
+}) {
   assertConfirmed(confirm);
-  const local = readLocalVersions(readFileSync(join(ROOT, 'BoitesALivresNative.xcodeproj', 'project.pbxproj'), 'utf8'));
-  const app = await findApp(client);
-  const versions = await listVersions(client, app.id);
-  const live = versions.find((v) => v.attributes.appStoreState === LIVE);
-  const builds = await listBuilds(client, app.id, 20);
-  const maxBuild = builds.map((b) => b.attributes.version).reduce((acc, v) => (acc == null || compareVersions(v, acc) > 0 ? v : acc), null);
-  const editable = versions
-    .filter((v) => EDITABLE.includes(v.attributes.appStoreState))
-    .map((v) => ({ id: v.id, versionString: v.attributes.versionString, appStoreState: v.attributes.appStoreState }));
-  const plan = planControls({
-    marketingVersion: local.marketingVersion,
-    buildNumber: local.buildNumber,
-    liveVersion: live?.attributes.versionString ?? null,
-    maxBuild,
-    editable,
-  });
-  if (!plan.ok) throw new Error(`contrôle des numéros refusé : ${plan.reason}. Rien n'a été envoyé.`);
-  log(`Contrôles OK : version ${local.marketingVersion} (build ${local.buildNumber}), en ligne ${live?.attributes.versionString ?? 'aucune'}, dernier build reçu ${maxBuild ?? 'aucun'}.`);
+  // Préflight d'abord : un refus ici = rien d'archivé, rien d'envoyé.
+  const pf = await preflight({ client, log, local: localOverride, notesPath });
+  const { plan, app } = pf;
+  const local = pf.local;
 
   let step = 'archive';
   try {
     log('1/6 Archive Release (xcodebuild archive)…');
-    runXcode(['-scheme', SCHEME, '-configuration', 'Release', '-destination', 'generic/platform=iOS', '-derivedDataPath', BUILD_DIR, '-archivePath', ARCHIVE, ...authArgs(cfg), 'archive'], 'archive');
+    runXcodeFn(['-scheme', SCHEME, '-configuration', 'Release', '-destination', 'generic/platform=iOS', '-derivedDataPath', BUILD_DIR, '-archivePath', ARCHIVE, ...authArgs(cfg), 'archive'], 'archive');
 
     step = 'envoi';
     log('2/6 Envoi du build vers App Store Connect (exportArchive, destination upload)…');
-    runXcode(['-exportArchive', '-archivePath', ARCHIVE, '-exportPath', EXPORT_DIR, '-exportOptionsPlist', EXPORT_PLIST, ...authArgs(cfg)], 'exportArchive');
+    runXcodeFn(['-exportArchive', '-archivePath', ARCHIVE, '-exportPath', EXPORT_DIR, '-exportOptionsPlist', EXPORT_PLIST, ...authArgs(cfg)], 'exportArchive');
 
     step = 'traitement';
     log(`3/6 Attente du traitement du build ${local.buildNumber} par Apple…`);
@@ -275,9 +320,7 @@ export async function publish({ client, cfg, confirm, log = console.log, sleepFn
 
     step = 'nouveautés';
     log(`5/6 Nouveautés (${LOCALE}) depuis release-notes/fr-FR.txt, puis rattachement du build…`);
-    const notes = readFileSync(join(ROOT, 'release-notes', 'fr-FR.txt'), 'utf8').trim();
-    if (!notes) throw new Error('release-notes/fr-FR.txt est vide');
-    if (notes.length > NOTES_MAX) throw new Error(`notes trop longues (${notes.length} > ${NOTES_MAX} caractères)`);
+    const notes = pf.notes;
     const locs = await client.get(`/v1/appStoreVersions/${versionId}/appStoreVersionLocalizations`, { limit: 50 });
     const loc = (locs.data ?? []).find((l) => l.attributes.locale === LOCALE);
     if (loc) {
