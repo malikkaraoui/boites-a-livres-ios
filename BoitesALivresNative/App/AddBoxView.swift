@@ -6,6 +6,8 @@ import SwiftUI
 struct AddBoxView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var vm = AddBoxViewModel()
+    // Observé : le bouton Soumettre se met à jour avec le GPS (F01 M0023, revue R017)
+    @ObservedObject private var locationService = LocationService.shared
     @State private var showCamera = false
     @FocusState private var isNotesFocused: Bool
 

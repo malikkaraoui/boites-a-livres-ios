@@ -74,7 +74,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
             let region = CLCircularRegion(center: box.coordinate, radius: LocationRules.proximityMeters,
                                           identifier: "\(Self.regionPrefix)\(box.id)")
             region.notifyOnEntry = true
-            region.notifyOnExit = false
+            region.notifyOnExit = true
             manager.startMonitoring(for: region)
             manager.requestState(for: region)
         }
@@ -129,6 +129,12 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         guard isEnabled, let boxId = boxId(of: region) else { return }
         notifyIfAllowed(boxId: boxId, origin: "entrée")
+    }
+
+    // Sortie : la présence est close, la prochaine entrée peut de nouveau notifier (F01 M0023, revue R017)
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        guard let boxId = boxId(of: region) else { return }
+        handledInside.remove(boxId)
     }
 
     // État courant d'une région (demandé après chaque enregistrement) : déjà dedans → même alerte
