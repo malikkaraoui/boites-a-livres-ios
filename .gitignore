@@ -19,6 +19,8 @@ build/
 
 # Secrets (ne jamais committer)
 *.env
+*.p8
+config.env
 Secrets.swift
 
 # ─────────────────────────────────────────────────────────────────────────────
