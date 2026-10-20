@@ -10,7 +10,7 @@ tout ce qui varie d'un projet à l'autre est lu dans `config/harnais.json` (§12
 verbatim vivent dans `references/gabarits.md` — **lus à la demande, jamais reconstruits de mémoire**.
 
 Notation : `<racine>` = `projet.racine`, `<echanges>` = `chemins.echanges`, `<vault>` = `chemins.vault`, `<runtime>` =
-`chemins.runtime`, `<principale>` = `git.branche_principale`, `<trailer>` = `git.trailer`.
+`chemins.runtime`, `<principale>` = `git.branche_principale`, `<trailer>` = la signature du harnais (`<HARNAIS_HOME>/reglages.json`, page Réglages du tableau).
 
 ## 0. Rôle
 
