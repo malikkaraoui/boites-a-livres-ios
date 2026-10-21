@@ -227,11 +227,9 @@ enum LocationRules {
         accuracy >= 0 && timestamp >= openedAt
     }
 
-    // Effet d'un fix sur la carte : centrer la caméra seulement ; poser aussi le repère si l'utilisateur n'a jamais touché la carte
-    enum FirstFixEffect: Equatable { case none, cameraOnly, cameraAndPin }
-    static func firstFixEffect(isWaiting: Bool, onMapStep: Bool, isFresh: Bool, userPlacedPin: Bool) -> FirstFixEffect {
-        guard isWaiting, onMapStep, isFresh else { return .none }
-        return userPlacedPin ? .cameraOnly : .cameraAndPin
+    // Premier fix frais : la carte se centre dessus seulement si elle attend encore un fix et que l'utilisateur ne l'a pas déplacée (F01 M0041)
+    static func shouldCenterOnFirstFix(isWaiting: Bool, onMapStep: Bool, isFresh: Bool, userMovedMap: Bool) -> Bool {
+        isWaiting && onMapStep && isFresh && !userMovedMap
     }
 
     // Source envoyée au serveur : « gps » seulement si GPS précis (≤ 10 m) ET repère posé sur la position GPS

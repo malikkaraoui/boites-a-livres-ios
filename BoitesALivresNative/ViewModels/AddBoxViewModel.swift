@@ -30,9 +30,9 @@ final class AddBoxViewModel {
     var submitted = false
     var errorMessage: String? = nil
 
-    // Vrai dès que l'utilisateur a touché la carte : le GPS ne déplace plus le repère (F01 M0039)
-    private var userPlacedPin = false
-    // Ouverture de l'étape position (première ouverture et « Replacer ») : seul un fix postérieur compte (F01 M0040, R032)
+    // Vrai dès que l'utilisateur a déplacé la carte à la main : le premier fix ne la recentre plus (F01 M0041)
+    private var userMovedMap = false
+    // Ouverture de l'étape position : seul un fix postérieur compte (F01 M0040, R032)
     private var positionStepOpenedAt = Date()
     // Vrai tant que le premier fix frais de cette ouverture n'est pas reçu (F01 M0040)
     private var waitingFreshFix = true
@@ -49,37 +49,33 @@ final class AddBoxViewModel {
         }
     }
 
-    // Premier fix frais sur l'étape position : caméra centrée dessus ; repère posé seulement si l'utilisateur n'a jamais touché la carte.
+    // Premier fix frais sur l'étape position : caméra centrée dessus, tant que l'utilisateur n'a pas bougé la carte.
+    // Le repère suit le centre de la carte (followCamera), donc il suit ce recentrage.
     // Le cache et son rejeu à l'abonnement sont ignorés : leur horodatage précède l'ouverture (F01 M0040, R032)
     func applyFirstFix(_ gps: CLLocation) {
         let fresh = LocationRules.isFresh(timestamp: gps.timestamp, openedAt: positionStepOpenedAt,
                                           accuracy: gps.horizontalAccuracy)
-        let effect = LocationRules.firstFixEffect(isWaiting: waitingFreshFix, onMapStep: step == .map,
-                                                  isFresh: fresh, userPlacedPin: userPlacedPin)
-        guard effect != .none else { return }
+        guard LocationRules.shouldCenterOnFirstFix(isWaiting: waitingFreshFix, onMapStep: step == .map,
+                                                   isFresh: fresh, userMovedMap: userMovedMap) else { return }
         waitingFreshFix = false
         cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
-        if effect == .cameraAndPin { pinCoordinate = gps.coordinate }
     }
 
-    // Ouverture de l'étape position et « Replacer » : caméra centrée sur le GPS, repère inchangé (F01 M0039)
-    func centerCameraOnGPS() {
-        guard let gps = LocationService.shared.currentLocation else { return }
-        cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+    // La carte a été glissée ou pincée à la main (F01 M0041)
+    func markMovedByUser() {
+        userMovedMap = true
     }
 
-    // Toucher la carte : le repère va au point touché (F01 M0039)
-    func placePin(at coordinate: CLLocationCoordinate2D) {
-        userPlacedPin = true
-        pinCoordinate = coordinate
+    // Épingle fixe : le repère est le centre de la carte, à chaque fin de déplacement (F01 M0041)
+    func followCamera(center: CLLocationCoordinate2D) {
+        pinCoordinate = center
     }
 
-    // « Replacer » rouvre l'étape position : nouvelle attente d'un fix frais, repère inchangé (F01 M0040)
+    // « Replacer » rouvre l'étape position sur le point déjà posé : pas d'attente de fix, pas de recentrage GPS (F01 M0041)
     func returnToMap() {
         step = .map
-        positionStepOpenedAt = Date()
-        waitingFreshFix = true
-        centerCameraOnGPS()
+        waitingFreshFix = false
+        cameraPosition = .camera(MapCamera(centerCoordinate: pinCoordinate, distance: 300))
     }
 
     func confirmPosition() async {

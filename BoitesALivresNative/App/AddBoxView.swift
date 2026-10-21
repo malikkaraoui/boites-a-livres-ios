@@ -42,7 +42,7 @@ struct AddBoxView: View {
             LocationService.shared.beginPrecisionUpdates()
         }
         .onDisappear { LocationService.shared.endPrecisionUpdates() }
-        // Premier fix GPS : la carte se centre dessus si l'utilisateur n'a pas encore touché la carte (F01 M0039)
+        // Premier fix GPS : la carte se centre dessus si l'utilisateur ne l'a pas encore déplacée (F01 M0041)
         .onReceive(locationService.$currentLocation.compactMap { $0 }) { vm.applyFirstFix($0) }
     }
 
@@ -50,29 +50,28 @@ struct AddBoxView: View {
 
     private var mapStep: some View {
         ZStack {
-            // Toucher la carte place le repère ; le repère ne suit plus le centre de la carte (F01 M0039)
-            MapReader { proxy in
-                Map(position: $vm.cameraPosition) {
-                    UserAnnotation()
-                    Annotation("Boîte", coordinate: vm.pinCoordinate, anchor: .bottom) {
-                        Image(systemName: "mappin.circle.fill")
-                            .font(.system(size: 36, weight: .semibold))
-                            .foregroundStyle(green)
-                            .shadow(color: green.opacity(0.4), radius: 8)
-                    }
-                }
-                .onTapGesture { point in
-                    if let coordinate = proxy.convert(point, from: .local) {
-                        vm.placePin(at: coordinate)
-                    }
-                }
+            // Épingle fixe au centre : on glisse la carte, le repère reste au centre (F01 M0041)
+            Map(position: $vm.cameraPosition) {
+                UserAnnotation()
             }
             .ignoresSafeArea()
+            .simultaneousGesture(DragGesture(minimumDistance: 4).onChanged { _ in vm.markMovedByUser() })
+            .onMapCameraChange(frequency: .onEnd) { context in
+                vm.followCamera(center: context.camera.centerCoordinate)
+            }
+            .overlay {
+                Image(systemName: "mappin.circle.fill")
+                    .font(.system(size: 36, weight: .semibold))
+                    .foregroundStyle(green)
+                    .shadow(color: green.opacity(0.4), radius: 8)
+                    .offset(y: -18)
+                    .allowsHitTesting(false)
+            }
 
             VStack {
                 Spacer()
                 VStack(spacing: 12) {
-                    Text("Touche la carte pour placer la boîte")
+                    Text("Déplace la carte pour placer la boîte")
                         .font(.system(size: 13))
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 16)
