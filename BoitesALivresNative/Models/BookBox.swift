@@ -221,6 +221,19 @@ enum LocationRules {
         accuracy >= 0 && accuracy <= manualMaxAccuracyMeters
     }
 
+    // Position « fraîche » : postérieure à l'ouverture de l'étape position, précision valide.
+    // Le cache de CLLocationManager et le rejeu de @Published sont plus anciens : jamais pris pour le premier fix (F01 M0040, R032)
+    static func isFresh(timestamp: Date, openedAt: Date, accuracy: Double) -> Bool {
+        accuracy >= 0 && timestamp >= openedAt
+    }
+
+    // Effet d'un fix sur la carte : centrer la caméra seulement ; poser aussi le repère si l'utilisateur n'a jamais touché la carte
+    enum FirstFixEffect: Equatable { case none, cameraOnly, cameraAndPin }
+    static func firstFixEffect(isWaiting: Bool, onMapStep: Bool, isFresh: Bool, userPlacedPin: Bool) -> FirstFixEffect {
+        guard isWaiting, onMapStep, isFresh else { return .none }
+        return userPlacedPin ? .cameraOnly : .cameraAndPin
+    }
+
     // Source envoyée au serveur : « gps » seulement si GPS précis (≤ 10 m) ET repère posé sur la position GPS
     static func source(accuracy: Double, pinIsGPS: Bool) -> String {
         (canSend(accuracy: accuracy) && pinIsGPS) ? "gps" : "manual"

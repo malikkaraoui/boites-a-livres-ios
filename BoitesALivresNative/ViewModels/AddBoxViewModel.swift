@@ -32,8 +32,10 @@ final class AddBoxViewModel {
 
     // Vrai dès que l'utilisateur a touché la carte : le GPS ne déplace plus le repère (F01 M0039)
     private var userPlacedPin = false
-    // Premier fix GPS « live » déjà appliqué : le cache (manager.location, sans âge) ne compte pas (F01 M0039, R032)
-    private var autoCentered = false
+    // Ouverture de l'étape position (première ouverture et « Replacer ») : seul un fix postérieur compte (F01 M0040, R032)
+    private var positionStepOpenedAt = Date()
+    // Vrai tant que le premier fix frais de cette ouverture n'est pas reçu (F01 M0040)
+    private var waitingFreshFix = true
 
     private let supabase = SupabaseService.shared
 
@@ -47,12 +49,17 @@ final class AddBoxViewModel {
         }
     }
 
-    // Premier fix GPS sur l'étape position : caméra ET repère dessus, tant que l'utilisateur n'a pas touché la carte (F01 M0039)
+    // Premier fix frais sur l'étape position : caméra centrée dessus ; repère posé seulement si l'utilisateur n'a jamais touché la carte.
+    // Le cache et son rejeu à l'abonnement sont ignorés : leur horodatage précède l'ouverture (F01 M0040, R032)
     func applyFirstFix(_ gps: CLLocation) {
-        guard step == .map, !autoCentered, !userPlacedPin else { return }
-        autoCentered = true
-        pinCoordinate = gps.coordinate
+        let fresh = LocationRules.isFresh(timestamp: gps.timestamp, openedAt: positionStepOpenedAt,
+                                          accuracy: gps.horizontalAccuracy)
+        let effect = LocationRules.firstFixEffect(isWaiting: waitingFreshFix, onMapStep: step == .map,
+                                                  isFresh: fresh, userPlacedPin: userPlacedPin)
+        guard effect != .none else { return }
+        waitingFreshFix = false
         cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+        if effect == .cameraAndPin { pinCoordinate = gps.coordinate }
     }
 
     // Ouverture de l'étape position et « Replacer » : caméra centrée sur le GPS, repère inchangé (F01 M0039)
@@ -67,8 +74,11 @@ final class AddBoxViewModel {
         pinCoordinate = coordinate
     }
 
+    // « Replacer » rouvre l'étape position : nouvelle attente d'un fix frais, repère inchangé (F01 M0040)
     func returnToMap() {
         step = .map
+        positionStepOpenedAt = Date()
+        waitingFreshFix = true
         centerCameraOnGPS()
     }
 
