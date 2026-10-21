@@ -32,7 +32,7 @@ final class AddBoxViewModel {
 
     // Vrai dès que l'utilisateur a touché la carte : le GPS ne déplace plus le repère (F01 M0039)
     private var userPlacedPin = false
-    // Première position GPS déjà appliquée à la caméra et au repère (F01 M0039)
+    // Premier fix GPS « live » déjà appliqué : le cache (manager.location, sans âge) ne compte pas (F01 M0039, R032)
     private var autoCentered = false
 
     private let supabase = SupabaseService.shared
@@ -41,7 +41,6 @@ final class AddBoxViewModel {
         if let gps = LocationService.shared.currentLocation {
             pinCoordinate = gps.coordinate
             cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
-            autoCentered = true
         } else {
             pinCoordinate = Constants.defaultLocation
             cameraPosition = .camera(MapCamera(centerCoordinate: Constants.defaultLocation, distance: 500))
