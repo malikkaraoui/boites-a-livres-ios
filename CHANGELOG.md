@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 19
+
+- Ajout de boîte : le repère est une épingle fixe au centre de la carte, on glisse la carte pour placer
+  la boîte. « Replacer » rouvre la carte sur le point déjà posé, sans recentrage automatique sur le GPS.
+
 ### Build 18
 
 - Ajout de boîte : le champ note reste visible au-dessus du clavier, à hauteur fixe (5 lignes, défilement
