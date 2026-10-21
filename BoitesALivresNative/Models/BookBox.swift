@@ -245,6 +245,24 @@ enum LocationRules {
     }
 }
 
+// Note libre de l'ajout de boîte : jamais deux sauts de ligne d'affilée (F01 M0038, #38)
+enum NoteText {
+    // Saisie et collage : un `\n` au plus entre deux lignes (espaces et retours tolérés entre eux)
+    static func limitLineBreaks(_ raw: String) -> String {
+        var out = raw
+        while true {
+            let next = out.replacingOccurrences(of: "\\n[ \\t\\r]*\\n", with: "\n", options: .regularExpression)
+            if next == out { return out }
+            out = next
+        }
+    }
+
+    // Envoi : même règle, plus espaces et sauts de ligne superflus en début et fin
+    static func forSend(_ raw: String) -> String {
+        limitLineBreaks(raw).trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
 // Journal des dates de rappel par boîte, sur le téléphone seulement (UserDefaults)
 enum LocationPromptLog {
     private static let key = "locationPromptTimes"

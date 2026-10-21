@@ -11,6 +11,13 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 18
+
+- Ajout de boîte : le champ note reste visible au-dessus du clavier, à hauteur fixe (5 lignes, défilement
+  interne). Un seul saut de ligne d'affilée dans la note, à la saisie comme au collage. Bouton OK au-dessus
+  du clavier (#38).
+- Ajout de boîte : création possible à 50 m de précision GPS ou mieux (la localisation reste à 10 m) (#38).
+
 ### Build 17
 
 - Localisation : un seul écran. La carte s'ouvre centrée sur la boîte ; laisse le repère sur la boîte

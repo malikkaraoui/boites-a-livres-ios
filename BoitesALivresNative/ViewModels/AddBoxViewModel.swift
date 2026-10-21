@@ -72,10 +72,10 @@ final class AddBoxViewModel {
         step = .form
     }
 
-    // Distance GPS -> point proposé, seulement si le GPS est précis (10 m ou mieux). Calculée sur le téléphone.
+    // Distance GPS -> point proposé, seulement si le GPS est précis (50 m ou mieux). Calculée sur le téléphone.
     private var presenceDistance: Double? {
         guard let gps = LocationService.shared.currentLocation,
-              LocationRules.canSend(accuracy: gps.horizontalAccuracy) else { return nil }
+              LocationRules.canSendManual(accuracy: gps.horizontalAccuracy) else { return nil }
         return gps.distance(from: CLLocation(latitude: pinCoordinate.latitude, longitude: pinCoordinate.longitude))
     }
 
@@ -87,7 +87,7 @@ final class AddBoxViewModel {
 
     var submitHint: String? {
         if selectedImage == nil { return "Ajoute une photo de la boîte" }
-        if presenceDistance == nil { return "Patiente, le GPS affine ta position (10 m ou mieux)…" }
+        if presenceDistance == nil { return "Patiente, le GPS affine ta position (50 m ou mieux)…" }
         if !presenceOK { return "Tu dois être à moins de 50 m du point proposé." }
         return nil
     }
@@ -100,6 +100,7 @@ final class AddBoxViewModel {
         isSubmitting = true
         defer { isSubmitting = false }
         errorMessage = nil
+        let cleanNotes = NoteText.forSend(notes)
 
         do {
             // Upload photo first if selected
@@ -116,7 +117,7 @@ final class AddBoxViewModel {
                 city: city.isEmpty ? nil : city,
                 postalCode: postalCode.isEmpty ? nil : postalCode,
                 department: department.isEmpty ? nil : department,
-                notes: notes.isEmpty ? nil : notes,
+                notes: cleanNotes.isEmpty ? nil : cleanNotes,
                 photoUrl: photoUrl,
                 deviceToken: deviceToken
             )
