@@ -11,3 +11,7 @@ Suppression : le bouton de signalement n'est actif qu'à 100 m ou moins de la bo
 Photos : une nouvelle boîte demande une photo prise sur place. Aucune personne ne doit apparaître sur la photo.
 
 Corrections : aperçu et carrousel des photos, « Mes soumissions » et « Mes demandes de suppression », affichage du numéro de build dans les réglages.
+
+Merci à toutes celles et ceux qui ajoutent des boîtes, envoient des photos et signalent les changements : c'est grâce à vous que la carte reste vivante et fiable.
+
+Un merci tout particulier à Loane Morandeau, qui nous a signalé une faille de sécurité, corrigée dans cette version.
