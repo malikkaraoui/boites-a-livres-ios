@@ -11,6 +11,13 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 17
+
+- Localisation : un seul écran. La carte s'ouvre centrée sur la boîte ; laisse le repère sur la boîte
+  et envoie, ou déplace la carte si elle est ailleurs. Le déplacement est limité à 100 m.
+- Alerte près d'une boîte : activée par défaut, rayon de 100 m (la présence pour proposer une
+  position reste à 50 m). Un désactivement explicite dans Réglages reste respecté.
+
 ### Build 16
 
 - Mise à jour obligatoire : l'équipe fixe une version minimale. Si ta version de l'app est en
