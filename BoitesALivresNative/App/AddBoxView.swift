@@ -42,36 +42,37 @@ struct AddBoxView: View {
             LocationService.shared.beginPrecisionUpdates()
         }
         .onDisappear { LocationService.shared.endPrecisionUpdates() }
+        // Premier fix GPS : la carte se centre dessus si l'utilisateur n'a pas encore touché la carte (F01 M0039)
+        .onReceive(locationService.$currentLocation.compactMap { $0 }) { vm.applyFirstFix($0) }
     }
 
     // MARK: Step 1 — Map
 
     private var mapStep: some View {
         ZStack {
-            Map(position: $vm.cameraPosition)
-                .onMapCameraChange(frequency: .continuous) { ctx in
-                    vm.pinCoordinate = ctx.region.center
+            // Toucher la carte place le repère ; le repère ne suit plus le centre de la carte (F01 M0039)
+            MapReader { proxy in
+                Map(position: $vm.cameraPosition) {
+                    UserAnnotation()
+                    Annotation("Boîte", coordinate: vm.pinCoordinate, anchor: .bottom) {
+                        Image(systemName: "mappin.circle.fill")
+                            .font(.system(size: 36, weight: .semibold))
+                            .foregroundStyle(green)
+                            .shadow(color: green.opacity(0.4), radius: 8)
+                    }
                 }
-                .ignoresSafeArea()
-
-            // Fixed center pin
-            VStack(spacing: 0) {
-                Image(systemName: "mappin.circle.fill")
-                    .font(.system(size: 36, weight: .semibold))
-                    .foregroundStyle(green)
-                    .shadow(color: green.opacity(0.4), radius: 8)
-                Rectangle()
-                    .fill(green)
-                    .frame(width: 2, height: 10)
-                Ellipse()
-                    .fill(green.opacity(0.25))
-                    .frame(width: 10, height: 4)
+                .onTapGesture { point in
+                    if let coordinate = proxy.convert(point, from: .local) {
+                        vm.placePin(at: coordinate)
+                    }
+                }
             }
+            .ignoresSafeArea()
 
             VStack {
                 Spacer()
                 VStack(spacing: 12) {
-                    Text("Déplacer la carte pour placer la boîte")
+                    Text("Touche la carte pour placer la boîte")
                         .font(.system(size: 13))
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 16)
@@ -252,7 +253,7 @@ struct AddBoxView: View {
                             .font(.system(size: 13, design: .monospaced))
                             .foregroundStyle(.secondary)
                         Spacer()
-                        Button { lightHaptic(); vm.step = .map } label: {
+                        Button { lightHaptic(); vm.returnToMap() } label: {
                             Text("Replacer")
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(green)

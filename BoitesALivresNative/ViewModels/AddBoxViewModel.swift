@@ -30,12 +30,47 @@ final class AddBoxViewModel {
     var submitted = false
     var errorMessage: String? = nil
 
+    // Vrai dès que l'utilisateur a touché la carte : le GPS ne déplace plus le repère (F01 M0039)
+    private var userPlacedPin = false
+    // Première position GPS déjà appliquée à la caméra et au repère (F01 M0039)
+    private var autoCentered = false
+
     private let supabase = SupabaseService.shared
 
     init() {
-        let startCoord = LocationService.shared.currentLocation?.coordinate ?? Constants.defaultLocation
-        pinCoordinate = startCoord
-        cameraPosition = .camera(MapCamera(centerCoordinate: startCoord, distance: 500))
+        if let gps = LocationService.shared.currentLocation {
+            pinCoordinate = gps.coordinate
+            cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+            autoCentered = true
+        } else {
+            pinCoordinate = Constants.defaultLocation
+            cameraPosition = .camera(MapCamera(centerCoordinate: Constants.defaultLocation, distance: 500))
+        }
+    }
+
+    // Premier fix GPS sur l'étape position : caméra ET repère dessus, tant que l'utilisateur n'a pas touché la carte (F01 M0039)
+    func applyFirstFix(_ gps: CLLocation) {
+        guard step == .map, !autoCentered, !userPlacedPin else { return }
+        autoCentered = true
+        pinCoordinate = gps.coordinate
+        cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+    }
+
+    // Ouverture de l'étape position et « Replacer » : caméra centrée sur le GPS, repère inchangé (F01 M0039)
+    func centerCameraOnGPS() {
+        guard let gps = LocationService.shared.currentLocation else { return }
+        cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+    }
+
+    // Toucher la carte : le repère va au point touché (F01 M0039)
+    func placePin(at coordinate: CLLocationCoordinate2D) {
+        userPlacedPin = true
+        pinCoordinate = coordinate
+    }
+
+    func returnToMap() {
+        step = .map
+        centerCameraOnGPS()
     }
 
     func confirmPosition() async {
