@@ -178,8 +178,15 @@ struct LocationUpdateRecord: Codable, Identifiable, Hashable {
 
 // Règles pures de la localisation : seuils, barres de précision, sélection des régions
 enum LocationRules {
-    static let proximityMeters: Double = 50
-    static let moveMaxMeters: Double = 500
+    // Présence sur place (ajout, bouton Localisation, écran Localisation) : 50 m, inchangé
+    static let presenceMeters: Double = 50
+    // Rayon des régions de l'alerte de proximité : 100 m (F01 M0036)
+    static let alertRadiusMeters: Double = 100
+    // Déplacement maximal du repère par rapport à la boîte : 100 m (F01 M0036)
+    static let moveMaxMeters: Double = 100
+
+    // Alerte de proximité activée par défaut : clé absente = activée, seul « false » explicite la coupe (F01 M0036)
+    static func alertEnabled(stored: Bool?) -> Bool { stored ?? true }
     static let confirmMaxAccuracyMeters: Double = 10
     static let regionLimit = 20
     static let repeatWindowSeconds: TimeInterval = 30 * 86_400

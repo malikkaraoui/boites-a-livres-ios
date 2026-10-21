@@ -80,7 +80,7 @@ final class AddBoxViewModel {
     }
 
     // Présence sur place : GPS à 10 m ou mieux et point à 50 m au plus (F01 M0023, #31)
-    var presenceOK: Bool { (presenceDistance ?? .infinity) <= LocationRules.proximityMeters }
+    var presenceOK: Bool { (presenceDistance ?? .infinity) <= LocationRules.presenceMeters }
 
     // Photo obligatoire (prise sur place) + présence : sinon le bouton reste grisé
     var canSubmit: Bool { selectedImage != nil && presenceOK }

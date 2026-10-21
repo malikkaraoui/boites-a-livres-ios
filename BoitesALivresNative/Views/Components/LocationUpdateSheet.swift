@@ -4,7 +4,8 @@ import SwiftUI
 
 // MARK: - Proposition de localisation (F01 M0020)
 
-// Parcours « La boîte est-elle bien ici ? » : confirmer, ou placer le repère sur la carte.
+// Parcours « La boîte est-elle bien ici ? » : un seul écran, la carte centrée sur la boîte.
+// Repère laissé sur la boîte = confirmation ; repère déplacé = nouvelle position (100 m au plus).
 // Rien ne change sur la carte avant validation admin. La position du téléphone ne quitte jamais
 // l'appareil : seules la position PROPOSÉE pour la boîte et la précision GPS partent vers le serveur.
 struct LocationUpdateSheet: View {
@@ -22,7 +23,6 @@ struct LocationUpdateSheet: View {
         var department: String?
     }
 
-    @State private var kind: Kind? = nil
     @State private var camera: MapCameraPosition = .automatic
     @State private var pinCenter: CLLocationCoordinate2D? = nil
     @State private var place = ProposedPlace()
@@ -35,17 +35,20 @@ struct LocationUpdateSheet: View {
 
     private var gps: CLLocation? { locationService.currentLocation }
     private var accuracy: Double { gps?.horizontalAccuracy ?? -1 }
-    // Oui : GPS à 10 m ou mieux. Repère manuel : jusqu'à 50 m (F01 M0023)
+    // Repère déplacé de plus de 1 m = nouvelle position (move) ; sinon confirmation (confirm)
+    private var pinMoved: Bool { (pinDistance ?? 0) >= 1 }
+    private var kind: Kind { pinMoved ? .move : .confirm }
+    // Confirmation : GPS à 10 m ou mieux. Repère déplacé : jusqu'à 50 m (F01 M0023)
     private var accuracyOK: Bool {
         kind == .move ? LocationRules.canSendManual(accuracy: accuracy) : LocationRules.canSend(accuracy: accuracy)
     }
     private var gpsOK: Bool { gps != nil && accuracyOK }
     private var boxLocation: CLLocation { CLLocation(latitude: box.lat, longitude: box.lng) }
 
-    // Distance téléphone -> boîte : calculée sur le téléphone uniquement
+    // Distance téléphone -> boîte : calculée sur le téléphone uniquement (présence, 50 m)
     private var nearEnough: Bool {
         guard let gps else { return false }
-        return gps.distance(from: boxLocation) <= LocationRules.proximityMeters
+        return gps.distance(from: boxLocation) <= LocationRules.presenceMeters
     }
 
     // Distance repère -> boîte, pour le déplacement
@@ -55,7 +58,7 @@ struct LocationUpdateSheet: View {
     }
 
     private var canSubmit: Bool {
-        guard phase == .editing, let kind, gpsOK, nearEnough else { return false }
+        guard phase == .editing, gpsOK, nearEnough else { return false }
         if kind == .move {
             guard let d = pinDistance, d <= LocationRules.moveMaxMeters else { return false }
         }
@@ -87,6 +90,7 @@ struct LocationUpdateSheet: View {
             locationService.requestAuthorization()
             locationService.startUpdatingIfAuthorized()
             locationService.beginPrecisionUpdates()
+            centerOnBox()
         }
         .onDisappear { locationService.endPrecisionUpdates() }
     }
@@ -98,15 +102,6 @@ struct LocationUpdateSheet: View {
         Text("La boîte est-elle bien ici ?")
             .font(.system(size: 20, weight: .bold))
 
-        HStack(spacing: 12) {
-            choiceButton(title: "Oui, elle est bien là", icon: "checkmark.circle.fill", selected: kind == .confirm) {
-                select(.confirm)
-            }
-            choiceButton(title: "Non, elle est ailleurs", icon: "mappin.slash", selected: kind == .move) {
-                select(.move)
-            }
-        }
-
         if gps == nil {
             notice("Position introuvable. Active la localisation pour proposer une position.", color: .orange)
         } else if !nearEnough {
@@ -117,15 +112,12 @@ struct LocationUpdateSheet: View {
 
         if gps != nil && !LocationRules.canSendManual(accuracy: accuracy) {
             notice("Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.", color: .orange)
-        } else if kind != .move && gps != nil && !LocationRules.canSend(accuracy: accuracy) {
-            Button("Placer le repère moi-même") { select(.move) }
-                .font(.system(size: 14, weight: .semibold))
-                .foregroundStyle(green)
+        } else if !pinMoved && gps != nil && !LocationRules.canSend(accuracy: accuracy) {
+            notice("Précision entre 10 et 50 m : déplace la carte pour placer le repère sur la boîte, puis envoie.", color: .orange)
         }
 
-        if kind == .move {
-            moveSection
-        }
+        mapSection
+
         if kind == .confirm {
             note("Ta position GPS est envoyée comme position proposée pour la boîte, et rien d'autre.")
         }
@@ -210,13 +202,14 @@ struct LocationUpdateSheet: View {
         return String(format: "Précision : ± %.0f m", accuracy)
     }
 
-    private var moveSection: some View {
+    private var mapSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Place la carte pour que le repère soit sur la boîte. Ton adresse n'est pas demandée : elle est proposée à partir du repère.")
+            Text("Laisse le repère sur la boîte et envoie. Si elle est ailleurs, déplace la carte.")
                 .font(.system(size: 13))
                 .foregroundStyle(.secondary)
             ZStack {
                 Map(position: $camera) {
+                    UserAnnotation()
                     Marker(box.address ?? "Boîte", coordinate: box.coordinate)
                         .tint(.gray)
                 }
@@ -240,7 +233,7 @@ struct LocationUpdateSheet: View {
                     .font(.system(size: 14))
             }
             if let d = pinDistance, d > LocationRules.moveMaxMeters {
-                notice("Le déplacement dépasse 500 m : rapproche le repère de la boîte.", color: .red)
+                notice("Tu ne peux pas déplacer la boîte de plus de 100 m.", color: .red)
             }
             Button("Centrer sur ma position") { centerOnGPS() }
                 .font(.system(size: 14, weight: .semibold))
@@ -272,10 +265,11 @@ struct LocationUpdateSheet: View {
 
     // MARK: - Actions
 
-    private func select(_ newKind: Kind) {
-        lightHaptic()
-        kind = newKind
-        if newKind == .move { centerOnGPS() }
+    // Départ : zoom sur la boîte, repère posé sur sa position actuelle (donc « non déplacé »)
+    private func centerOnBox() {
+        camera = .region(MKCoordinateRegion(center: box.coordinate, latitudinalMeters: 80, longitudinalMeters: 80))
+        pinCenter = box.coordinate
+        Task { place = await reverseGeocode(box.coordinate) }
     }
 
     private func centerOnGPS() {
@@ -301,7 +295,7 @@ struct LocationUpdateSheet: View {
     }
 
     private func submit() async {
-        guard canSubmit, let kind, let gps else { return }
+        guard canSubmit, let gps else { return }
         guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else {
             phase = .failed("Autorise les notifications : la proposition est liée à cet appareil.")
             return
@@ -351,23 +345,6 @@ struct LocationUpdateSheet: View {
     }
 
     // MARK: - Éléments visuels
-
-    private func choiceButton(title: String, icon: String, selected: Bool, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 6) {
-                Image(systemName: icon).font(.system(size: 22))
-                Text(title)
-                    .font(.system(size: 14, weight: .semibold))
-                    .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .foregroundStyle(selected ? .white : green)
-            .background(selected ? green : green.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-        }
-        .buttonStyle(ScaleButtonStyle())
-    }
 
     private func notice(_ text: String, color: Color) -> some View {
         Text(text)
