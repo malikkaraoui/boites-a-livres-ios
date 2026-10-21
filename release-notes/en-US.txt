@@ -1,10 +1,10 @@
-Version 1.3.0 (build 16)
+Version 1.3.0 (build 17)
 
 Required update: if your version is too old, a screen asks you to update the app before continuing.
 
 Box location: you can confirm a box is really there, or suggest its exact position on the map, when you are close enough. Suggested positions are checked before being published.
 
-Nearby box alert (off by default, Settings › Location): a reminder when you pass within 50 m of a box. Your location stays on your phone. An alert you have already seen won't come back for 30 days.
+Nearby box alert (on by default, Settings › Location): a reminder when you pass within 100 m of a box. Your location stays on your phone. An alert you have already seen won't come back for 30 days.
 
 Removal: the report button only works within 100 m of the box.
 
