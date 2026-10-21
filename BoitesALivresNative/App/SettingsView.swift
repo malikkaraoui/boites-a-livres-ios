@@ -38,7 +38,7 @@ struct SettingsView: View {
     @AppStorage("colorSchemeIndex") private var colorSchemeIndex = 0
     @AppStorage("textSizeIndex") private var textSizeIndex = 0
     @AppStorage("useImperialUnits") private var useImperialUnits = false
-    @AppStorage(ProximityAlertService.enabledKey) private var proximityEnabled = false
+    @AppStorage(ProximityAlertService.enabledKey) private var proximityEnabled = true
     @State private var showProximityExplanation = false
     @Environment(\.requestReview) private var requestReview
 
@@ -227,7 +227,7 @@ struct SettingsView: View {
         }
     }
 
-    // Section Localisation : alerte de proximité (F01 M0020), désactivée par défaut
+    // Section Localisation : alerte de proximité (F01 M0020), activée par défaut (F01 M0036)
     private var locationSection: some View {
         Section {
             Toggle("Alerte près d'une boîte", isOn: Binding(
@@ -257,7 +257,7 @@ struct SettingsView: View {
         } header: {
             Text("Localisation")
         } footer: {
-            Text("Un rappel apparaît quand tu passes à moins de 50 m d'une boîte. Ta position reste sur ton téléphone.")
+            Text("Un rappel apparaît quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone.")
         }
         .alert("Alerte près d'une boîte", isPresented: $showProximityExplanation) {
             Button("Continuer") { ProximityAlertService.shared.enable() }
