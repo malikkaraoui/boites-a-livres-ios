@@ -86,17 +86,17 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     // Une seule notification par présence ; anti-répétition 30 j ; tout est journalisé localement.
     // Une alerte affichée compte comme vue : la date est posée à l'envoi, sans attendre une réponse (F01 M0024)
     private func notifyIfAllowed(boxId: Int, origin: String) {
-        ProximityJournal.add(String(localized: "dans le rayon de la boîte \(boxId) (\(origin))"))
+        ProximityJournal.add(String(localized: "dans le rayon de la boîte \(String(boxId)) (\(origin))"))
         guard !handledInside.contains(boxId) else { return }
         handledInside.insert(boxId)
         let blocked = LocationRules.isBlocked(lastPrompt: LocationPromptLog.all()[boxId], now: Date())
         guard !blocked else {
-            ProximityJournal.add(String(localized: "notification bloquée : boîte \(boxId), anti-répétition 30 j"))
+            ProximityJournal.add(String(localized: "notification bloquée : boîte \(String(boxId)), anti-répétition 30 j"))
             return
         }
-        ProximityJournal.add(String(localized: "notification envoyée : boîte \(boxId)"))
+        ProximityJournal.add(String(localized: "notification envoyée : boîte \(String(boxId))"))
         LocationPromptLog.mark(boxId: boxId)
-        ProximityJournal.add(String(localized: "anti-répétition posée : boîte \(boxId), 30 j"))
+        ProximityJournal.add(String(localized: "anti-répétition posée : boîte \(String(boxId)), 30 j"))
         scheduleNotification(boxId: boxId)
     }
 

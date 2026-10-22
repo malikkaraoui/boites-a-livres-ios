@@ -593,7 +593,7 @@ struct SettingsView: View {
     }
 
     private func boxTitle(_ id: Int) -> String {
-        String(format: NSLocalizedString("Boîte #%lld", comment: ""), id)
+        String(format: NSLocalizedString("Boîte #%@", comment: ""), String(id))
     }
 }
 
