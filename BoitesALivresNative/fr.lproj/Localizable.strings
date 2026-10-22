@@ -195,3 +195,20 @@
 /* Build 27 — notification de proximité */
 "📚 Boîte à livres à côté" = "📚 Boîte à livres à côté";
 "Est-elle bien ici ?" = "Est-elle bien ici ?";
+
+/* Build 27 — revue R042 : textes String affichés */
+"Limite atteinte" = "Limite atteinte";
+"Erreur" = "Erreur";
+"Choisis l'état de la boîte" = "Choisis l'état de la boîte";
+"Écris un commentaire" = "Écris un commentaire";
+"Patiente, le GPS affine ta position (50 m ou mieux)…" = "Patiente, le GPS affine ta position (50 m ou mieux)…";
+"Tu dois être à moins de 50 m du point proposé." = "Tu dois être à moins de 50 m du point proposé.";
+"Position introuvable. Active la localisation pour proposer une position." = "Position introuvable. Active la localisation pour proposer une position.";
+"Approche-toi à moins de 50 m de la boîte pour proposer une localisation." = "Approche-toi à moins de 50 m de la boîte pour proposer une localisation.";
+"Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie." = "Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.";
+"Précision : inconnue" = "Précision : inconnue";
+"Précision : ± %.0f m" = "Précision : ± %.0f m";
+"Tu ne peux pas déplacer la boîte de plus de 100 m." = "Tu ne peux pas déplacer la boîte de plus de 100 m.";
+"Supprimée" = "Supprimée";
+
+"Ajoute une photo de la boîte" = "Ajoute une photo de la boîte";

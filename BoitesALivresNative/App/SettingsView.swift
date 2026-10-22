@@ -463,9 +463,9 @@ struct SettingsView: View {
 
     private func deletionStatusChip(_ status: String) -> some View {
         let (label, color): (String, Color) = switch status {
-            case "pending":  ("En attente", .orange)
-            case "approved": ("Supprimée", .red)
-            case "rejected": ("Refusée", .secondary)
+            case "pending":  (String(localized: "En attente"), .orange)
+            case "approved": (String(localized: "Supprimée"), .red)
+            case "rejected": (String(localized: "Refusée"), .secondary)
             default:         (status, .secondary)
         }
         return Text(label)

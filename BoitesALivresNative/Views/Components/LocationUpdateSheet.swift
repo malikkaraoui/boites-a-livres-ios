@@ -143,7 +143,7 @@ struct LocationUpdateSheet: View {
             note("Pas encore de photo ? Tu peux en ajouter une depuis la fiche de la boîte.")
         }
         if case .failed(let message) = phase {
-            notice(message, color: .red)
+            notice(LocalizedStringKey(message), color: .red)
         }
         submitButton(proxy)
     }
@@ -205,9 +205,9 @@ struct LocationUpdateSheet: View {
     }
 
     private var precisionText: String {
-        guard gps != nil else { return "Précision : inconnue" }
-        guard accuracy >= 0 else { return "Précision : inconnue" }
-        return String(format: "Précision : ± %.0f m", accuracy)
+        guard gps != nil else { return String(localized: "Précision : inconnue") }
+        guard accuracy >= 0 else { return String(localized: "Précision : inconnue") }
+        return String(format: String(localized: "Précision : ± %.0f m"), accuracy)
     }
 
     private var mapSection: some View {
@@ -379,7 +379,7 @@ struct LocationUpdateSheet: View {
 
     // MARK: - Éléments visuels
 
-    private func notice(_ text: String, color: Color) -> some View {
+    private func notice(_ text: LocalizedStringKey, color: Color) -> some View {
         Text(text)
             .font(.system(size: 13, weight: .medium))
             .foregroundStyle(color)

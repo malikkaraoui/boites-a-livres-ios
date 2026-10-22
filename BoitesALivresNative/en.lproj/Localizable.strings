@@ -206,3 +206,20 @@
 /* Build 27 — notification de proximité */
 "📚 Boîte à livres à côté" = "📚 Book box nearby";
 "Est-elle bien ici ?" = "Is it really here?";
+
+/* Build 27 — revue R042 : textes String affichés */
+"Limite atteinte" = "Limit reached";
+"Erreur" = "Error";
+"Choisis l'état de la boîte" = "Choose the box's condition";
+"Écris un commentaire" = "Write a comment";
+"Patiente, le GPS affine ta position (50 m ou mieux)…" = "Hang on, GPS is refining your position (50 m or better)…";
+"Tu dois être à moins de 50 m du point proposé." = "You must be within 50 m of the proposed point.";
+"Position introuvable. Active la localisation pour proposer une position." = "Location unavailable. Turn on location to suggest a position.";
+"Approche-toi à moins de 50 m de la boîte pour proposer une localisation." = "Get within 50 m of the box to suggest a location.";
+"Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie." = "Accuracy too low (over 50 m): wait for a better GPS signal, then try again.";
+"Précision : inconnue" = "Accuracy: unknown";
+"Précision : ± %.0f m" = "Accuracy: ± %.0f m";
+"Tu ne peux pas déplacer la boîte de plus de 100 m." = "You can't move the box more than 100 m.";
+"Supprimée" = "Removed";
+
+"Ajoute une photo de la boîte" = "Add a photo of the box";
