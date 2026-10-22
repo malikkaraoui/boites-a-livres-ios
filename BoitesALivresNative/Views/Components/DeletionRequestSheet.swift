@@ -120,7 +120,9 @@ struct DeletionRequestSheet: View {
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
         .onAppear { focused = true }
-        // Succès d'envoi en pleine page, comme après une photo (F01 M0046)
+        // Succès d'envoi en pleine page, comme après une photo (F01 M0046).
+        // Même blocage du glissement que l'ancienne alerte : la feuille se ferme par « Fermer ».
+        .interactiveDismissDisabled(showSuccess)
         .overlay {
             if showSuccess {
                 SubmissionSuccessView(

@@ -210,7 +210,9 @@ struct ReviewSubmitSheet: View {
         .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
-        // Succès d'envoi en pleine page, comme après une photo (F01 M0046)
+        // Succès d'envoi en pleine page, comme après une photo (F01 M0046).
+        // Le glissement ne ferme pas la feuille avant « Fermer » : onSubmitted() doit toujours partir.
+        .interactiveDismissDisabled(showSuccess)
         .overlay {
             if showSuccess {
                 SubmissionSuccessView(
