@@ -16,7 +16,8 @@ Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - Couleurs : toute l'app passe au vert de la marque, y compris « Retour », les liens, les boutons et l'onglet sélectionné, en clair comme en sombre. Plus de bleu iOS. Les couleurs d'état (rouge, orange) ne changent pas.
 - Avis : le nom affiché (facultatif) est limité à 20 caractères, saisie et collage compris.
 - Anglais : tous les textes affichés ont désormais leur traduction anglaise, dont les titres d'alertes et les boutons.
-- Icône : nouvelle icône de l'app (thème Halloween).
+- Icône : nouvelle icône de l'app (thème Halloween, toile d'araignée).
+- Localisation : les textes sont dans un catalogue Xcode (`Localizable.xcstrings`), contrôlé par Xcode lui-même.
 - README : présentation, lien App Store et captures d'écran.
 
 ### Build 26

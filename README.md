@@ -75,7 +75,7 @@ Historique des versions : [CHANGELOG.md](CHANGELOG.md).
 
 ## Localisation
 
-L'app suit la langue du système, sans sélecteur manuel. Chaque texte affiché a une clé dans `fr.lproj/Localizable.strings` et une traduction dans `en.lproj/Localizable.strings`.
+L'app suit la langue du système, sans sélecteur manuel. Les textes sont dans les catalogues `BoitesALivresNative/Localizable.xcstrings` (français et anglais) et `BoitesALivresNative/InfoPlist.xcstrings` (textes des autorisations). Contrôle : `scripts/check_xliff.py` lit l'export Xcode (`xcodebuild -exportLocalizations ... -exportLanguage en`) et échoue si une unité n'a pas de traduction anglaise.
 
 ## Contributeurs
 
