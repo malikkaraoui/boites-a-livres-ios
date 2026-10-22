@@ -1308,6 +1308,23 @@
         }
       }
     },
+    "device_token manquant" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "device_token missing"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "device_token manquant"
+          }
+        }
+      }
+    },
     "Diagnostic des alertes" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1370,6 +1387,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Donner mon avis"
+          }
+        }
+      }
+    },
+    "Écart de %lld m : dans la marge du GPS (moins de %lld m), la boîte reste à sa place." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gap of %lld m: within the GPS margin (under %lld m), the box stays where it is."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écart de %lld m : dans la marge du GPS (moins de %lld m), la boîte reste à sa place."
           }
         }
       }
@@ -2219,6 +2253,23 @@
         }
       }
     },
+    "Note (optionnel)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note (optional)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note (optionnel)"
+          }
+        }
+      }
+    },
     "Noter l'application" : {
       "localizations" : {
         "en" : {
@@ -2402,6 +2453,23 @@
         }
       }
     },
+    "Pas encore de photo ? Tu peux en ajouter une depuis la fiche de la boîte." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photo yet? You can add one from the box page."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore de photo ? Tu peux en ajouter une depuis la fiche de la boîte."
+          }
+        }
+      }
+    },
     "Patiente, le GPS affine ta position (50 m ou mieux)…" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2447,6 +2515,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photo"
+          }
+        }
+      }
+    },
+    "Photo (obligatoire, prise sur place)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo (required, taken on site)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo (obligatoire, prise sur place)"
           }
         }
       }
@@ -2981,6 +3066,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Supprimer"
+          }
+        }
+      }
+    },
+    "Ta position GPS est envoyée comme position proposée pour la boîte, et rien d'autre." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your GPS position is sent as the proposed position for the box, and nothing else."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta position GPS est envoyée comme position proposée pour la boîte, et rien d'autre."
           }
         }
       }

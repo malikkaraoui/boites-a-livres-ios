@@ -279,7 +279,7 @@ actor SupabaseService {
             let platform: String
         }
         guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else {
-            throw SupabaseError.httpError(400, "device_token manquant")
+            throw SupabaseError.httpError(400, String(localized: "device_token manquant"))
         }
         let cleanedName = authorName?.trimmingCharacters(in: .whitespaces)
         let body = try JSONEncoder().encode(Body(
