@@ -287,9 +287,9 @@ struct AddBoxView: View {
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(.orange)
                             .multilineTextAlignment(.center)
+                            .missingHighlight(tick: feedback.tick(for: .gpsPrecision) + feedback.tick(for: .tooFar), cornerRadius: 8)
                             .padding(.horizontal, 16)
                             .id("submit")
-                            .missingHighlight(tick: feedback.tick(for: .gpsPrecision) + feedback.tick(for: .tooFar), cornerRadius: 8)
                     }
 
                     Text("Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision.")

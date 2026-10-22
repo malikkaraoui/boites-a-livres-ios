@@ -148,6 +148,8 @@ struct ReviewSubmitSheet: View {
                     proximityBanner
                         .id("proximity")
                         .missingHighlight(tick: feedback.tick(for: .proximity))
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 14)
                     conditionSection
                     bookCountSection
                     authorSection
@@ -280,8 +282,6 @@ struct ReviewSubmitSheet: View {
         .padding(12)
         .background(color.opacity(0.10))
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 20)
-        .padding(.bottom, 14)
     }
 
     private func formattedDistance(_ meters: CLLocationDistance) -> String {

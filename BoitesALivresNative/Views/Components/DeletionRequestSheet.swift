@@ -63,9 +63,9 @@ struct DeletionRequestSheet: View {
                             .foregroundStyle(.secondary)
                             .padding(8)
                     }
+                    .missingHighlight(tick: feedback.tick(for: .reason))
                     .padding(.horizontal, 20)
                     .id("reason")
-                    .missingHighlight(tick: feedback.tick(for: .reason))
 
                     if reason.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text("La raison est obligatoire")
