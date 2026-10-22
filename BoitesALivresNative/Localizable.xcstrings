@@ -1,2922 +1,3432 @@
 {
-  "sourceLanguage": "fr",
-  "strings": {
-    "#%@ — %@": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "new",
-            "value": "#%1$@ — %2$@"
+  "sourceLanguage" : "fr",
+  "strings" : {
+    "#%@ — %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "#%@ — %@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "#%@ — %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$@ — %2$@"
           }
         }
       }
     },
-    "%@ %@": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@ %2$@"
+    "%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
           }
         }
       }
     },
-    "%@ livres": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ books"
+    "%@ livres" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ books"
           }
         }
       }
     },
-    "%@/%@": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$@/%2$@"
+    "%@/%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@/%@"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@/%@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@/%2$@"
           }
         }
       }
     },
-    "%lld boîtes": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld boxes"
+    "%lld boîtes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld boxes"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld boîtes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld boîtes"
           }
         }
       }
     },
-    "%lld boîtes chargées": {
-      "comment": "Loaded boxes count",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld boxes loaded"
+    "%lld boîtes chargées" : {
+      "comment" : "Loaded boxes count",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld boxes loaded"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld boîtes chargées"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld boîtes chargées"
           }
         }
       }
     },
-    "%lld livres": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld books"
+    "%lld livres" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld books"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld livres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld livres"
           }
         }
       }
     },
-    "~%@ livres": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "~%@ books"
+    "~%@ livres" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~%@ books"
           }
         }
       }
     },
-    "~%lld livres": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "~%lld books"
+    "~%lld livres" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~%lld books"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "~%lld livres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "~%lld livres"
           }
         }
       }
     },
-    "📚 Boîte à livres à côté": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📚 Book box nearby"
+    "📚 Boîte à livres à côté" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "📚 Book box nearby"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📚 Boîte à livres à côté"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "📚 Boîte à livres à côté"
           }
         }
       }
     },
-    "À propos": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "About"
+    "À propos" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À propos"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À propos"
           }
         }
       }
     },
-    "À proximité (%lld)": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nearby (%lld)"
+    "À proximité (%lld)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby (%lld)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "À proximité (%lld)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À proximité (%lld)"
           }
         }
       }
     },
-    "Acceptée": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approved"
+    "Acceptée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approved"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Acceptée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acceptée"
           }
         }
       }
     },
-    "Accessibilité": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accessibility"
+    "Accès à la localisation refusé" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location access denied"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accessibilité"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès à la localisation refusé"
           }
         }
       }
     },
-    "Activées": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enabled"
+    "Accessibilité" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibility"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activées"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accessibilité"
           }
         }
       }
     },
-    "Activer les notifications": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Enable notifications"
+    "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on Precise Location: the location route needs an accuracy of 50 m or better."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Activer les notifications"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus."
           }
         }
       }
     },
-    "Adresse": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Address"
+    "Activées" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enabled"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Adresse"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activées"
           }
         }
       }
     },
-    "Affichage": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Display"
+    "Activer les notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable notifications"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Affichage"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer les notifications"
           }
         }
       }
     },
-    "Ajoute une photo de la boîte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add a photo of the box"
+    "Adresse" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Address"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajoute une photo de la boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse"
           }
         }
       }
     },
-    "Ajouter une photo": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add a photo"
+    "Affichage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affichage"
           }
         }
       }
     },
-    "Ajouter une photo (%@/%@ publiées)": {
-      "localizations": {
-        "fr": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Ajouter une photo (%1$@/%2$@ publiées)"
+    "Ajoute une photo de la boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a photo of the box"
           }
         },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add a photo (%@/%@ published)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute une photo de la boîte"
           }
         }
       }
     },
-    "Ajouter une photo (%lld/%lld publiées)": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add a photo (%lld/%lld published)"
+    "Ajouter une photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une photo (%lld/%lld publiées)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une photo"
           }
         }
       }
     },
-    "Ajouter une photo de la boîte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add a photo of the box"
+    "Ajouter une photo (%@/%@ publiées)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a photo (%@/%@ published)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ajouter une photo de la boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Ajouter une photo (%1$@/%2$@ publiées)"
           }
         }
       }
     },
-    "Alerte près d'une boîte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nearby box alert"
+    "Ajouter une photo (%lld/%lld publiées)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a photo (%lld/%lld published)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alerte près d'une boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une photo (%lld/%lld publiées)"
           }
         }
       }
     },
-    "Alerte près d'une boîte désactivée": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nearby box alert turned off"
+    "Ajouter une photo de la boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a photo of the box"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alerte près d'une boîte désactivée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une photo de la boîte"
           }
         }
       }
     },
-    "Annuler": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancel"
+    "Alerte près d'une boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby box alert"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Annuler"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerte près d'une boîte"
           }
         }
       }
     },
-    "Anonyme": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anonymous"
+    "Alerte près d'une boîte désactivée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nearby box alert turned off"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Anonyme"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerte près d'une boîte désactivée"
           }
         }
       }
     },
-    "Apparence": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Appearance"
+    "Annuler" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apparence"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
           }
         }
       }
     },
-    "Approche-toi à moins de 50 m de la boîte pour proposer une localisation.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Get within 50 m of the box to suggest a location."
+    "Anonyme" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anonymous"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approche-toi à moins de 50 m de la boîte pour proposer une localisation."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anonyme"
           }
         }
       }
     },
-    "Approche-toi à moins de 50 m pour signaler la position de cette boîte.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Get within 50 m to report this box's location."
+    "anti-répétition posée : boîte %lld, 30 j" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "repeat guard set: box %lld, 30 days"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approche-toi à moins de 50 m pour signaler la position de cette boîte."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "anti-répétition posée : boîte %lld, 30 j"
           }
         }
       }
     },
-    "Approche-toi à moins de 100 m de la boîte pour signaler sa suppression.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Get within 100 m of the box to report its removal."
+    "Apparence" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Approche-toi à moins de 100 m de la boîte pour signaler sa suppression."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparence"
           }
         }
       }
     },
-    "Aucun avis pour le moment": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No reviews yet"
+    "Approche-toi à moins de 50 m de la boîte pour proposer une localisation." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get within 50 m of the box to suggest a location."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun avis pour le moment"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approche-toi à moins de 50 m de la boîte pour proposer une localisation."
           }
         }
       }
     },
-    "Aucun événement pour le moment.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No events yet."
+    "Approche-toi à moins de 50 m pour signaler la position de cette boîte." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get within 50 m to report this box's location."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucun événement pour le moment."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approche-toi à moins de 50 m pour signaler la position de cette boîte."
           }
         }
       }
     },
-    "Aucune demande envoyée depuis cet appareil.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No requests sent from this device."
+    "Approche-toi à moins de 100 m de la boîte pour signaler sa suppression." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get within 100 m of the box to report its removal."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune demande envoyée depuis cet appareil."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approche-toi à moins de 100 m de la boîte pour signaler sa suppression."
           }
         }
       }
     },
-    "Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No people may appear in the photo. Photos showing people are rejected."
+    "Aucun avis pour le moment" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No reviews yet"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun avis pour le moment"
           }
         }
       }
     },
-    "Aucune soumission pour le moment.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "No submissions yet."
+    "Aucun événement pour le moment." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No events yet."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aucune soumission pour le moment."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun événement pour le moment."
           }
         }
       }
     },
-    "Augmentez la taille pour une meilleure lisibilité.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Increase the size for better readability."
+    "Aucune demande envoyée depuis cet appareil." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No requests sent from this device."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Augmentez la taille pour une meilleure lisibilité."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune demande envoyée depuis cet appareil."
           }
         }
       }
     },
-    "Auto": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto"
+    "Aucune image sélectionnée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No image selected"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Auto"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune image sélectionnée"
           }
         }
       }
     },
-    "Avec photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With photo"
+    "Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No people may appear in the photo. Photos showing people are rejected."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avec photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune personne ne doit apparaître sur la photo. Les photos avec des personnes sont refusées."
           }
         }
       }
     },
-    "Avis": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Review"
+    "Aucune soumission pour le moment." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No submissions yet."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avis"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune soumission pour le moment."
           }
         }
       }
     },
-    "Avis de la communauté": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Community reviews"
+    "Augmentez la taille pour une meilleure lisibilité." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase the size for better readability."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avis de la communauté"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmentez la taille pour une meilleure lisibilité."
           }
         }
       }
     },
-    "Avis envoyé": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Review sent"
+    "Auto" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Avis envoyé"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
           }
         }
       }
     },
-    "Bénévolement :": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Volunteer work:"
+    "Autorise les notifications : la proposition est liée à cet appareil." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow notifications: the proposal is tied to this device."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bénévolement :"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorise les notifications : la proposition est liée à cet appareil."
           }
         }
       }
     },
-    "Boîte #%@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Box #%@"
+    "Avec photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With photo"
           }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avec photo"
+          }
+        }
+      }
+    },
+    "Avis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avis"
+          }
+        }
+      }
+    },
+    "Avis de la communauté" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Community reviews"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avis de la communauté"
+          }
+        }
+      }
+    },
+    "Avis envoyé" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review sent"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avis envoyé"
+          }
+        }
+      }
+    },
+    "Bénévolement :" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volunteer work:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bénévolement :"
+          }
+        }
+      }
+    },
+    "Boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte"
+          }
+        }
+      }
+    },
+    "Boîte #%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box #%@"
+          }
+        }
+      }
+    },
+    "Boîte #%lld" : {
+      "comment" : "Book box title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box #%lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte #%lld"
+          }
+        }
+      }
+    },
+    "Boîte à livres" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Book box"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte à livres"
+          }
+        }
+      }
+    },
+    "Boîte introuvable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box not found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte introuvable"
+          }
+        }
+      }
+    },
+    "Boîte soumise !" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box submitted!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîte soumise !"
+          }
+        }
+      }
+    },
+    "Boîtes à livres" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Book boxes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîtes à livres"
+          }
+        }
+      }
+    },
+    "Boîtes à Livres" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîtes à Livres"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîtes à Livres"
+          }
+        }
+      }
+    },
+    "Boîtes à Livres peut t'envoyer un rappel quand tu passes près d'une boîte, même application fermée. Ta position ne quitte pas ton téléphone. Pour cela, iOS te demandera l'accès « Toujours »." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîtes à Livres can send you a reminder when you pass near a box, even when the app is closed. Your location never leaves your phone. For this, iOS will ask for “Always” access."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boîtes à Livres peut t'envoyer un rappel quand tu passes près d'une boîte, même application fermée. Ta position ne quitte pas ton téléphone. Pour cela, iOS te demandera l'accès « Toujours »."
+          }
+        }
+      }
+    },
+    "boites-a-livres.fr" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "boites-a-livres.fr"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "boites-a-livres.fr"
+          }
+        }
+      }
+    },
+    "Bon" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Good"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bon"
+          }
         }
       }
     },
-    "Boîte #%lld": {
-      "comment": "Book box title",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Box #%lld"
+    "Carte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîte #%lld"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carte"
           }
         }
       }
     },
-    "Boîte introuvable": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Box not found"
+    "Centrer sur ma position" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Center on my location"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîte introuvable"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centrer sur ma position"
           }
         }
       }
     },
-    "Boîte soumise !": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Box submitted!"
+    "Cette boîte sera supprimée uniquement après validation par un administrateur. Explique brièvement pourquoi." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This box will only be removed after an administrator approves it. Briefly explain why."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîte soumise !"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette boîte sera supprimée uniquement après validation par un administrateur. Explique brièvement pourquoi."
           }
         }
       }
     },
-    "Boîtes à livres": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Book boxes"
+    "Changer la photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîtes à livres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer la photo"
           }
         }
       }
     },
-    "Boîtes à Livres": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîtes à Livres"
+    "Chargement impossible" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading failed"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîtes à Livres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement impossible"
           }
         }
       }
     },
-    "Boîtes à Livres peut t'envoyer un rappel quand tu passes près d'une boîte, même application fermée. Ta position ne quitte pas ton téléphone. Pour cela, iOS te demandera l'accès « Toujours ».": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîtes à Livres can send you a reminder when you pass near a box, even when the app is closed. Your location never leaves your phone. For this, iOS will ask for “Always” access."
+    "Choisir depuis la bibliothèque" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from library"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Boîtes à Livres peut t'envoyer un rappel quand tu passes près d'une boîte, même application fermée. Ta position ne quitte pas ton téléphone. Pour cela, iOS te demandera l'accès « Toujours »."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir depuis la bibliothèque"
           }
         }
       }
     },
-    "boites-a-livres.fr": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "boites-a-livres.fr"
+    "Choisis l'état de la boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose the box's condition"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "boites-a-livres.fr"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis l'état de la boîte"
           }
         }
       }
     },
-    "Bon": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Good"
+    "Clair" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bon"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clair"
           }
         }
       }
     },
-    "Carte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Map"
+    "Code postal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Postal code"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code postal"
           }
         }
       }
     },
-    "Centrer sur ma position": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Center on my location"
+    "Commentaire" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Centrer sur ma position"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Commentaire"
           }
         }
       }
     },
-    "Cette boîte sera supprimée uniquement après validation par un administrateur. Explique brièvement pourquoi.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "This box will only be removed after an administrator approves it. Briefly explain why."
+    "Confirmer la position →" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm the location →"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cette boîte sera supprimée uniquement après validation par un administrateur. Explique brièvement pourquoi."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmer la position →"
           }
         }
       }
     },
-    "Changer la photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Change photo"
+    "Continuer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changer la photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuer"
           }
         }
       }
     },
-    "Chargement impossible": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Loading failed"
+    "dans le rayon de la boîte %lld (%@)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "within range of box %lld (%@)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chargement impossible"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dans le rayon de la boîte %lld (%@)"
           }
         }
       }
     },
-    "Choisir depuis la bibliothèque": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose from library"
+    "Décimal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decimal"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisir depuis la bibliothèque"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Décimal"
           }
         }
       }
     },
-    "Choisis l'état de la boîte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose the box's condition"
+    "Décodage échoué: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decoding failed: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choisis l'état de la boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Décodage échoué: %@"
           }
         }
       }
     },
-    "Clair": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Light"
+    "Délai de géolocalisation dépassé" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location request timed out"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clair"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délai de géolocalisation dépassé"
           }
         }
       }
     },
-    "Code postal": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Postal code"
+    "Demande envoyée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request sent"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Code postal"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demande envoyée"
           }
         }
       }
     },
-    "Commentaire": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Comment"
+    "Demander la suppression" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request removal"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Commentaire"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demander la suppression"
           }
         }
       }
     },
-    "Continuer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue"
+    "Département %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Department %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continuer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Département %@"
           }
         }
       }
     },
-    "Décimal": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Decimal"
+    "Déplace la carte pour placer la boîte" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move the map to place the box"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Décimal"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplace la carte pour placer la boîte"
           }
         }
       }
     },
-    "Demande envoyée": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Request sent"
+    "Détail" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detail"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demande envoyée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détail"
           }
         }
       }
     },
-    "Demander la suppression": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Request removal"
+    "Diagnostic des alertes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert diagnostics"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demander la suppression"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostic des alertes"
           }
         }
       }
     },
-    "Département %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Department %@"
+    "DMS" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DMS"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Département %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DMS"
           }
         }
       }
     },
-    "Déplace la carte pour placer la boîte": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Move the map to place the box"
+    "Données issues de" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data from"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Déplace la carte pour placer la boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Données issues de"
           }
         }
       }
     },
-    "Détail": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Detail"
+    "Donner mon avis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave a review"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Détail"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Donner mon avis"
           }
         }
       }
     },
-    "Diagnostic des alertes": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Alert diagnostics"
+    "Écris un commentaire" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write a comment"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Diagnostic des alertes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écris un commentaire"
           }
         }
       }
     },
-    "DMS": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DMS"
+    "Effacer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DMS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer"
           }
         }
       }
     },
-    "Données issues de": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Data from"
+    "En attente" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pending"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Données issues de"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En attente"
           }
         }
       }
     },
-    "Donner mon avis": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leave a review"
+    "entrée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "entry"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Donner mon avis"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "entrée"
           }
         }
       }
     },
-    "Écris un commentaire": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Write a comment"
+    "Envoi en cours…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uploading…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Écris un commentaire"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi en cours…"
           }
         }
       }
     },
-    "Effacer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Clear"
+    "Envoi impossible pour le moment. Réessaie dans un instant." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Can't send right now. Try again in a moment."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Effacer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi impossible pour le moment. Réessaie dans un instant."
           }
         }
       }
     },
-    "En attente": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pending"
+    "Envoi…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sending…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "En attente"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoi…"
           }
         }
       }
     },
-    "Envoi en cours…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uploading…"
+    "Envoyer la demande" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send the request"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoi en cours…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer la demande"
           }
         }
       }
     },
-    "Envoi…": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sending…"
+    "Envoyer le nouvel emplacement" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send the new location"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoi…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer le nouvel emplacement"
           }
         }
       }
     },
-    "Envoyer mon avis": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Submit review"
+    "Envoyer mon avis" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit review"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Envoyer mon avis"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer mon avis"
           }
         }
       }
     },
-    "Erreur": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Error"
+    "Erreur" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erreur"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
           }
         }
       }
     },
-    "Est-elle bien ici ?": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Is it really here?"
+    "Erreur HTTP %lld: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HTTP error %lld: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Est-elle bien ici ?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur HTTP %lld: %@"
           }
         }
       }
     },
-    "Étape 1 / 2 — Position": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Step 1 / 2 — Location"
+    "Est-elle bien ici ?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is it really here?"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Étape 1 / 2 — Position"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Est-elle bien ici ?"
           }
         }
       }
     },
-    "Étape 2 / 2 — Détails": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Step 2 / 2 — Details"
+    "Étape 1 / 2 — Position" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step 1 / 2 — Location"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Étape 2 / 2 — Détails"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape 1 / 2 — Position"
           }
         }
       }
     },
-    "État de la boîte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Box condition"
+    "Étape 2 / 2 — Détails" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step 2 / 2 — Details"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "État de la boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étape 2 / 2 — Détails"
           }
         }
       }
     },
-    "Ex : devant la mairie, à côté de la fontaine…": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "E.g.: in front of the town hall, next to the fountain…"
+    "état au démarrage" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "state at launch"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ex : devant la mairie, à côté de la fontaine…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "état au démarrage"
           }
         }
       }
     },
-    "Faites découvrir Boîtes à Livres à vos proches !": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share Boîtes à Livres with your friends and family!"
+    "État de la boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Box condition"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Faites découvrir Boîtes à Livres à vos proches !"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "État de la boîte"
           }
         }
       }
     },
-    "Fermer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Close"
+    "Ex : devant la mairie, à côté de la fontaine…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E.g.: in front of the town hall, next to the fountain…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fermer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ex : devant la mairie, à côté de la fontaine…"
           }
         }
       }
     },
-    "Inconnu": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unknown"
+    "Faites découvrir Boîtes à Livres à vos proches !" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Boîtes à Livres with your friends and family!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Inconnu"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites découvrir Boîtes à Livres à vos proches !"
           }
         }
       }
     },
-    "km": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "km"
+    "Fermer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "km"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
           }
         }
       }
     },
-    "La boîte est-elle bien ici ?": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Is the box really here?"
+    "Impossible de compresser l'image" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't compress the image"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La boîte est-elle bien ici ?"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de compresser l'image"
           }
         }
       }
     },
-    "La raison est obligatoire": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A reason is required"
+    "Inconnu" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "La raison est obligatoire"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inconnu"
           }
         }
       }
     },
-    "Laisse le repère sur la boîte et envoie. Si elle est ailleurs, déplace la carte.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leave the pin on the box and send. If it's somewhere else, move the map."
+    "km" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "km"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laisse le repère sur la boîte et envoie. Si elle est ailleurs, déplace la carte."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "km"
           }
         }
       }
     },
-    "Laisser un avis sur l'App Store": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Leave a review on the App Store"
+    "La boîte est-elle bien ici ?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is the box really here?"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Laisser un avis sur l'App Store"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La boîte est-elle bien ici ?"
           }
         }
       }
     },
-    "Les nouvelles photos sont publiées après validation manuelle.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New photos are published after manual review."
+    "La raison est obligatoire" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A reason is required"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Les nouvelles photos sont publiées après validation manuelle."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La raison est obligatoire"
           }
         }
       }
     },
-    "Limite atteinte": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limit reached"
+    "Laisse le repère sur la boîte et envoie. Si elle est ailleurs, déplace la carte." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave the pin on the box and send. If it's somewhere else, move the map."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Limite atteinte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laisse le repère sur la boîte et envoie. Si elle est ailleurs, déplace la carte."
           }
         }
       }
     },
-    "Liste": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "List"
+    "Laisser un avis sur l'App Store" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave a review on the App Store"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liste"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laisser un avis sur l'App Store"
           }
         }
       }
     },
-    "Localisation": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location"
+    "Le service de localisation n'est pas encore disponible." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The location service isn't available yet."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Localisation"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le service de localisation n'est pas encore disponible."
           }
         }
       }
     },
-    "Localisation en cours…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locating…"
+    "Les nouvelles photos sont publiées après validation manuelle." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New photos are published after manual review."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Localisation en cours…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les nouvelles photos sont publiées après validation manuelle."
           }
         }
       }
     },
-    "Malik Karaoui": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Malik Karaoui"
+    "Limite atteinte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limit reached"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Malik Karaoui"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limite atteinte"
           }
         }
       }
     },
-    "Mauvais": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Poor"
+    "Liste" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mauvais"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste"
           }
         }
       }
     },
-    "Maximum %@ photos atteint": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum %@ photos reached"
+    "Localisation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localisation"
+          }
+        }
+      }
+    },
+    "Localisation en cours…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locating…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localisation en cours…"
+          }
+        }
+      }
+    },
+    "Localisation…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locating…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localisation…"
+          }
+        }
+      }
+    },
+    "Malik Karaoui" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Malik Karaoui"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Malik Karaoui"
+          }
+        }
+      }
+    },
+    "Mauvais" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauvais"
+          }
+        }
+      }
+    },
+    "Maximum %@ photos atteint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum %@ photos reached"
+          }
+        }
+      }
+    },
+    "Maximum %lld photos atteint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum %lld photos reached"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum %lld photos atteint"
+          }
+        }
+      }
+    },
+    "Maximum %lld photos par boîte." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum %lld photos per box."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum %lld photos par boîte."
+          }
+        }
+      }
+    },
+    "Merci !" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci !"
+          }
+        }
+      }
+    },
+    "Merci ! Ton avis sera publié après validation par un administrateur." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks! Your review will be published after moderation."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci ! Ton avis sera publié après validation par un administrateur."
+          }
+        }
+      }
+    },
+    "Merci. Ta demande sera examinée par un administrateur avant toute action." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thanks. Your request will be reviewed by an administrator before any action is taken."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merci. Ta demande sera examinée par un administrateur avant toute action."
+          }
+        }
+      }
+    },
+    "Mes demandes de suppression" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My removal requests"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes demandes de suppression"
+          }
+        }
+      }
+    },
+    "Mes soumissions" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My submissions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mes soumissions"
+          }
+        }
+      }
+    },
+    "Mettre à jour" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour"
+          }
+        }
+      }
+    },
+    "miles" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "miles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "miles"
+          }
+        }
+      }
+    },
+    "Mise à jour nécessaire" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update required"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour nécessaire"
           }
         }
       }
     },
-    "Maximum %lld photos atteint": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum %lld photos reached"
+    "Motif : %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reason: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum %lld photos atteint"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Motif : %@"
           }
         }
       }
     },
-    "Maximum %lld photos par boîte.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum %lld photos per box."
+    "Moyen" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fair"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Maximum %lld photos par boîte."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyen"
           }
         }
       }
     },
-    "Merci !": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thanks!"
+    "Nombre estimé de livres" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimated book count"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merci !"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre estimé de livres"
           }
         }
       }
     },
-    "Merci ! Ton avis sera publié après validation par un administrateur.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thanks! Your review will be published after moderation."
+    "Non configurées" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not configured"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merci ! Ton avis sera publié après validation par un administrateur."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non configurées"
           }
         }
       }
     },
-    "Merci. Ta demande sera examinée par un administrateur avant toute action.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Thanks. Your request will be reviewed by an administrator before any action is taken."
+    "Noter l'application" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate the app"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Merci. Ta demande sera examinée par un administrateur avant toute action."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noter l'application"
           }
         }
       }
     },
-    "Mes demandes de suppression": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My removal requests"
+    "notification bloquée : boîte %lld, anti-répétition 30 j" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "notification blocked: box %lld, 30-day repeat guard"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mes demandes de suppression"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "notification bloquée : boîte %lld, anti-répétition 30 j"
           }
         }
       }
     },
-    "Mes soumissions": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My submissions"
+    "notification envoyée : boîte %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "notification sent: box %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mes soumissions"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "notification envoyée : boîte %lld"
           }
         }
       }
     },
-    "Mettre à jour": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Update"
+    "Notifications" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mettre à jour"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications"
           }
         }
       }
     },
-    "miles": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "miles"
+    "Nouvelle boîte" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New box"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "miles"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle boîte"
           }
         }
       }
     },
-    "Mise à jour nécessaire": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Update required"
+    "OK" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mise à jour nécessaire"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
     },
-    "Motif : %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reason: %@"
+    "Oui, elle est bien ici" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes, it's right here"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Motif : %@"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui, elle est bien ici"
           }
         }
       }
     },
-    "Moyen": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fair"
+    "Ouvrir dans Plans" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open in Maps"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moyen"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir dans Plans"
           }
         }
       }
     },
-    "Nombre estimé de livres": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Estimated book count"
+    "Ouvrir les Réglages" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nombre estimé de livres"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir les Réglages"
           }
         }
       }
     },
-    "Non configurées": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not configured"
+    "Partager" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non configurées"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager"
           }
         }
       }
     },
-    "Noter l'application": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rate the app"
+    "Partager l'application" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share the app"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Noter l'application"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager l'application"
           }
         }
       }
     },
-    "Notifications": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notifications"
+    "Patiente, le GPS affine ta position (50 m ou mieux)…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hang on, GPS is refining your position (50 m or better)…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Notifications"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patiente, le GPS affine ta position (50 m ou mieux)…"
           }
         }
       }
     },
-    "Nouvelle boîte": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "New box"
+    "Patiente, le GPS affine ta position…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hang on, GPS is refining your location…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nouvelle boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Patiente, le GPS affine ta position…"
           }
         }
       }
     },
-    "OK": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+    "Photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OK"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo"
           }
         }
       }
     },
-    "Ouvrir dans Plans": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open in Maps"
+    "Photo soumise !" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo submitted!"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvrir dans Plans"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo soumise !"
           }
         }
       }
     },
-    "Ouvrir les Réglages": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open Settings"
+    "Plus tard" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ouvrir les Réglages"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus tard"
           }
         }
       }
     },
-    "Partager": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share"
+    "Position introuvable. Active la localisation pour proposer une position." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location unavailable. Turn on location to suggest a position."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position introuvable. Active la localisation pour proposer une position."
           }
         }
       }
     },
-    "Partager l'application": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Share the app"
+    "Position introuvable. Activez la localisation pour ajouter une photo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location unavailable. Enable location to add a photo."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Partager l'application"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position introuvable. Activez la localisation pour ajouter une photo."
           }
         }
       }
     },
-    "Patiente, le GPS affine ta position (50 m ou mieux)…": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hang on, GPS is refining your position (50 m or better)…"
+    "Position introuvable. Activez la localisation pour pouvoir noter cette boîte." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location unavailable. Enable location to review this box."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patiente, le GPS affine ta position (50 m ou mieux)…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position introuvable. Activez la localisation pour pouvoir noter cette boîte."
           }
         }
       }
     },
-    "Patiente, le GPS affine ta position…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hang on, GPS is refining your location…"
+    "Position non disponible" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Location unavailable"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Patiente, le GPS affine ta position…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position non disponible"
           }
         }
       }
     },
-    "Photo": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photo"
+    "Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To be alerted even when the app is closed, allow “Always” in iOS Settings."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS."
           }
         }
       }
     },
-    "Photo soumise !": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photo submitted!"
+    "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To get alerted near a box, even when the app is closed, choose Location › Always."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Photo soumise !"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours."
           }
         }
       }
     },
-    "Plus tard": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Later"
+    "Précision : ± %.0f m" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accuracy: ± %.0f m"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plus tard"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précision : ± %.0f m"
           }
         }
       }
     },
-    "Position introuvable. Active la localisation pour proposer une position.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location unavailable. Turn on location to suggest a position."
+    "Précision : inconnue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accuracy: unknown"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position introuvable. Active la localisation pour proposer une position."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précision : inconnue"
           }
         }
       }
     },
-    "Position introuvable. Activez la localisation pour ajouter une photo.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location unavailable. Enable location to add a photo."
+    "Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accuracy too low (over 50 m): wait for a better GPS signal, then try again."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position introuvable. Activez la localisation pour ajouter une photo."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie."
           }
         }
       }
     },
-    "Position introuvable. Activez la localisation pour pouvoir noter cette boîte.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Location unavailable. Enable location to review this box."
+    "Prendre une photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take a photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Position introuvable. Activez la localisation pour pouvoir noter cette boîte."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prendre une photo"
           }
         }
       }
     },
-    "Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To be alerted even when the app is closed, allow “Always” in iOS Settings."
+    "Prends-la sur place. Aucune personne sur la photo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Take it on site. No people in the photo."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prends-la sur place. Aucune personne sur la photo."
           }
         }
       }
     },
-    "Précision : ± %.0f m": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accuracy: ± %.0f m"
+    "Proposition refusée : elle est trop loin de la boîte." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proposal refused: it's too far from the box."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Précision : ± %.0f m"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proposition refusée : elle est trop loin de la boîte."
           }
         }
       }
     },
-    "Précision : inconnue": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accuracy: unknown"
+    "Provisoires" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provisional"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Précision : inconnue"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provisoires"
           }
         }
       }
     },
-    "Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Accuracy too low (over 50 m): wait for a better GPS signal, then try again."
+    "Recommandé — inclut ta position GPS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommended — includes your GPS position"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommandé — inclut ta position GPS"
           }
         }
       }
     },
-    "Prendre une photo": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Take a photo"
+    "Réessayer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prendre une photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }
     },
-    "Prends-la sur place. Aucune personne sur la photo.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Take it on site. No people in the photo."
+    "Refusée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejected"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Prends-la sur place. Aucune personne sur la photo."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refusée"
           }
         }
       }
     },
-    "Provisoires": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Provisional"
+    "Refusées" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denied"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Provisoires"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refusées"
           }
         }
       }
     },
-    "Recommandé — inclut ta position GPS": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recommended — includes your GPS position"
+    "régions enregistrées : %lld" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "regions registered: %lld"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Recommandé — inclut ta position GPS"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "régions enregistrées : %lld"
           }
         }
       }
     },
-    "Réessayer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry"
+    "Réglages" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réessayer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages"
           }
         }
       }
     },
-    "Refusée": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rejected"
+    "Replacer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reposition"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refusée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replacer"
           }
         }
       }
     },
-    "Refusées": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Denied"
+    "Réseau: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network: %@"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Refusées"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réseau: %@"
           }
         }
       }
     },
-    "Réglages": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Settings"
+    "Sans données de localisation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without location data"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Réglages"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans données de localisation"
           }
         }
       }
     },
-    "Replacer": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reposition"
+    "Sans photo" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Replacer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sans photo"
           }
         }
       }
     },
-    "Sans données de localisation": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Without location data"
+    "share_app_text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discover Boîtes à Livres 📚 — the free app to find book boxes near you!\nAvailable on iOS: https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sans données de localisation"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Découvre Boîtes à Livres 📚 — l'app gratuite pour trouver les boîtes à livres près de chez toi !\nDisponible sur iOS : https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762"
           }
         }
       }
     },
-    "Sans photo": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Without photo"
+    "Signaler une suppression" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report removal"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sans photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signaler une suppression"
           }
         }
       }
     },
-    "share_app_text": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Discover Boîtes à Livres 📚 — the free app to find book boxes near you!\nAvailable on iOS: https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762"
+    "Sombre" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Découvre Boîtes à Livres 📚 — l'app gratuite pour trouver les boîtes à livres près de chez toi !\nDisponible sur iOS : https://apps.apple.com/fr/app/boîtes-à-livres/id6768351762"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sombre"
           }
         }
       }
     },
-    "Signaler une suppression": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Report removal"
+    "Soumettre la boîte" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Submit the box"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Signaler une suppression"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soumettre la boîte"
           }
         }
       }
     },
-    "Sombre": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Dark"
+    "Statut" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Sombre"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statut"
           }
         }
       }
     },
-    "Statut": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Status"
+    "Supprimée" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removed"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Statut"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimée"
           }
         }
       }
     },
-    "Supprimée": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Removed"
+    "Supprimer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimée"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
           }
         }
       }
     },
-    "Supprimer": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Delete"
+    "Ta proposition sera vérifiée par un administrateur." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your suggestion will be checked by an administrator."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Supprimer"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta proposition sera vérifiée par un administrateur."
           }
         }
       }
     },
-    "Ta proposition sera vérifiée par un administrateur.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your suggestion will be checked by an administrator."
+    "Taille du texte" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text Size"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ta proposition sera vérifiée par un administrateur."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille du texte"
           }
         }
       }
     },
-    "Taille du texte": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Text Size"
+    "Toutes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Taille du texte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes"
           }
         }
       }
     },
-    "Toutes": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "All"
+    "Trop loin pour ajouter une photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too far to add a photo"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toutes"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trop loin pour ajouter une photo"
           }
         }
       }
     },
-    "Trop loin pour ajouter une photo": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Too far to add a photo"
+    "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too far to review — you're %@ from the box. Get within 100 m."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trop loin pour ajouter une photo"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m."
           }
         }
       }
     },
-    "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Too far to review — you're %@ from the box. Get within 100 m."
+    "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You already have a pending request for this box. Wait for the administrator's decision."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Trop loin pour noter — vous êtes à %@ de la boîte. Approchez-vous à moins de 100 m."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur."
           }
         }
       }
     },
-    "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You already have a pending request for this box. Wait for the administrator's decision."
+    "Tu as déjà une proposition en attente pour cette boîte." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You already have a pending proposal for this box."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu as déjà une proposition en attente pour cette boîte."
           }
         }
       }
     },
-    "Tu dois être à moins de 50 m du point proposé.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You must be within 50 m of the proposed point."
+    "Tu dois être à moins de 50 m du point proposé." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You must be within 50 m of the proposed point."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tu dois être à moins de 50 m du point proposé."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu dois être à moins de 50 m du point proposé."
           }
         }
       }
     },
-    "Tu ne peux pas déplacer la boîte de plus de 100 m.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You can't move the box more than 100 m."
+    "Tu ne peux pas déplacer la boîte de plus de 100 m." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can't move the box more than 100 m."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tu ne peux pas déplacer la boîte de plus de 100 m."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu ne peux pas déplacer la boîte de plus de 100 m."
           }
         }
       }
     },
-    "Un rappel apparaît quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A reminder appears when you pass within 100 m of a box. Your location stays on your phone."
+    "Un rappel apparaît quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A reminder appears when you pass within 100 m of a box. Your location stays on your phone."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Un rappel apparaît quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un rappel apparaît quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone."
           }
         }
       }
     },
-    "Une application proposée par": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "An app by"
+    "Une application proposée par" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An app by"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une application proposée par"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une application proposée par"
           }
         }
       }
     },
-    "Une erreur est survenue. Réessaie plus tard.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Something went wrong. Try again later."
+    "Une erreur est survenue. Réessaie plus tard." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong. Try again later."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une erreur est survenue. Réessaie plus tard."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur est survenue. Réessaie plus tard."
           }
         }
       }
     },
-    "Une nouvelle version de Boîtes à Livres est disponible. Mets à jour l'app pour continuer.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "A new version of Boîtes à Livres is available. Update the app to continue."
+    "Une nouvelle version de Boîtes à Livres est disponible. Mets à jour l'app pour continuer." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A new version of Boîtes à Livres is available. Update the app to continue."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Une nouvelle version de Boîtes à Livres est disponible. Mets à jour l'app pour continuer."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une nouvelle version de Boîtes à Livres est disponible. Mets à jour l'app pour continuer."
           }
         }
       }
     },
-    "Unités": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Units"
+    "Unités" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Units"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unités"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unités"
           }
         }
       }
     },
-    "Unités de distance": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Distance units"
+    "Unités de distance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Distance units"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unités de distance"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unités de distance"
           }
         }
       }
     },
-    "Version": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+    "Version" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Version"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         }
       }
     },
-    "Ville": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "City"
+    "Ville" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "City"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ville"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ville"
           }
         }
       }
     },
-    "Voir le détail": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "See details"
+    "Voir le détail" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See details"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voir le détail"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir le détail"
           }
         }
       }
     },
-    "Votre demande est en attente de validation.\nVous recevrez une notification à la décision.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your request is awaiting review.\nYou'll get a notification when it's decided."
+    "Votre demande est en attente de validation.\nVous recevrez une notification à la décision." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your request is awaiting review.\nYou'll get a notification when it's decided."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Votre demande est en attente de validation.\nVous recevrez une notification à la décision."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre demande est en attente de validation.\nVous recevrez une notification à la décision."
           }
         }
       }
     },
-    "Votre nom (facultatif)": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your name (optional)"
+    "Votre nom (facultatif)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your name (optional)"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Votre nom (facultatif)"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre nom (facultatif)"
           }
         }
       }
     },
-    "Votre photo est en attente de validation.\nVous recevrez une notification à la décision.": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your photo is awaiting review.\nYou'll get a notification when it's decided."
+    "Votre photo est en attente de validation.\nVous recevrez une notification à la décision." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your photo is awaiting review.\nYou'll get a notification when it's decided."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Votre photo est en attente de validation.\nVous recevrez une notification à la décision."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre photo est en attente de validation.\nVous recevrez une notification à la décision."
           }
         }
       }
     },
-    "Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your submission will be reviewed by the team, and you'll get a notification of the decision."
+    "Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your submission will be reviewed by the team, and you'll get a notification of the decision."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision."
           }
         }
       }
     },
-    "Vous avez déjà laissé un avis cette semaine sur cette boîte": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You already reviewed this box this week"
+    "Vous avez déjà laissé un avis cette semaine sur cette boîte" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You already reviewed this box this week"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous avez déjà laissé un avis cette semaine sur cette boîte"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez déjà laissé un avis cette semaine sur cette boîte"
           }
         }
       }
     },
-    "Vous devez être à moins de 100 m de la boîte pour la noter.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You must be within 100 m of the box to leave a review."
+    "Vous devez être à moins de 100 m de la boîte pour la noter." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You must be within 100 m of the box to leave a review."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous devez être à moins de 100 m de la boîte pour la noter."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous devez être à moins de 100 m de la boîte pour la noter."
           }
         }
       }
     },
-    "Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo.": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You're %@ away. Get within 100 m to add a photo."
+    "Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're %@ away. Get within 100 m to add a photo."
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo."
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous êtes à %@. Approchez-vous à moins de 100 m pour ajouter une photo."
           }
         }
       }
     },
-    "Vous êtes à %d m de la boîte ✓": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You're %d m from the box ✓"
+    "Vous êtes à %d m de la boîte ✓" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're %d m from the box ✓"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Vous êtes à %d m de la boîte ✓"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous êtes à %d m de la boîte ✓"
           }
         }
       }
     },
-    "WhatsApp, SMS, e-mail…": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "WhatsApp, SMS, email…"
+    "WhatsApp, SMS, e-mail…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WhatsApp, SMS, email…"
           }
         },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "WhatsApp, SMS, e-mail…"
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WhatsApp, SMS, e-mail…"
           }
         }
       }
     }
   },
-  "version": "1.0"
+  "version" : "1.0"
 }
