@@ -27,7 +27,9 @@ Données issues de [boites-a-livres.fr](https://www.boites-a-livres.fr).
 ## Captures
 
 <p align="center">
-  <img src="docs/captures/01-carte.png" alt="Écran carte de Boîtes à Livres" width="260">
+  <img src="docs/captures/01-carte.png" alt="Carte des boîtes à livres" width="260">
+  &nbsp;
+  <img src="docs/captures/02-fiche.png" alt="Fiche d'une boîte" width="260">
 </p>
 
 ## Stack technique
