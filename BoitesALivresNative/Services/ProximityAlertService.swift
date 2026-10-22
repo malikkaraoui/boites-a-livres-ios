@@ -184,7 +184,7 @@ enum ProximityReminder {
             return "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours."
         }
         if manager.accuracyAuthorization == .reducedAccuracy {
-            return "Active Position exacte : le parcours de localisation exige une précision de 10 m."
+            return "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus."
         }
         return nil
     }

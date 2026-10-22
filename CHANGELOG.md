@@ -11,6 +11,12 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 20
+
+- Localisation : « Oui, elle est bien ici » est possible à 50 m de la boîte au plus, avec une précision GPS de 50 m ou mieux (plus besoin de 10 m).
+- Localisation : une boîte ne se déplace que si le repère s'écarte de plus de max(20 m, 2 × précision), et de 100 m au plus. En dessous, un message indique l'écart et la marge du GPS, et rien ne change en base (#42).
+- Localisation : textes d'aide mis à jour, message « Précision entre 10 et 50 m » retiré.
+
 ### Build 19
 
 - Ajout de boîte : le repère est une épingle fixe au centre de la carte, on glisse la carte pour placer

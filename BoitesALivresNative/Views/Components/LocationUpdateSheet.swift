@@ -35,13 +35,21 @@ struct LocationUpdateSheet: View {
 
     private var gps: CLLocation? { locationService.currentLocation }
     private var accuracy: Double { gps?.horizontalAccuracy ?? -1 }
-    // Repère déplacé de plus de 1 m = nouvelle position (move) ; sinon confirmation (confirm)
-    private var pinMoved: Bool { (pinDistance ?? 0) >= 1 }
-    private var kind: Kind { pinMoved ? .move : .confirm }
-    // Confirmation : GPS à 10 m ou mieux. Repère déplacé : jusqu'à 50 m (F01 M0023)
-    private var accuracyOK: Bool {
-        kind == .move ? LocationRules.canSendManual(accuracy: accuracy) : LocationRules.canSend(accuracy: accuracy)
+    // Décision unique (F01 M0042) : confirmer, déplacer, ou bloquer avec sa raison
+    private var action: LocationRules.Action {
+        LocationRules.locationAction(
+            pinDistance: pinDistance ?? 0,
+            accuracy: accuracy,
+            userDistance: gps.map { $0.distance(from: boxLocation) }
+        )
     }
+    private var kind: Kind {
+        if case .move = action { return .move }
+        return .confirm
+    }
+    private var isConfirm: Bool { action == .confirm }
+    // Précision jusqu'à 50 m, pour la confirmation comme pour le déplacement (F01 M0042)
+    private var accuracyOK: Bool { LocationRules.canSendManual(accuracy: accuracy) }
     private var gpsOK: Bool { gps != nil && accuracyOK }
     private var boxLocation: CLLocation { CLLocation(latitude: box.lat, longitude: box.lng) }
 
@@ -58,10 +66,8 @@ struct LocationUpdateSheet: View {
     }
 
     private var canSubmit: Bool {
-        guard phase == .editing, gpsOK, nearEnough else { return false }
-        if kind == .move {
-            guard let d = pinDistance, d <= LocationRules.moveMaxMeters else { return false }
-        }
+        guard phase == .editing else { return false }
+        if case .blocked = action { return false }
         return true
     }
 
@@ -110,10 +116,8 @@ struct LocationUpdateSheet: View {
 
         precisionRow
 
-        if gps != nil && !LocationRules.canSendManual(accuracy: accuracy) {
+        if gps != nil && !accuracyOK {
             notice("Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.", color: .orange)
-        } else if !pinMoved && gps != nil && !LocationRules.canSend(accuracy: accuracy) {
-            notice("Précision entre 10 et 50 m : déplace la carte pour placer le repère sur la boîte, puis envoie.", color: .orange)
         }
 
         mapSection
@@ -172,7 +176,7 @@ struct LocationUpdateSheet: View {
         .multilineTextAlignment(.center)
     }
 
-    // Indicateur 5 barres et précision ; envoi direct à 10 m ou mieux, repère manuel jusqu'à 50 m
+    // Indicateur 5 barres et précision ; envoi possible jusqu'à 50 m (source gps seulement à 10 m ou mieux)
     private var precisionRow: some View {
         let bars = gps == nil ? 0 : LocationRules.precisionBars(accuracy: accuracy)
         return VStack(alignment: .leading, spacing: 6) {
@@ -235,6 +239,11 @@ struct LocationUpdateSheet: View {
             if let d = pinDistance, d > LocationRules.moveMaxMeters {
                 notice("Tu ne peux pas déplacer la boîte de plus de 100 m.", color: .red)
             }
+            // Repère bougé mais sous le seuil : la boîte ne bouge pas (F01 M0042)
+            if isConfirm, let d = pinDistance, d >= 1 {
+                let threshold = LocationRules.moveMinMeters(accuracy: accuracy)
+                note("Écart de \(Int(d.rounded())) m : dans la marge du GPS (moins de \(Int(threshold.rounded())) m), la boîte reste à sa place.")
+            }
             Button("Centrer sur ma position") { centerOnGPS() }
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundStyle(green)
@@ -249,7 +258,7 @@ struct LocationUpdateSheet: View {
                 if phase == .sending {
                     ProgressView().tint(.white)
                 } else {
-                    Text("Envoyer ma proposition")
+                    Text(kind == .move ? "Envoyer le nouvel emplacement" : "Oui, elle est bien ici")
                         .font(.system(size: 16, weight: .semibold))
                 }
             }
@@ -304,11 +313,12 @@ struct LocationUpdateSheet: View {
         do {
             switch kind {
             case .confirm:
+                // Contrainte serveur location_updates_accuracy_ck : « gps » seulement si précision ≤ 10 m
                 try await SupabaseService.shared.insertLocationUpdate(
                     boxId: box.id, kind: kind.rawValue,
                     lat: gps.coordinate.latitude, lng: gps.coordinate.longitude,
                     address: nil, city: nil, postalCode: nil, department: nil,
-                    source: "gps", accuracyM: accuracy, deviceToken: token
+                    source: LocationRules.source(accuracy: accuracy, pinIsGPS: true), accuracyM: accuracy, deviceToken: token
                 )
             case .move:
                 let pin = pinCenter ?? gps.coordinate

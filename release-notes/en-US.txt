@@ -1,4 +1,4 @@
-Version 1.3.0 (build 19)
+Version 1.3.0 (build 20)
 
 Required update: if your version is too old, a screen asks you to update the app before continuing.
 

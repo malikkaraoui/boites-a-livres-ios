@@ -221,6 +221,32 @@ enum LocationRules {
         accuracy >= 0 && accuracy <= manualMaxAccuracyMeters
     }
 
+    // Seuil de déplacement : le repère doit s'écarter de plus de max(20 m, 2 × précision) (F01 M0042)
+    static let moveFloorMeters: Double = 20
+    static func moveMinMeters(accuracy: Double) -> Double {
+        max(moveFloorMeters, 2 * accuracy)
+    }
+
+    // Décision de l'écran Localisation (F01 M0042) : confirmer, déplacer, ou bloquer avec sa raison
+    enum Block: Equatable {
+        case noPosition   // téléphone sans position
+        case tooFar       // téléphone à plus de 50 m de la boîte
+        case badAccuracy  // précision inconnue ou au-delà de 50 m
+        case moveTooFar   // repère à plus de 100 m de la boîte
+    }
+    enum Action: Equatable {
+        case confirm
+        case move
+        case blocked(Block)
+    }
+    static func locationAction(pinDistance: Double, accuracy: Double, userDistance: Double?) -> Action {
+        guard let userDistance else { return .blocked(.noPosition) }
+        guard userDistance <= presenceMeters else { return .blocked(.tooFar) }
+        guard canSendManual(accuracy: accuracy) else { return .blocked(.badAccuracy) }
+        guard pinDistance <= moveMaxMeters else { return .blocked(.moveTooFar) }
+        return pinDistance > moveMinMeters(accuracy: accuracy) ? .move : .confirm
+    }
+
     // Position « fraîche » : postérieure à l'ouverture de l'étape position, précision valide.
     // Le cache de CLLocationManager et le rejeu de @Published sont plus anciens : jamais pris pour le premier fix (F01 M0040, R032)
     static func isFresh(timestamp: Date, openedAt: Date, accuracy: Double) -> Bool {
