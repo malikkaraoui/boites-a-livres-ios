@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 26
+
+- Réglages : le bouton « Vider le cache » et son alerte sont retirés. Aucun changement de données ni d'envoi.
+- Mode sombre : les champs des formulaires (nombre de livres, nom, commentaire de l'avis ; motif de la demande de suppression) restent visibles comme en mode clair.
+
 ### Build 25
 
 - Cadre orange qui clignote : il épouse maintenant exactement le texte ou la zone qu'il signale (bandeau « Trop loin pour noter », message de distance, champ « Motif » de la demande de suppression), sans déborder dans les marges. Aucun changement d'envoi ni de données.

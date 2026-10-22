@@ -348,7 +348,7 @@ struct ReviewSubmitSheet: View {
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
-                .background(Color(.systemGray6))
+                .background(Color.formField)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
@@ -362,7 +362,7 @@ struct ReviewSubmitSheet: View {
             TextField("Anonyme", text: $authorName)
                 .textInputAutocapitalization(.words)
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Color.formField)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .onChange(of: authorName) { _, new in
                     if new.count > maxName { authorName = String(new.prefix(maxName)) }
@@ -381,7 +381,7 @@ struct ReviewSubmitSheet: View {
                     .font(.system(size: 15))
                     .frame(height: 120)
                     .padding(10)
-                    .background(Color(.systemGray6))
+                    .background(Color.formField)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)

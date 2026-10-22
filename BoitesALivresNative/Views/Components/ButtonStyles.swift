@@ -95,3 +95,11 @@ extension View {
         modifier(MissingHighlight(tick: tick, cornerRadius: cornerRadius))
     }
 }
+
+extension Color {
+    // Fond des champs de saisie des feuilles : identique à systemGray6 en clair, éclairci en sombre
+    // pour rester visible sur la feuille (F01 M0049, build 26)
+    static let formField = Color(uiColor: UIColor { trait in
+        trait.userInterfaceStyle == .dark ? .tertiarySystemBackground : .systemGray6
+    })
+}

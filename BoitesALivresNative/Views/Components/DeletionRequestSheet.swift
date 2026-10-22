@@ -46,7 +46,7 @@ struct DeletionRequestSheet: View {
                             .font(.system(size: 15))
                             .frame(height: 100)
                             .padding(10)
-                            .background(Color(.systemGray6))
+                            .background(Color.formField)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
