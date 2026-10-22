@@ -120,10 +120,15 @@ struct DeletionRequestSheet: View {
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
         .onAppear { focused = true }
-        .alert("Demande envoyée", isPresented: $showSuccess) {
-            Button("OK") { dismiss() }
-        } message: {
-            Text("Merci. Ta demande sera examinée par un administrateur avant toute action.")
+        // Succès d'envoi en pleine page, comme après une photo (F01 M0046)
+        .overlay {
+            if showSuccess {
+                SubmissionSuccessView(
+                    title: "Demande envoyée",
+                    message: "Merci. Ta demande sera examinée par un administrateur avant toute action.",
+                    primaryAction: { dismiss() }
+                )
+            }
         }
     }
 

@@ -210,10 +210,15 @@ struct ReviewSubmitSheet: View {
         .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
-        .alert("Avis envoyé", isPresented: $showSuccess) {
-            Button("OK") { onSubmitted(); dismiss() }
-        } message: {
-            Text("Merci ! Ton avis sera publié après validation par un administrateur.")
+        // Succès d'envoi en pleine page, comme après une photo (F01 M0046)
+        .overlay {
+            if showSuccess {
+                SubmissionSuccessView(
+                    title: "Avis envoyé",
+                    message: "Merci ! Ton avis sera publié après validation par un administrateur.",
+                    primaryAction: { onSubmitted(); dismiss() }
+                )
+            }
         }
         .task {
             await refreshUserLocation()

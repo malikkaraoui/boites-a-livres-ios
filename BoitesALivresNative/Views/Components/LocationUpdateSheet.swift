@@ -149,18 +149,14 @@ struct LocationUpdateSheet: View {
     }
 
     // Écran « Merci ! » centré (F01 M0023, retour terrain 5) ; photo proposée après l'envoi (point 4)
+    // Action secondaire (photo) gardée au-dessus du bouton « Fermer » (F01 M0046)
     private var sentView: some View {
-        VStack(alignment: .center, spacing: 14) {
-            Spacer(minLength: 24)
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(green)
-            Text("Merci !")
-                .font(.system(size: 22, weight: .bold))
-            Text("Ta proposition sera vérifiée par un administrateur.")
-                .font(.system(size: 16))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+        SubmissionSuccessView(
+            icon: "checkmark.seal.fill",
+            title: "Merci !",
+            message: "Ta proposition sera vérifiée par un administrateur.",
+            primaryAction: { dismiss() }
+        ) {
             if let onAddPhoto {
                 if box.has_photo {
                     Button("Ajouter une photo") { onAddPhoto() }
@@ -181,13 +177,7 @@ struct LocationUpdateSheet: View {
                     .buttonStyle(ScaleButtonStyle())
                 }
             }
-            Button("Fermer") { dismiss() }
-                .buttonStyle(.bordered)
-                .tint(.secondary)
-            Spacer(minLength: 24)
         }
-        .frame(maxWidth: .infinity)
-        .multilineTextAlignment(.center)
     }
 
     // Indicateur 5 barres et précision ; envoi possible jusqu'à 50 m (source gps seulement à 10 m ou mieux)

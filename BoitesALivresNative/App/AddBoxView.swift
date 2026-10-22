@@ -368,30 +368,11 @@ struct AddBoxView: View {
     // MARK: Success
 
     private var successView: some View {
-        VStack(spacing: 20) {
-            Spacer()
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(green)
-            Text("Boîte soumise !")
-                .font(.system(size: 24, weight: .bold))
-            Text("Votre demande est en attente de validation.\nVous recevrez une notification à la décision.")
-                .font(.system(size: 15))
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
-            Button { lightHaptic(); dismiss() } label: {
-                Text("Fermer")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 40)
-                    .padding(.vertical, 14)
-                    .background(green)
-                    .clipShape(Capsule())
-            }
-            .buttonStyle(ScaleButtonStyle())
-            Spacer()
-        }
+        SubmissionSuccessView(
+            title: "Boîte soumise !",
+            message: "Votre demande est en attente de validation.\nVous recevrez une notification à la décision.",
+            primaryAction: { dismiss() }
+        )
     }
 
     private func fieldLabel(_ text: String) -> some View {
