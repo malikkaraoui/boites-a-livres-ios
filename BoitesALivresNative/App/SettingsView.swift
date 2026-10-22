@@ -217,7 +217,7 @@ struct SettingsView: View {
                     }
                 } label: {
                     Label(
-                        vm.notificationStatus == .denied ? "Ouvrir les Réglages" : "Activer les notifications",
+                        vm.notificationStatus == .denied ? String(localized: "Ouvrir les Réglages") : String(localized: "Activer les notifications"),
                         systemImage: "bell.badge"
                     )
                     .foregroundStyle(green)

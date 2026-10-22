@@ -10,9 +10,9 @@ enum SupabaseError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .httpError(let code, let msg): return "Erreur HTTP \(code): \(msg)"
-        case .decodingError(let e): return "Décodage échoué: \(e.localizedDescription)"
-        case .networkError(let e): return "Réseau: \(e.localizedDescription)"
+        case .httpError(let code, let msg): return String(localized: "Erreur HTTP \(code): \(msg)")
+        case .decodingError(let e): return String(localized: "Décodage échoué: \(e.localizedDescription)")
+        case .networkError(let e): return String(localized: "Réseau: \(e.localizedDescription)")
         }
     }
 }
@@ -94,7 +94,7 @@ actor SupabaseService {
             throw SupabaseError.httpError(http.statusCode, String(data: data, encoding: .utf8) ?? "")
         }
         let arr = try JSONDecoder().decode([BookBox].self, from: data)
-        guard let box = arr.first else { throw SupabaseError.httpError(404, "Boîte introuvable") }
+        guard let box = arr.first else { throw SupabaseError.httpError(404, String(localized: "Boîte introuvable")) }
         return box
     }
 

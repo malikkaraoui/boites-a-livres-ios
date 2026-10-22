@@ -432,7 +432,7 @@ struct ReviewSubmitSheet: View {
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
-                Text(submitting ? "Envoi…" : "Envoyer mon avis")
+                Text(submitting ? String(localized: "Envoi…") : String(localized: "Envoyer mon avis"))
                     .font(.system(size: 16, weight: .semibold))
             }
             .frame(maxWidth: .infinity)

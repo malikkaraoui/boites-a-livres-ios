@@ -86,7 +86,7 @@ struct AddBoxView: View {
                     } label: {
                         HStack {
                             if vm.isGeocoding { ProgressView().tint(.white) }
-                            Text(vm.isGeocoding ? "Localisation…" : "Confirmer la position →")
+                            Text(vm.isGeocoding ? String(localized: "Localisation…") : String(localized: "Confirmer la position →"))
                                 .font(.system(size: 16, weight: .bold))
                         }
                         .foregroundStyle(.white)
@@ -337,7 +337,7 @@ struct AddBoxView: View {
         } label: {
             HStack {
                 if vm.isSubmitting { ProgressView().tint(.white) }
-                Text(vm.isSubmitting ? "Envoi…" : "Soumettre la boîte")
+                Text(vm.isSubmitting ? String(localized: "Envoi…") : String(localized: "Soumettre la boîte"))
                     .font(.system(size: 16, weight: .bold))
             }
             .foregroundStyle(.white)
@@ -379,7 +379,7 @@ struct AddBoxView: View {
         )
     }
 
-    private func fieldLabel(_ text: String) -> some View {
+    private func fieldLabel(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 12, weight: .semibold))
             .foregroundStyle(.secondary)

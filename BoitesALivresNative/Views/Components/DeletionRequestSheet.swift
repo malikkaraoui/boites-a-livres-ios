@@ -141,7 +141,7 @@ struct DeletionRequestSheet: View {
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
-                Text(submitting ? "Envoi…" : "Envoyer la demande")
+                Text(submitting ? String(localized: "Envoi…") : String(localized: "Envoyer la demande"))
                     .font(.system(size: 16, weight: .semibold))
             }
             .frame(maxWidth: .infinity)

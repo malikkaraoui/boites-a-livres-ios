@@ -72,7 +72,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         stopBoxRegions()
         let chosen = Array(picks.prefix(LocationRules.regionLimit))
         handledInside.formIntersection(chosen.map(\.id))
-        ProximityJournal.add("régions enregistrées : \(chosen.count)")
+        ProximityJournal.add(String(localized: "régions enregistrées : \(chosen.count)"))
         for box in chosen {
             let region = CLCircularRegion(center: box.coordinate, radius: LocationRules.alertRadiusMeters,
                                           identifier: "\(Self.regionPrefix)\(box.id)")
@@ -86,17 +86,17 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     // Une seule notification par présence ; anti-répétition 30 j ; tout est journalisé localement.
     // Une alerte affichée compte comme vue : la date est posée à l'envoi, sans attendre une réponse (F01 M0024)
     private func notifyIfAllowed(boxId: Int, origin: String) {
-        ProximityJournal.add("dans le rayon de la boîte \(boxId) (\(origin))")
+        ProximityJournal.add(String(localized: "dans le rayon de la boîte \(boxId) (\(origin))"))
         guard !handledInside.contains(boxId) else { return }
         handledInside.insert(boxId)
         let blocked = LocationRules.isBlocked(lastPrompt: LocationPromptLog.all()[boxId], now: Date())
         guard !blocked else {
-            ProximityJournal.add("notification bloquée : boîte \(boxId), anti-répétition 30 j")
+            ProximityJournal.add(String(localized: "notification bloquée : boîte \(boxId), anti-répétition 30 j"))
             return
         }
-        ProximityJournal.add("notification envoyée : boîte \(boxId)")
+        ProximityJournal.add(String(localized: "notification envoyée : boîte \(boxId)"))
         LocationPromptLog.mark(boxId: boxId)
-        ProximityJournal.add("anti-répétition posée : boîte \(boxId), 30 j")
+        ProximityJournal.add(String(localized: "anti-répétition posée : boîte \(boxId), 30 j"))
         scheduleNotification(boxId: boxId)
     }
 
@@ -134,7 +134,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     // Entrée dans une boîte : rappel local, sauf anti-répétition 30 jours
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         guard isEnabled, let boxId = boxId(of: region) else { return }
-        notifyIfAllowed(boxId: boxId, origin: "entrée")
+        notifyIfAllowed(boxId: boxId, origin: String(localized: "entrée"))
     }
 
     // Sortie : la présence est close, la prochaine entrée peut de nouveau notifier (F01 M0023, revue R017)
@@ -147,7 +147,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         guard isEnabled, let boxId = boxId(of: region) else { return }
         if state == .inside {
-            notifyIfAllowed(boxId: boxId, origin: "état au démarrage")
+            notifyIfAllowed(boxId: boxId, origin: String(localized: "état au démarrage"))
         } else if state == .outside {
             handledInside.remove(boxId)
         }
@@ -181,10 +181,10 @@ enum ProximityReminder {
         if now.timeIntervalSince1970 < UserDefaults.standard.double(forKey: snoozeKey) { return nil }
         let manager = CLLocationManager()
         if manager.authorizationStatus != .authorizedAlways {
-            return "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours."
+            return String(localized: "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours.")
         }
         if manager.accuracyAuthorization == .reducedAccuracy {
-            return "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus."
+            return String(localized: "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus.")
         }
         return nil
     }
