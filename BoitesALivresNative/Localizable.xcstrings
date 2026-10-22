@@ -477,7 +477,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "repeat guard set: box %lld, 30 days"
+            "value" : "repeat guard set: box %@, 30 days"
           }
         },
         "fr" : {
@@ -1166,7 +1166,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "within range of box %lld (%@)"
+            "value" : "within range of box %@ (%@)"
           }
         },
         "fr" : {
@@ -2294,7 +2294,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification blocked: box %lld, 30-day repeat guard"
+            "value" : "notification blocked: box %@, 30-day repeat guard"
           }
         },
         "fr" : {
@@ -2311,7 +2311,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification sent: box %lld"
+            "value" : "notification sent: box %@"
           }
         },
         "fr" : {
