@@ -10,6 +10,7 @@ struct AddBoxView: View {
     @ObservedObject private var locationService = LocationService.shared
     @State private var showCamera = false
     @FocusState private var isNotesFocused: Bool
+    @State private var feedback = MissingFeedback<SubmitRequirements.AddBox>()
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private let notesLimit = 100
@@ -211,10 +212,17 @@ struct AddBoxView: View {
                             }
                             .buttonStyle(ScaleButtonStyle())
                         }
+                        if let hint = feedback.message(for: .photo) {
+                            Text(hint)
+                                .font(.system(size: 12, weight: .semibold))
+                                .foregroundStyle(.orange)
+                        }
                     }
                     .padding(16)
                     .background(Color(.secondarySystemBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .id("photo")
+                    .missingHighlight(tick: feedback.tick(for: .photo), cornerRadius: 14)
 
                     // Notes — 100 caractères, un seul saut de ligne d'affilée, hauteur fixe (F01 M0038, #38)
                     VStack(alignment: .leading, spacing: 8) {
@@ -270,15 +278,18 @@ struct AddBoxView: View {
 
                     // Masqué pendant la saisie de la note : il est alors collé au-dessus du clavier (M0044)
                     if !isNotesFocused {
-                        submitButton
+                        submitButton(proxy)
                     }
 
+                    // Présence (GPS, distance) : l'indication persistante clignote quand on touche le bouton (F01 M0045)
                     if let hint = vm.submitHint {
                         Text(hint)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(.orange)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 16)
+                            .id("submit")
+                            .missingHighlight(tick: feedback.tick(for: .gpsPrecision) + feedback.tick(for: .tooFar), cornerRadius: 8)
                     }
 
                     Text("Votre soumission sera examinée par l'équipe et vous recevrez une notification à la décision.")
@@ -293,7 +304,7 @@ struct AddBoxView: View {
             // Bouton d'envoi collé au-dessus du clavier pendant la saisie de la note (M0044)
             .safeAreaInset(edge: .bottom) {
                 if isNotesFocused {
-                    submitButton
+                    submitButton(proxy)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 8)
                         .background(Color(.systemBackground))
@@ -319,13 +330,10 @@ struct AddBoxView: View {
     }
 
     // Bouton « Soumettre la boîte », partagé entre sa place dans le formulaire et la barre au-dessus du clavier
-    private var submitButton: some View {
+    // Grisé mais touchable : toucher avec un manque défile, clignote et n'envoie rien (F01 M0045)
+    private func submitButton(_ proxy: ScrollViewProxy) -> some View {
         Button {
-            mediumHaptic()
-            Task {
-                let token = NotificationService.shared.getPushToken()
-                await vm.submit(deviceToken: token)
-            }
+            submitTapped(proxy)
         } label: {
             HStack {
                 if vm.isSubmitting { ProgressView().tint(.white) }
@@ -339,8 +347,22 @@ struct AddBoxView: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(ScaleButtonStyle())
-        .disabled(vm.isSubmitting || !vm.canSubmit)
         .opacity(vm.canSubmit ? 1 : 0.5)
+    }
+
+    private func submitTapped(_ proxy: ScrollViewProxy) {
+        guard !vm.isSubmitting else { return }
+        guard let first = vm.missingRequirements.first else {
+            mediumHaptic()
+            Task {
+                let token = NotificationService.shared.getPushToken()
+                await vm.submit(deviceToken: token)
+            }
+            return
+        }
+        errorHaptic()
+        withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
+        feedback.flash(first, message: first.hint)
     }
 
     // MARK: Success

@@ -27,6 +27,7 @@ struct LocationUpdateSheet: View {
     @State private var pinCenter: CLLocationCoordinate2D? = nil
     @State private var place = ProposedPlace()
     @State private var phase: Phase = .editing
+    @State private var feedback = MissingFeedback<SubmitRequirements.Location>()
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -65,23 +66,26 @@ struct LocationUpdateSheet: View {
         return CLLocation(latitude: pinCenter.latitude, longitude: pinCenter.longitude).distance(from: boxLocation)
     }
 
-    private var canSubmit: Bool {
-        guard phase == .editing else { return false }
-        if case .blocked = action { return false }
-        return true
+    // Source unique des manques (F01 M0045) : le blocage de la décision, rien d'autre
+    private var missingRequirements: [SubmitRequirements.Location] {
+        SubmitRequirements.location(action: action)
     }
+
+    private var canSubmit: Bool { phase == .editing && missingRequirements.isEmpty }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    if phase == .sent {
-                        sentView
-                    } else {
-                        editingView
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 18) {
+                        if phase == .sent {
+                            sentView
+                        } else {
+                            editingView(proxy)
+                        }
                     }
+                    .padding(20)
                 }
-                .padding(20)
             }
             .navigationTitle("Localisation")
             .navigationBarTitleDisplayMode(.inline)
@@ -104,21 +108,31 @@ struct LocationUpdateSheet: View {
     // MARK: - Écrans
 
     @ViewBuilder
-    private var editingView: some View {
+    private func editingView(_ proxy: ScrollViewProxy) -> some View {
         Text("La boîte est-elle bien ici ?")
             .font(.system(size: 20, weight: .bold))
 
-        if gps == nil {
-            notice("Position introuvable. Active la localisation pour proposer une position.", color: .orange)
-        } else if !nearEnough {
-            notice("Approche-toi à moins de 50 m de la boîte pour proposer une localisation.", color: .orange)
+        // Chaque blocage garde son message : le toucher du bouton grisé le fait clignoter (F01 M0045)
+        VStack(alignment: .leading, spacing: 0) {
+            if gps == nil {
+                notice("Position introuvable. Active la localisation pour proposer une position.", color: .orange)
+            } else if !nearEnough {
+                notice("Approche-toi à moins de 50 m de la boîte pour proposer une localisation.", color: .orange)
+            }
         }
+        .id("distance")
+        .missingHighlight(tick: feedback.tick(for: .distance), cornerRadius: 8)
 
         precisionRow
+            .id("precision")
 
-        if gps != nil && !accuracyOK {
-            notice("Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.", color: .orange)
+        VStack(alignment: .leading, spacing: 0) {
+            if gps != nil && !accuracyOK {
+                notice("Précision insuffisante (plus de 50 m) : attends un meilleur signal GPS, puis réessaie.", color: .orange)
+            }
         }
+        .id("precision-notice")
+        .missingHighlight(tick: feedback.tick(for: .precision), cornerRadius: 8)
 
         mapSection
 
@@ -131,7 +145,7 @@ struct LocationUpdateSheet: View {
         if case .failed(let message) = phase {
             notice(message, color: .red)
         }
-        submitButton
+        submitButton(proxy)
     }
 
     // Écran « Merci ! » centré (F01 M0023, retour terrain 5) ; photo proposée après l'envoi (point 4)
@@ -236,9 +250,13 @@ struct LocationUpdateSheet: View {
                 Text([address, place.postalCode, place.city].compactMap { $0 }.joined(separator: ", "))
                     .font(.system(size: 14))
             }
-            if let d = pinDistance, d > LocationRules.moveMaxMeters {
-                notice("Tu ne peux pas déplacer la boîte de plus de 100 m.", color: .red)
+            VStack(alignment: .leading, spacing: 0) {
+                if let d = pinDistance, d > LocationRules.moveMaxMeters {
+                    notice("Tu ne peux pas déplacer la boîte de plus de 100 m.", color: .red)
+                }
             }
+            .id("moveTooFar")
+            .missingHighlight(tick: feedback.tick(for: .moveTooFar), cornerRadius: 8)
             // Repère bougé mais sous le seuil : la boîte ne bouge pas (F01 M0042)
             if isConfirm, let d = pinDistance, d >= 1 {
                 let threshold = LocationRules.moveMinMeters(accuracy: accuracy)
@@ -250,9 +268,10 @@ struct LocationUpdateSheet: View {
         }
     }
 
-    private var submitButton: some View {
+    // Grisé mais touchable : toucher avec un blocage défile, fait clignoter le message et n'envoie rien (F01 M0045)
+    private func submitButton(_ proxy: ScrollViewProxy) -> some View {
         Button {
-            Task { await submit() }
+            Task { await submitTapped(proxy) }
         } label: {
             Group {
                 if phase == .sending {
@@ -269,10 +288,20 @@ struct LocationUpdateSheet: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(ScaleButtonStyle())
-        .disabled(!canSubmit)
     }
 
     // MARK: - Actions
+
+    private func submitTapped(_ proxy: ScrollViewProxy) async {
+        guard phase != .sending else { return }
+        guard let first = missingRequirements.first else {
+            await submit()
+            return
+        }
+        errorHaptic()
+        withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
+        feedback.flash(first, message: nil)
+    }
 
     // Départ : zoom sur la boîte, repère posé sur sa position actuelle (donc « non déplacé »)
     private func centerOnBox() {

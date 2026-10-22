@@ -119,18 +119,17 @@ final class AddBoxViewModel {
         return gps.distance(from: CLLocation(latitude: pinCoordinate.latitude, longitude: pinCoordinate.longitude))
     }
 
-    // Présence sur place : GPS à 10 m ou mieux et point à 50 m au plus (F01 M0023, #31)
-    var presenceOK: Bool { (presenceDistance ?? .infinity) <= LocationRules.presenceMeters }
+    // Source unique des manques, dans l'ordre de l'écran (F01 M0045) : photo obligatoire, puis présence
+    var missingRequirements: [SubmitRequirements.AddBox] {
+        SubmitRequirements.addBox(hasPhoto: selectedImage != nil,
+                                  distance: presenceDistance,
+                                  maxDistance: LocationRules.presenceMeters)
+    }
 
     // Photo obligatoire (prise sur place) + présence : sinon le bouton reste grisé
-    var canSubmit: Bool { selectedImage != nil && presenceOK }
+    var canSubmit: Bool { missingRequirements.isEmpty }
 
-    var submitHint: String? {
-        if selectedImage == nil { return "Ajoute une photo de la boîte" }
-        if presenceDistance == nil { return "Patiente, le GPS affine ta position (50 m ou mieux)…" }
-        if !presenceOK { return "Tu dois être à moins de 50 m du point proposé." }
-        return nil
-    }
+    var submitHint: String? { missingRequirements.first?.submitHint }
 
     func submit(deviceToken: String?) async {
         guard canSubmit else {

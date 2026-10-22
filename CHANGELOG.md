@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 22
+
+- Envoi grisé : toucher « Envoyer » quand il manque quelque chose ne envoie rien. L'écran défile jusqu'à ce qui manque (l'état de la boîte, le commentaire, la photo, la distance ou la précision), le fait clignoter, affiche un court message et vibre légèrement. Concerne l'avis, la demande de suppression, l'ajout de boîte et la localisation. « Réduire les animations » remplace le clignotement par un surlignage fixe.
+
 ### Build 21
 
 - Clavier : dans l'avis et la demande de suppression, le champ de texte reste entièrement visible quand on écrit, et « Envoyer » et « Annuler » restent collés au-dessus du clavier (#49).

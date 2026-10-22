@@ -110,6 +110,7 @@ struct ReviewSubmitSheet: View {
     @State private var locationError: String? = nil
     @FocusState private var commentFocused: Bool
     @FocusState private var bookCountFocused: Bool
+    @State private var feedback = MissingFeedback<SubmitRequirements.Review>()
 
     private let maxComment = 150
     private let maxName = 30
@@ -127,12 +128,16 @@ struct ReviewSubmitSheet: View {
         return d <= maxDistanceMeters
     }
 
-    private var canSubmit: Bool {
-        condition != nil
-        && !comment.trimmingCharacters(in: .whitespaces).isEmpty
-        && !submitting
-        && isWithinRange
+    // Source unique des manques (F01 M0045) ; canSubmit n'en garde que la couleur et l'envoi
+    private var missingRequirements: [SubmitRequirements.Review] {
+        SubmitRequirements.review(
+            hasCondition: condition != nil,
+            commentFilled: !comment.trimmingCharacters(in: .whitespaces).isEmpty,
+            withinRange: isWithinRange
+        )
     }
+
+    private var canSubmit: Bool { missingRequirements.isEmpty && !submitting }
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -141,6 +146,8 @@ struct ReviewSubmitSheet: View {
                     handle
                     header
                     proximityBanner
+                        .id("proximity")
+                        .missingHighlight(tick: feedback.tick(for: .proximity))
                     conditionSection
                     bookCountSection
                     authorSection
@@ -150,7 +157,7 @@ struct ReviewSubmitSheet: View {
                     Spacer().frame(height: 16)
                     // Boutons collés au-dessus du clavier quand le commentaire a le focus (M0044)
                     if !commentFocused {
-                        submitButton
+                        submitButton(proxy)
                         cancelButton
                     }
                 }
@@ -159,7 +166,7 @@ struct ReviewSubmitSheet: View {
             .safeAreaInset(edge: .bottom) {
                 if commentFocused {
                     VStack(spacing: 0) {
-                        submitButton
+                        submitButton(proxy)
                         cancelButton
                     }
                     .padding(.top, 8)
@@ -302,7 +309,12 @@ struct ReviewSubmitSheet: View {
         VStack(alignment: .leading, spacing: 8) {
             sectionLabel("État de la boîte")
             ConditionPicker(selection: $condition)
+                .missingHighlight(tick: feedback.tick(for: .condition))
+            if let hint = feedback.message(for: .condition) {
+                flashHint(hint)
+            }
         }
+        .id("condition")
         .padding(.horizontal, 20)
         .padding(.bottom, 18)
     }
@@ -378,8 +390,20 @@ struct ReviewSubmitSheet: View {
                     .foregroundStyle(.secondary)
                     .padding(8)
             }
+            .missingHighlight(tick: feedback.tick(for: .comment))
+            if let hint = feedback.message(for: .comment) {
+                flashHint(hint)
+            }
         }
         .padding(.horizontal, 20)
+    }
+
+    // Message court affiché sous l'élément manquant pendant le clignotement (F01 M0045)
+    private func flashHint(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 12, weight: .semibold))
+            .foregroundStyle(.orange)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func errorRow(_ err: String) -> some View {
@@ -394,9 +418,10 @@ struct ReviewSubmitSheet: View {
         .padding(.top, 10)
     }
 
-    private var submitButton: some View {
+    // Grisé mais touchable : toucher sans manque envoie ; avec un manque, défile, clignote et message (F01 M0045)
+    private func submitButton(_ proxy: ScrollViewProxy) -> some View {
         Button {
-            submit()
+            submitTapped(proxy)
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
@@ -409,7 +434,6 @@ struct ReviewSubmitSheet: View {
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }
-        .disabled(!canSubmit)
         .padding(.horizontal, 20)
     }
 
@@ -427,6 +451,17 @@ struct ReviewSubmitSheet: View {
     }
 
     // MARK: - Submit
+
+    private func submitTapped(_ proxy: ScrollViewProxy) {
+        guard !submitting else { return }
+        guard let first = missingRequirements.first else {
+            submit()
+            return
+        }
+        errorHaptic()
+        withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
+        feedback.flash(first, message: first.hint)
+    }
 
     private func submit() {
         guard let cond = condition else { return }

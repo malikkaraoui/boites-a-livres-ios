@@ -8,8 +8,14 @@ struct DeletionRequestSheet: View {
     @State private var showSuccess = false
     @State private var errorMessage: String? = nil
     @FocusState private var focused: Bool
+    @State private var feedback = MissingFeedback<SubmitRequirements.Deletion>()
 
     private let maxChars = 100
+
+    // Source unique des manques (F01 M0045) ; canSubmit n'en garde que la couleur et l'envoi
+    private var missingRequirements: [SubmitRequirements.Deletion] {
+        SubmitRequirements.deletion(reasonFilled: !reason.trimmingCharacters(in: .whitespaces).isEmpty)
+    }
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     var body: some View {
@@ -59,6 +65,7 @@ struct DeletionRequestSheet: View {
                     }
                     .padding(.horizontal, 20)
                     .id("reason")
+                    .missingHighlight(tick: feedback.tick(for: .reason))
 
                     if reason.trimmingCharacters(in: .whitespaces).isEmpty {
                         Text("La raison est obligatoire")
@@ -85,7 +92,7 @@ struct DeletionRequestSheet: View {
 
                     // Boutons collés au-dessus du clavier quand la raison a le focus (M0044)
                     if !focused {
-                        submitButton
+                        submitButton(proxy)
                         cancelButton
                     }
                 }
@@ -93,7 +100,7 @@ struct DeletionRequestSheet: View {
             .safeAreaInset(edge: .bottom) {
                 if focused {
                     VStack(spacing: 0) {
-                        submitButton
+                        submitButton(proxy)
                         cancelButton
                     }
                     .padding(.top, 8)
@@ -120,9 +127,10 @@ struct DeletionRequestSheet: View {
         }
     }
 
-    private var submitButton: some View {
+    // Grisé mais touchable : toucher avec un manque défile, clignote et ne envoie rien (F01 M0045)
+    private func submitButton(_ proxy: ScrollViewProxy) -> some View {
         Button {
-            submit()
+            submitTapped(proxy)
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
@@ -131,12 +139,22 @@ struct DeletionRequestSheet: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
-            .background(reason.trimmingCharacters(in: .whitespaces).isEmpty ? Color.red.opacity(0.3) : Color.red)
+            .background(missingRequirements.isEmpty ? Color.red : Color.red.opacity(0.3))
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }
-        .disabled(reason.trimmingCharacters(in: .whitespaces).isEmpty || submitting)
         .padding(.horizontal, 20)
+    }
+
+    private func submitTapped(_ proxy: ScrollViewProxy) {
+        guard !submitting else { return }
+        guard let first = missingRequirements.first else {
+            submit()
+            return
+        }
+        errorHaptic()
+        withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
+        feedback.flash(first, message: first.hint)
     }
 
     private var cancelButton: some View {

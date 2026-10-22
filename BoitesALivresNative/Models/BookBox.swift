@@ -283,6 +283,104 @@ enum LocationRules {
 }
 
 // Note libre de l'ajout de boîte : jamais deux sauts de ligne d'affilée (F01 M0038, #38)
+// MARK: - Manques avant envoi (F01 M0045)
+
+// Liste ordonnée, de haut en bas de l'écran, de ce qui empêche l'envoi. Source unique : canSubmit = liste vide.
+// Toucher un bouton grisé n'envoie rien : il lit le premier élément de la liste (défilement, clignotement, message).
+enum SubmitRequirements {
+    enum Review: Hashable { case proximity, condition, comment }
+    enum Deletion: Hashable { case reason }
+    enum AddBox: Hashable { case photo, gpsPrecision, tooFar }
+    enum Location: Hashable { case distance, precision, moveTooFar }
+
+    // Avis : bandeau de distance en haut, puis état, puis commentaire
+    static func review(hasCondition: Bool, commentFilled: Bool, withinRange: Bool) -> [Review] {
+        var missing: [Review] = []
+        if !withinRange { missing.append(.proximity) }
+        if !hasCondition { missing.append(.condition) }
+        if !commentFilled { missing.append(.comment) }
+        return missing
+    }
+
+    static func deletion(reasonFilled: Bool) -> [Deletion] {
+        reasonFilled ? [] : [.reason]
+    }
+
+    // Ajout de boîte : photo au-dessus du bouton ; distance inconnue = GPS pas assez précis
+    static func addBox(hasPhoto: Bool, distance: Double?, maxDistance: Double) -> [AddBox] {
+        var missing: [AddBox] = []
+        if !hasPhoto { missing.append(.photo) }
+        guard let distance else {
+            missing.append(.gpsPrecision)
+            return missing
+        }
+        if distance > maxDistance { missing.append(.tooFar) }
+        return missing
+    }
+
+    // Localisation : un seul blocage à la fois, même décision que LocationRules.locationAction
+    static func location(action: LocationRules.Action) -> [Location] {
+        guard case .blocked(let block) = action else { return [] }
+        switch block {
+        case .noPosition, .tooFar: return [.distance]
+        case .badAccuracy: return [.precision]
+        case .moveTooFar: return [.moveTooFar]
+        }
+    }
+}
+
+extension SubmitRequirements.Review {
+    // Élément à faire défiler puis clignoter
+    var anchor: String {
+        switch self {
+        case .proximity: return "proximity"
+        case .condition: return "condition"
+        case .comment: return "comment"
+        }
+    }
+
+    // Indication sous l'élément pendant le clignotement ; nil quand l'écran l'explique déjà
+    var hint: String? {
+        switch self {
+        case .proximity: return nil
+        case .condition: return "Choisis l'état de la boîte"
+        case .comment: return "Écris un commentaire"
+        }
+    }
+}
+
+extension SubmitRequirements.Deletion {
+    // Le libellé « La raison est obligatoire » est déjà affiché sous le champ
+    var anchor: String { "reason" }
+    var hint: String? { nil }
+}
+
+extension SubmitRequirements.AddBox {
+    // Présence (GPS, distance) : l'indication est déjà affichée sous le bouton, qui sert d'ancre
+    var anchor: String { self == .photo ? "photo" : "submit" }
+
+    var hint: String? { self == .photo ? submitHint : nil }
+
+    var submitHint: String {
+        switch self {
+        case .photo: return "Ajoute une photo de la boîte"
+        case .gpsPrecision: return "Patiente, le GPS affine ta position (50 m ou mieux)…"
+        case .tooFar: return "Tu dois être à moins de 50 m du point proposé."
+        }
+    }
+}
+
+extension SubmitRequirements.Location {
+    // Chaque blocage est déjà expliqué par un message affiché : on le fait clignoter, sans texte en plus
+    var anchor: String {
+        switch self {
+        case .distance: return "distance"
+        case .precision: return "precision"
+        case .moveTooFar: return "moveTooFar"
+        }
+    }
+}
+
 enum NoteText {
     // Saisie et collage : un `\n` au plus entre deux lignes (espaces et retours tolérés entre eux)
     static func limitLineBreaks(_ raw: String) -> String {
