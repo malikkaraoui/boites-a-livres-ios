@@ -30,12 +30,52 @@ final class AddBoxViewModel {
     var submitted = false
     var errorMessage: String? = nil
 
+    // Vrai dès que l'utilisateur a déplacé la carte à la main : le premier fix ne la recentre plus (F01 M0041)
+    private var userMovedMap = false
+    // Ouverture de l'étape position : seul un fix postérieur compte (F01 M0040, R032)
+    private var positionStepOpenedAt = Date()
+    // Vrai tant que le premier fix frais de cette ouverture n'est pas reçu (F01 M0040)
+    private var waitingFreshFix = true
+
     private let supabase = SupabaseService.shared
 
     init() {
-        let startCoord = LocationService.shared.currentLocation?.coordinate ?? Constants.defaultLocation
-        pinCoordinate = startCoord
-        cameraPosition = .camera(MapCamera(centerCoordinate: startCoord, distance: 500))
+        if let gps = LocationService.shared.currentLocation {
+            pinCoordinate = gps.coordinate
+            cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+        } else {
+            pinCoordinate = Constants.defaultLocation
+            cameraPosition = .camera(MapCamera(centerCoordinate: Constants.defaultLocation, distance: 500))
+        }
+    }
+
+    // Premier fix frais sur l'étape position : caméra centrée dessus, tant que l'utilisateur n'a pas bougé la carte.
+    // Le repère suit le centre de la carte (followCamera), donc il suit ce recentrage.
+    // Le cache et son rejeu à l'abonnement sont ignorés : leur horodatage précède l'ouverture (F01 M0040, R032)
+    func applyFirstFix(_ gps: CLLocation) {
+        let fresh = LocationRules.isFresh(timestamp: gps.timestamp, openedAt: positionStepOpenedAt,
+                                          accuracy: gps.horizontalAccuracy)
+        guard LocationRules.shouldCenterOnFirstFix(isWaiting: waitingFreshFix, onMapStep: step == .map,
+                                                   isFresh: fresh, userMovedMap: userMovedMap) else { return }
+        waitingFreshFix = false
+        cameraPosition = .camera(MapCamera(centerCoordinate: gps.coordinate, distance: 300))
+    }
+
+    // La carte a été glissée ou pincée à la main (F01 M0041)
+    func markMovedByUser() {
+        userMovedMap = true
+    }
+
+    // Épingle fixe : le repère est le centre de la carte, à chaque fin de déplacement (F01 M0041)
+    func followCamera(center: CLLocationCoordinate2D) {
+        pinCoordinate = center
+    }
+
+    // « Replacer » rouvre l'étape position sur le point déjà posé : pas d'attente de fix, pas de recentrage GPS (F01 M0041)
+    func returnToMap() {
+        step = .map
+        waitingFreshFix = false
+        cameraPosition = .camera(MapCamera(centerCoordinate: pinCoordinate, distance: 300))
     }
 
     func confirmPosition() async {
@@ -72,25 +112,24 @@ final class AddBoxViewModel {
         step = .form
     }
 
-    // Distance GPS -> point proposé, seulement si le GPS est précis (10 m ou mieux). Calculée sur le téléphone.
+    // Distance GPS -> point proposé, seulement si le GPS est précis (50 m ou mieux). Calculée sur le téléphone.
     private var presenceDistance: Double? {
         guard let gps = LocationService.shared.currentLocation,
-              LocationRules.canSend(accuracy: gps.horizontalAccuracy) else { return nil }
+              LocationRules.canSendManual(accuracy: gps.horizontalAccuracy) else { return nil }
         return gps.distance(from: CLLocation(latitude: pinCoordinate.latitude, longitude: pinCoordinate.longitude))
     }
 
-    // Présence sur place : GPS à 10 m ou mieux et point à 50 m au plus (F01 M0023, #31)
-    var presenceOK: Bool { (presenceDistance ?? .infinity) <= LocationRules.proximityMeters }
+    // Source unique des manques, dans l'ordre de l'écran (F01 M0045) : photo obligatoire, puis présence
+    var missingRequirements: [SubmitRequirements.AddBox] {
+        SubmitRequirements.addBox(hasPhoto: selectedImage != nil,
+                                  distance: presenceDistance,
+                                  maxDistance: LocationRules.presenceMeters)
+    }
 
     // Photo obligatoire (prise sur place) + présence : sinon le bouton reste grisé
-    var canSubmit: Bool { selectedImage != nil && presenceOK }
+    var canSubmit: Bool { missingRequirements.isEmpty }
 
-    var submitHint: String? {
-        if selectedImage == nil { return "Ajoute une photo de la boîte" }
-        if presenceDistance == nil { return "Patiente, le GPS affine ta position (10 m ou mieux)…" }
-        if !presenceOK { return "Tu dois être à moins de 50 m du point proposé." }
-        return nil
-    }
+    var submitHint: String? { missingRequirements.first?.submitHint }
 
     func submit(deviceToken: String?) async {
         guard canSubmit else {
@@ -100,6 +139,7 @@ final class AddBoxViewModel {
         isSubmitting = true
         defer { isSubmitting = false }
         errorMessage = nil
+        let cleanNotes = NoteText.forSend(notes)
 
         do {
             // Upload photo first if selected
@@ -116,7 +156,7 @@ final class AddBoxViewModel {
                 city: city.isEmpty ? nil : city,
                 postalCode: postalCode.isEmpty ? nil : postalCode,
                 department: department.isEmpty ? nil : department,
-                notes: notes.isEmpty ? nil : notes,
+                notes: cleanNotes.isEmpty ? nil : cleanNotes,
                 photoUrl: photoUrl,
                 deviceToken: deviceToken
             )

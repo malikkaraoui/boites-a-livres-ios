@@ -110,6 +110,7 @@ struct ReviewSubmitSheet: View {
     @State private var locationError: String? = nil
     @FocusState private var commentFocused: Bool
     @FocusState private var bookCountFocused: Bool
+    @State private var feedback = MissingFeedback<SubmitRequirements.Review>()
 
     private let maxComment = 150
     private let maxName = 30
@@ -127,37 +128,69 @@ struct ReviewSubmitSheet: View {
         return d <= maxDistanceMeters
     }
 
-    private var canSubmit: Bool {
-        condition != nil
-        && !comment.trimmingCharacters(in: .whitespaces).isEmpty
-        && !submitting
-        && isWithinRange
+    // Source unique des manques (F01 M0045) ; canSubmit n'en garde que la couleur et l'envoi
+    private var missingRequirements: [SubmitRequirements.Review] {
+        SubmitRequirements.review(
+            hasCondition: condition != nil,
+            commentFilled: !comment.trimmingCharacters(in: .whitespaces).isEmpty,
+            withinRange: isWithinRange
+        )
     }
 
+    private var canSubmit: Bool { missingRequirements.isEmpty && !submitting }
+
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                handle
-                header
-                proximityBanner
-                conditionSection
-                bookCountSection
-                authorSection
-                commentSection
-                if let err = errorMessage { errorRow(err) }
-                Spacer().frame(height: 16)
-                submitButton
-                cancelButton
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    handle
+                    header
+                    proximityBanner
+                        .id("proximity")
+                        .missingHighlight(tick: feedback.tick(for: .proximity))
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 14)
+                    conditionSection
+                    bookCountSection
+                    authorSection
+                    commentSection
+                        .id("comment")
+                    if let err = errorMessage { errorRow(err) }
+                    Spacer().frame(height: 16)
+                    // Boutons collés au-dessus du clavier quand le commentaire a le focus (M0044)
+                    if !commentFocused {
+                        submitButton(proxy)
+                        cancelButton
+                    }
+                }
             }
-        }
-        .scrollDismissesKeyboard(.interactively)
-        // Bouton OK au-dessus du clavier numérique du nombre de livres (#21)
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                if bookCountFocused {
-                    Spacer()
-                    Button("OK") { bookCountFocused = false }
-                        .fontWeight(.semibold)
+            .scrollDismissesKeyboard(.interactively)
+            .safeAreaInset(edge: .bottom) {
+                if commentFocused {
+                    VStack(spacing: 0) {
+                        submitButton(proxy)
+                        cancelButton
+                    }
+                    .padding(.top, 8)
+                    .background(Color(.systemBackground))
+                }
+            }
+            // Le champ commentaire entier (compteur compris) défile au-dessus du clavier (M0044)
+            .onChange(of: commentFocused) { _, focused in
+                guard focused else { return }
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 300_000_000)
+                    withAnimation { proxy.scrollTo("comment", anchor: .bottom) }
+                }
+            }
+            // Bouton OK au-dessus du clavier numérique du nombre de livres (#21)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    if bookCountFocused {
+                        Spacer()
+                        Button("OK") { bookCountFocused = false }
+                            .fontWeight(.semibold)
+                    }
                 }
             }
         }
@@ -179,10 +212,17 @@ struct ReviewSubmitSheet: View {
         .presentationDetents([.large])
         .presentationDragIndicator(.hidden)
         .presentationCornerRadius(28)
-        .alert("Avis envoyé", isPresented: $showSuccess) {
-            Button("OK") { onSubmitted(); dismiss() }
-        } message: {
-            Text("Merci ! Ton avis sera publié après validation par un administrateur.")
+        // Succès d'envoi en pleine page, comme après une photo (F01 M0046).
+        // Le glissement ne ferme pas la feuille avant « Fermer » : onSubmitted() doit toujours partir.
+        .interactiveDismissDisabled(showSuccess)
+        .overlay {
+            if showSuccess {
+                SubmissionSuccessView(
+                    title: "Avis envoyé",
+                    message: "Merci ! Ton avis sera publié après validation par un administrateur.",
+                    primaryAction: { onSubmitted(); dismiss() }
+                )
+            }
         }
         .task {
             await refreshUserLocation()
@@ -242,8 +282,6 @@ struct ReviewSubmitSheet: View {
         .padding(12)
         .background(color.opacity(0.10))
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 20)
-        .padding(.bottom, 14)
     }
 
     private func formattedDistance(_ meters: CLLocationDistance) -> String {
@@ -278,7 +316,12 @@ struct ReviewSubmitSheet: View {
         VStack(alignment: .leading, spacing: 8) {
             sectionLabel("État de la boîte")
             ConditionPicker(selection: $condition)
+                .missingHighlight(tick: feedback.tick(for: .condition))
+            if let hint = feedback.message(for: .condition) {
+                flashHint(hint)
+            }
         }
+        .id("condition")
         .padding(.horizontal, 20)
         .padding(.bottom, 18)
     }
@@ -305,7 +348,7 @@ struct ReviewSubmitSheet: View {
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
-                .background(Color(.systemGray6))
+                .background(Color.formField)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }
@@ -319,7 +362,7 @@ struct ReviewSubmitSheet: View {
             TextField("Anonyme", text: $authorName)
                 .textInputAutocapitalization(.words)
                 .padding(12)
-                .background(Color(.systemGray6))
+                .background(Color.formField)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .onChange(of: authorName) { _, new in
                     if new.count > maxName { authorName = String(new.prefix(maxName)) }
@@ -338,22 +381,36 @@ struct ReviewSubmitSheet: View {
                     .font(.system(size: 15))
                     .frame(height: 120)
                     .padding(10)
-                    .background(Color(.systemGray6))
+                    .background(Color.formField)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(commentFocused ? green.opacity(0.5) : Color(.systemGray4), lineWidth: 1)
                     )
+                    // Saisie et collage : un seul saut de ligne d'affilée, puis limite de caractères (M0044)
                     .onChange(of: comment) { _, new in
-                        if new.count > maxComment { comment = String(new.prefix(maxComment)) }
+                        let clean = String(NoteText.limitLineBreaks(new).prefix(maxComment))
+                        if clean != new { comment = clean }
                     }
                 Text("\(comment.count)/\(maxComment)")
                     .font(.system(size: 11))
                     .foregroundStyle(.secondary)
                     .padding(8)
             }
+            .missingHighlight(tick: feedback.tick(for: .comment))
+            if let hint = feedback.message(for: .comment) {
+                flashHint(hint)
+            }
         }
         .padding(.horizontal, 20)
+    }
+
+    // Message court affiché sous l'élément manquant pendant le clignotement (F01 M0045)
+    private func flashHint(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 12, weight: .semibold))
+            .foregroundStyle(.orange)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func errorRow(_ err: String) -> some View {
@@ -368,9 +425,10 @@ struct ReviewSubmitSheet: View {
         .padding(.top, 10)
     }
 
-    private var submitButton: some View {
+    // Grisé mais touchable : toucher sans manque envoie ; avec un manque, défile, clignote et message (F01 M0045)
+    private func submitButton(_ proxy: ScrollViewProxy) -> some View {
         Button {
-            submit()
+            submitTapped(proxy)
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
@@ -383,7 +441,6 @@ struct ReviewSubmitSheet: View {
             .foregroundStyle(.white)
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }
-        .disabled(!canSubmit)
         .padding(.horizontal, 20)
     }
 
@@ -401,6 +458,21 @@ struct ReviewSubmitSheet: View {
     }
 
     // MARK: - Submit
+
+    private func submitTapped(_ proxy: ScrollViewProxy) {
+        guard !submitting else { return }
+        guard let first = missingRequirements.first else {
+            // Clavier fermé avant l'envoi : la page de remerciement s'affiche sans lui (F01 M0047)
+            dismissKeyboard()
+            submit()
+            return
+        }
+        // Manque non textuel : le clavier ne cache pas l'élément qui clignote (F01 M0047)
+        if first != .comment { dismissKeyboard() }
+        errorHaptic()
+        withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
+        feedback.flash(first, message: first.hint)
+    }
 
     private func submit() {
         guard let cond = condition else { return }

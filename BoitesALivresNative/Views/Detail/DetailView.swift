@@ -381,7 +381,7 @@ struct DetailView: View {
     // Bouton « Localisation » : actif seulement à 50 m ou moins de la boîte (présence vérifiée sur le téléphone)
     @ViewBuilder
     private func locationUpdateButton(box: BookBox) -> some View {
-        let nearEnough = (distanceFromUser(to: box) ?? .greatestFiniteMagnitude) <= LocationRules.proximityMeters
+        let nearEnough = (distanceFromUser(to: box) ?? .greatestFiniteMagnitude) <= LocationRules.presenceMeters
         VStack(spacing: 6) {
             Button {
                 lightHaptic()

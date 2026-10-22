@@ -11,6 +11,57 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 26
+
+- Réglages : le bouton « Vider le cache » et son alerte sont retirés. Aucun changement de données ni d'envoi.
+- Mode sombre : les champs des formulaires (nombre de livres, nom, commentaire de l'avis ; motif de la demande de suppression) restent visibles comme en mode clair.
+
+### Build 25
+
+- Cadre orange qui clignote : il épouse maintenant exactement le texte ou la zone qu'il signale (bandeau « Trop loin pour noter », message de distance, champ « Motif » de la demande de suppression), sans déborder dans les marges. Aucun changement d'envoi ni de données.
+
+### Build 24
+
+- Envoi : le clavier se ferme dès qu'on touche « Envoyer » (avis, demande de suppression, ajout de boîte, localisation). L'écran de confirmation s'affiche donc sans clavier. Le bouton grisé ne ferme le clavier que si ce qui manque n'est pas un champ texte. Aucun changement d'envoi ni de données.
+
+### Build 23
+
+- Envoi : après « Envoyer mon avis » et « Envoyer la demande de suppression », l'écran de confirmation s'affiche en pleine page, aux couleurs de l'app, comme après l'envoi d'une photo. Plus d'alerte flottante. Même écran pour l'ajout de boîte, la localisation et la photo, sans changer les textes ni les actions.
+
+### Build 22
+
+- Envoi grisé : toucher « Envoyer » quand il manque quelque chose ne envoie rien. L'écran défile jusqu'à ce qui manque (l'état de la boîte, le commentaire, la photo, la distance ou la précision), le fait clignoter, affiche un court message et vibre légèrement. Concerne l'avis, la demande de suppression, l'ajout de boîte et la localisation. « Réduire les animations » remplace le clignotement par un surlignage fixe.
+
+### Build 21
+
+- Clavier : dans l'avis et la demande de suppression, le champ de texte reste entièrement visible quand on écrit, et « Envoyer » et « Annuler » restent collés au-dessus du clavier (#49).
+- Texte libre : un seul saut de ligne d'affilée à la saisie et au collage, dans l'avis, la demande de suppression et la note d'ajout de boîte (#49).
+
+### Build 20
+
+- Localisation : « Oui, elle est bien ici » est possible à 50 m de la boîte au plus, avec une précision GPS de 50 m ou mieux (plus besoin de 10 m).
+- Localisation : une boîte ne se déplace que si le repère s'écarte de plus de max(20 m, 2 × précision), et de 100 m au plus. En dessous, un message indique l'écart et la marge du GPS, et rien ne change en base (#42).
+- Localisation : textes d'aide mis à jour, message « Précision entre 10 et 50 m » retiré.
+
+### Build 19
+
+- Ajout de boîte : le repère est une épingle fixe au centre de la carte, on glisse la carte pour placer
+  la boîte. « Replacer » rouvre la carte sur le point déjà posé, sans recentrage automatique sur le GPS.
+
+### Build 18
+
+- Ajout de boîte : le champ note reste visible au-dessus du clavier, à hauteur fixe (5 lignes, défilement
+  interne). Un seul saut de ligne d'affilée dans la note, à la saisie comme au collage. Bouton OK au-dessus
+  du clavier (#38).
+- Ajout de boîte : création possible à 50 m de précision GPS ou mieux (la localisation reste à 10 m) (#38).
+
+### Build 17
+
+- Localisation : un seul écran. La carte s'ouvre centrée sur la boîte ; laisse le repère sur la boîte
+  et envoie, ou déplace la carte si elle est ailleurs. Le déplacement est limité à 100 m.
+- Alerte près d'une boîte : activée par défaut, rayon de 100 m (la présence pour proposer une
+  position reste à 50 m). Un désactivement explicite dans Réglages reste respecté.
+
 ### Build 16
 
 - Mise à jour obligatoire : l'équipe fixe une version minimale. Si ta version de l'app est en

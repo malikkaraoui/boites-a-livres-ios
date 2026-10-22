@@ -57,15 +57,6 @@
 "Données issues de" = "Données issues de";
 "À propos" = "À propos";
 
-/* Settings — Cache */
-"Vider le cache" = "Vider le cache";
-"Cache vidé" = "Cache vidé";
-"Cache vidé ✓" = "Cache vidé ✓";
-"Vider le cache ?" = "Vider le cache ?";
-"Vider" = "Vider";
-"Les boîtes seront rechargées depuis le serveur." = "Les boîtes seront rechargées depuis le serveur.";
-"Supprime les données mises en cache localement." = "Supprime les données mises en cache localement.";
-
 /* Settings — Version */
 "Version" = "Version";
 

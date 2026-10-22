@@ -31,6 +31,7 @@
 		8A7A9CFBDB43BFC593D35168 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD863E2E1DD3B71B8797673 /* DetailViewModel.swift */; };
 		8F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy */; };
 		93C0A0AF024FD9C0CF22ECE8 /* PhotoSubmittedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */; };
+		5A1E0C1B2D3F4A5B6C7D8E9F /* SubmissionSuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2F1D2C3E4A5B6C7D8E9F00 /* SubmissionSuccessView.swift */; };
 		DD1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */; };
 		95C14329994EDC207F637F54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D85382CA5E970BF4B82947D9 /* Assets.xcassets */; };
 		A2B3C4D5E6F7A8B9C0D1E2F3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C4D5E6F7A8B9C0D1E2F3A4B5 /* Localizable.strings */; };
@@ -69,6 +70,7 @@
 		7F9A1B2C3D4E5F6A7B8C9D0E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8BF27BDDAE056D88CB7E1843 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PhotoSubmittedView.swift; sourceTree = "<group>"; };
+		6B2F1D2C3E4A5B6C7D8E9F00 /* SubmissionSuccessView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SubmissionSuccessView.swift; sourceTree = "<group>"; };
 		EE1A2B3C4D5E6F7A8B9C0D1E /* DeletionRequestSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionRequestSheet.swift; sourceTree = "<group>"; };
 		AA11BB22CC33DD44EE55FF66 /* ButtonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyles.swift; sourceTree = "<group>"; };
 		94B765557228691DC2F6C9C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				BB1B2C3D4E5F6A7B8C9D0E1F /* FullScreenPhotoViewer.swift */,
 				A530FD1A72EA2FF2155F8910 /* PhotoCarousel.swift */,
 				93AD6BE90112AD7171ECA5EF /* PhotoSubmittedView.swift */,
+				6B2F1D2C3E4A5B6C7D8E9F00 /* SubmissionSuccessView.swift */,
 				5077DC8E98D448E0A024244E /* LocationUpdateSheet.swift */,
 			);
 			path = Components;
@@ -326,6 +329,7 @@
 				1AA21E8BA32F6CEC6647E2B5 /* AddBoxView.swift in Sources */,
 				C71A925C50B067E4D8505E0A /* AddBoxViewModel.swift in Sources */,
 				93C0A0AF024FD9C0CF22ECE8 /* PhotoSubmittedView.swift in Sources */,
+				5A1E0C1B2D3F4A5B6C7D8E9F /* SubmissionSuccessView.swift in Sources */,
 				FB83CFA7DA884F00AB11E6C6 /* LocationUpdateSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -354,7 +358,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 26;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -437,7 +441,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 26;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;

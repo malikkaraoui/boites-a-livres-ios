@@ -4,7 +4,7 @@ import UserNotifications
 
 // MARK: - Alerte de proximité (F01 M0020)
 
-// Rappel « La boîte est-elle bien ici ? » quand on entre dans un rayon de 50 m, app fermée.
+// Rappel « La boîte est-elle bien ici ? » quand on entre dans un rayon de 100 m, app fermée.
 // Régions CLCircularRegion : 20 au plus, les plus proches hors anti-répétition.
 // Aucune position n'est envoyée au serveur : les boîtes viennent du cache local.
 final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
@@ -26,7 +26,10 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     }
 
-    var isEnabled: Bool { UserDefaults.standard.bool(forKey: Self.enabledKey) }
+    // Activée par défaut (clé absente) ; seul un désactivement explicite de l'utilisateur la coupe
+    var isEnabled: Bool {
+        LocationRules.alertEnabled(stored: UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool)
+    }
 
     // Appelé au lancement, de façon synchrone : reprend la surveillance si activée et autorisée « Toujours »
     func start() {
@@ -71,7 +74,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         handledInside.formIntersection(chosen.map(\.id))
         ProximityJournal.add("régions enregistrées : \(chosen.count)")
         for box in chosen {
-            let region = CLCircularRegion(center: box.coordinate, radius: LocationRules.proximityMeters,
+            let region = CLCircularRegion(center: box.coordinate, radius: LocationRules.alertRadiusMeters,
                                           identifier: "\(Self.regionPrefix)\(box.id)")
             region.notifyOnEntry = true
             region.notifyOnExit = true
@@ -181,7 +184,7 @@ enum ProximityReminder {
             return "Pour être prévenu près d'une boîte, même app fermée, choisis Position › Toujours."
         }
         if manager.accuracyAuthorization == .reducedAccuracy {
-            return "Active Position exacte : le parcours de localisation exige une précision de 10 m."
+            return "Active Position exacte : le parcours de localisation exige une précision de 50 m au plus."
         }
         return nil
     }
