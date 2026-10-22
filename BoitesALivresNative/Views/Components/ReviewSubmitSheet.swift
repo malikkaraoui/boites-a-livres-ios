@@ -135,29 +135,53 @@ struct ReviewSubmitSheet: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                handle
-                header
-                proximityBanner
-                conditionSection
-                bookCountSection
-                authorSection
-                commentSection
-                if let err = errorMessage { errorRow(err) }
-                Spacer().frame(height: 16)
-                submitButton
-                cancelButton
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    handle
+                    header
+                    proximityBanner
+                    conditionSection
+                    bookCountSection
+                    authorSection
+                    commentSection
+                        .id("comment")
+                    if let err = errorMessage { errorRow(err) }
+                    Spacer().frame(height: 16)
+                    // Boutons collés au-dessus du clavier quand le commentaire a le focus (M0044)
+                    if !commentFocused {
+                        submitButton
+                        cancelButton
+                    }
+                }
             }
-        }
-        .scrollDismissesKeyboard(.interactively)
-        // Bouton OK au-dessus du clavier numérique du nombre de livres (#21)
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                if bookCountFocused {
-                    Spacer()
-                    Button("OK") { bookCountFocused = false }
-                        .fontWeight(.semibold)
+            .scrollDismissesKeyboard(.interactively)
+            .safeAreaInset(edge: .bottom) {
+                if commentFocused {
+                    VStack(spacing: 0) {
+                        submitButton
+                        cancelButton
+                    }
+                    .padding(.top, 8)
+                    .background(Color(.systemBackground))
+                }
+            }
+            // Le champ commentaire entier (compteur compris) défile au-dessus du clavier (M0044)
+            .onChange(of: commentFocused) { _, focused in
+                guard focused else { return }
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 300_000_000)
+                    withAnimation { proxy.scrollTo("comment", anchor: .bottom) }
+                }
+            }
+            // Bouton OK au-dessus du clavier numérique du nombre de livres (#21)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    if bookCountFocused {
+                        Spacer()
+                        Button("OK") { bookCountFocused = false }
+                            .fontWeight(.semibold)
+                    }
                 }
             }
         }
@@ -344,8 +368,10 @@ struct ReviewSubmitSheet: View {
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(commentFocused ? green.opacity(0.5) : Color(.systemGray4), lineWidth: 1)
                     )
+                    // Saisie et collage : un seul saut de ligne d'affilée, puis limite de caractères (M0044)
                     .onChange(of: comment) { _, new in
-                        if new.count > maxComment { comment = String(new.prefix(maxComment)) }
+                        let clean = String(NoteText.limitLineBreaks(new).prefix(maxComment))
+                        if clean != new { comment = clean }
                     }
                 Text("\(comment.count)/\(maxComment)")
                     .font(.system(size: 11))

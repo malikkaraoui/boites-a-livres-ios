@@ -268,27 +268,10 @@ struct AddBoxView: View {
                             .padding(.horizontal, 16)
                     }
 
-                    Button {
-                        mediumHaptic()
-                        Task {
-                            let token = NotificationService.shared.getPushToken()
-                            await vm.submit(deviceToken: token)
-                        }
-                    } label: {
-                        HStack {
-                            if vm.isSubmitting { ProgressView().tint(.white) }
-                            Text(vm.isSubmitting ? "Envoi…" : "Soumettre la boîte")
-                                .font(.system(size: 16, weight: .bold))
-                        }
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(green)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    // Masqué pendant la saisie de la note : il est alors collé au-dessus du clavier (M0044)
+                    if !isNotesFocused {
+                        submitButton
                     }
-                    .buttonStyle(ScaleButtonStyle())
-                    .disabled(vm.isSubmitting || !vm.canSubmit)
-                    .opacity(vm.canSubmit ? 1 : 0.5)
 
                     if let hint = vm.submitHint {
                         Text(hint)
@@ -307,6 +290,15 @@ struct AddBoxView: View {
                 .padding(20)
             }
             .scrollDismissesKeyboard(.immediately)
+            // Bouton d'envoi collé au-dessus du clavier pendant la saisie de la note (M0044)
+            .safeAreaInset(edge: .bottom) {
+                if isNotesFocused {
+                    submitButton
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 8)
+                        .background(Color(.systemBackground))
+                }
+            }
             .onTapGesture { isNotesFocused = false }
             // Le champ note reste visible au-dessus du clavier : on fait défiler jusqu'à lui à l'ouverture
             .onChange(of: isNotesFocused) { _, focused in
@@ -324,6 +316,31 @@ struct AddBoxView: View {
             }
         }
         .navigationTitle("Étape 2 / 2 — Détails")
+    }
+
+    // Bouton « Soumettre la boîte », partagé entre sa place dans le formulaire et la barre au-dessus du clavier
+    private var submitButton: some View {
+        Button {
+            mediumHaptic()
+            Task {
+                let token = NotificationService.shared.getPushToken()
+                await vm.submit(deviceToken: token)
+            }
+        } label: {
+            HStack {
+                if vm.isSubmitting { ProgressView().tint(.white) }
+                Text(vm.isSubmitting ? "Envoi…" : "Soumettre la boîte")
+                    .font(.system(size: 16, weight: .bold))
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(green)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+        .buttonStyle(ScaleButtonStyle())
+        .disabled(vm.isSubmitting || !vm.canSubmit)
+        .opacity(vm.canSubmit ? 1 : 0.5)
     }
 
     // MARK: Success
