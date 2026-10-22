@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 21
+
+- Clavier : dans l'avis et la demande de suppression, le champ de texte reste entièrement visible quand on écrit, et « Envoyer » et « Annuler » restent collés au-dessus du clavier (#49).
+- Texte libre : un seul saut de ligne d'affilée à la saisie et au collage, dans l'avis, la demande de suppression et la note d'ajout de boîte (#49).
+
 ### Build 20
 
 - Localisation : « Oui, elle est bien ici » est possible à 50 m de la boîte au plus, avec une précision GPS de 50 m ou mieux (plus besoin de 10 m).
