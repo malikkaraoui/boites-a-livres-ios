@@ -125,6 +125,7 @@ struct MapScreen: View {
                     .buttonStyle(ScaleButtonStyle())
                     Button { mediumHaptic(); showAddBox = true } label: {
                         Image(systemName: "plus")
+                            .accessibilityIdentifier("ajouter-boite")
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(.white)
                             .frame(width: 44, height: 44)

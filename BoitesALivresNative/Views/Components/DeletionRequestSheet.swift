@@ -143,6 +143,7 @@ struct DeletionRequestSheet: View {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
                 Text(submitting ? String(localized: "Envoi…") : String(localized: "Envoyer la demande"))
                     .font(.system(size: 16, weight: .semibold))
+                    .accessibilityIdentifier("suppression-envoyer")
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
