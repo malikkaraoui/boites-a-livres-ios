@@ -120,7 +120,7 @@ struct SettingsView: View {
                     Text("Taille du texte")
                 } icon: {
                     Image(systemName: "textformat.size")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color.accentColor)
                 }
                 Spacer()
                 sizeButton(label: "A", size: 13, tag: 0)
@@ -344,7 +344,7 @@ struct SettingsView: View {
 
         case .box(let b):
             HStack(spacing: 12) {
-                typedIconTile(systemName: "mappin.and.ellipse", color: .blue)
+                typedIconTile(systemName: "mappin.and.ellipse", color: .accentColor)
                 rowBody(
                     title: NSLocalizedString("Nouvelle boîte", comment: "") + " · " + (b.city ?? b.address ?? "—"),
                     subtitle: relativeDate(from: b.submitted_at)
