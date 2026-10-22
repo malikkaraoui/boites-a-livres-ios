@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 25
+
+- Cadre orange qui clignote : il épouse maintenant exactement le texte ou la zone qu'il signale (bandeau « Trop loin pour noter », message de distance, champ « Motif » de la demande de suppression), sans déborder dans les marges. Aucun changement d'envoi ni de données.
+
 ### Build 24
 
 - Envoi : le clavier se ferme dès qu'on touche « Envoyer » (avis, demande de suppression, ajout de boîte, localisation). L'écran de confirmation s'affiche donc sans clavier. Le bouton grisé ne ferme le clavier que si ce qui manque n'est pas un champ texte. Aucun changement d'envoi ni de données.
