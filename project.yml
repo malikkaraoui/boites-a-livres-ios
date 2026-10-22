@@ -36,5 +36,23 @@ targets:
           SWIFT_OPTIMIZATION_LEVEL: "-O"
           DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
     scheme:
-      testTargets: []
+      testTargets:
+        - BoitesALivresNativeUITests
       disableMainThreadChecker: true
+
+  BoitesALivresNativeUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: BoitesALivresNativeUITests
+    dependencies:
+      - target: BoitesALivresNative
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.malikkaraoui.boitesalivresapp.uitests
+        GENERATE_INFOPLIST_FILE: "YES"
+        DEVELOPMENT_TEAM: UPES5479T5
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGNING_ALLOWED: "YES"
+        SWIFT_VERSION: 5.9
