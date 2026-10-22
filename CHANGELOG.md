@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 24
+
+- Envoi : le clavier se ferme dès qu'on touche « Envoyer » (avis, demande de suppression, ajout de boîte, localisation). L'écran de confirmation s'affiche donc sans clavier. Le bouton grisé ne ferme le clavier que si ce qui manque n'est pas un champ texte. Aucun changement d'envoi ni de données.
+
 ### Build 23
 
 - Envoi : après « Envoyer mon avis » et « Envoyer la demande de suppression », l'écran de confirmation s'affiche en pleine page, aux couleurs de l'app, comme après l'envoi d'une photo. Plus d'alerte flottante. Même écran pour l'ajout de boîte, la localisation et la photo, sans changer les textes ni les actions.
