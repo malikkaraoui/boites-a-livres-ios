@@ -60,7 +60,7 @@ final class DetailViewModel {
         showPhotoModal = false
         guard photos.count < Constants.maxPhotosPerBox else {
             alertTitle = "Limite atteinte"
-            alertMessage = "Maximum \(Constants.maxPhotosPerBox) photos par boîte."
+            alertMessage = String(localized: "Maximum \(Constants.maxPhotosPerBox) photos par boîte.")
             showAlert = true
             return
         }

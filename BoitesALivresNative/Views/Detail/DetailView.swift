@@ -103,7 +103,7 @@ struct DetailView: View {
                     }
                 }
                 .refreshable { await vm.refresh(boxId: boxId) }
-                .navigationTitle("#\(box.id) — \(box.city ?? "Détail")")
+                .navigationTitle("#\(box.id) — \(box.city ?? String(localized: "Détail"))")
                 .navigationBarTitleDisplayMode(.inline)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     Color.clear.frame(height: 90)

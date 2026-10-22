@@ -184,15 +184,15 @@ struct DeletionRequestSheet: View {
                 await MainActor.run {
                     submitting = false
                     if case .httpError(let code, let body) = error, code == 409 || body.contains("deletion_requests_pending_unique") {
-                        errorMessage = "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur."
+                        errorMessage = String(localized: "Tu as déjà une demande en attente pour cette boîte. Attends la décision de l'administrateur.")
                     } else {
-                        errorMessage = "Une erreur est survenue. Réessaie plus tard."
+                        errorMessage = String(localized: "Une erreur est survenue. Réessaie plus tard.")
                     }
                 }
             } catch {
                 await MainActor.run {
                     submitting = false
-                    errorMessage = "Une erreur est survenue. Réessaie plus tard."
+                    errorMessage = String(localized: "Une erreur est survenue. Réessaie plus tard.")
                 }
             }
         }

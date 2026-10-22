@@ -9,17 +9,17 @@ struct SubmissionSuccessView<Secondary: View>: View {
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
     let icon: String
-    let title: String
-    let message: String
-    let primaryTitle: String
+    let title: LocalizedStringKey
+    let message: LocalizedStringKey
+    let primaryTitle: LocalizedStringKey
     let primaryAction: () -> Void
     let secondary: Secondary
 
     init(
         icon: String = "checkmark.circle.fill",
-        title: String,
-        message: String,
-        primaryTitle: String = "Fermer",
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
+        primaryTitle: LocalizedStringKey = "Fermer",
         primaryAction: @escaping () -> Void,
         @ViewBuilder secondary: () -> Secondary
     ) {
@@ -72,9 +72,9 @@ struct SubmissionSuccessView<Secondary: View>: View {
 extension SubmissionSuccessView where Secondary == EmptyView {
     init(
         icon: String = "checkmark.circle.fill",
-        title: String,
-        message: String,
-        primaryTitle: String = "Fermer",
+        title: LocalizedStringKey,
+        message: LocalizedStringKey,
+        primaryTitle: LocalizedStringKey = "Fermer",
         primaryAction: @escaping () -> Void
     ) {
         self.init(

@@ -107,7 +107,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     }
 
     private func registerCategory() {
-        let later = UNNotificationAction(identifier: Self.laterActionId, title: "Plus tard", options: [])
+        let later = UNNotificationAction(identifier: Self.laterActionId, title: String(localized: "Plus tard"), options: [])
         let category = UNNotificationCategory(identifier: Self.categoryId, actions: [later],
                                               intentIdentifiers: [], options: [])
         UNUserNotificationCenter.current().setNotificationCategories([category])
@@ -115,8 +115,8 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
 
     private func scheduleNotification(boxId: Int) {
         let content = UNMutableNotificationContent()
-        content.title = "📚 Boîte à livres à côté"
-        content.body = "Est-elle bien ici ?"
+        content.title = String(localized: "📚 Boîte à livres à côté")
+        content.body = String(localized: "Est-elle bien ici ?")
         content.sound = .default
         content.categoryIdentifier = Self.categoryId
         content.userInfo = ["type": Self.notifType, "boxId": boxId]
