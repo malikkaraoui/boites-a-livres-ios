@@ -40,13 +40,6 @@ actor LocalCacheService {
         }
     }
 
-    // Clear all cached zones from memory and disk
-    func clear() {
-        cache.removeAll()
-        try? FileManager.default.removeItem(at: cacheDir)
-        try? FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
-    }
-
     // Toutes les boîtes déjà en cache (mémoire + disque), sans réseau : base des régions de proximité
     func allCachedBoxes() -> [BookBox] {
         var byId: [Int: BookBox] = [:]

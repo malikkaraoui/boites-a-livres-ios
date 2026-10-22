@@ -13,8 +13,6 @@ final class SettingsViewModel {
     var myReviews: [BoxReview] = []
     var myBoxSubmissions: [BoxSubmissionRecord] = []
     var myLocationUpdates: [LocationUpdateRecord] = []
-    var showCacheClearAlert = false
-    var cacheClearDone = false
 
     // Load notification status, device push token, photo submissions, deletion requests,
     // mes avis et mes soumissions de nouvelles boîtes — tout en parallèle.
@@ -37,14 +35,5 @@ final class SettingsViewModel {
     func requestNotifications() async {
         _ = await NotificationService.shared.requestPermission()
         notificationStatus = await NotificationService.shared.getAuthorizationStatus()
-    }
-
-    // Clear both disk and memory caches; show confirmation feedback for 2 seconds
-    func clearCache() async {
-        await LocalCacheService.shared.clear()
-        ImageCacheService.shared.clear()
-        cacheClearDone = true
-        try? await Task.sleep(nanoseconds: 2_000_000_000)
-        cacheClearDone = false
     }
 }

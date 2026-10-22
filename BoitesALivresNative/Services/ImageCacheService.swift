@@ -73,15 +73,6 @@ final class ImageCacheService {
         }
     }
 
-    // Remove all cached images from memory and disk
-    func clear() {
-        memCache.removeAllObjects()
-        diskQueue.sync {
-            try? FileManager.default.removeItem(at: self.diskDir)
-            try? FileManager.default.createDirectory(at: self.diskDir, withIntermediateDirectories: true)
-        }
-    }
-
     // MARK: - Private
 
     // Hash URL to filename: SHA256 ensures unique, collision-free names

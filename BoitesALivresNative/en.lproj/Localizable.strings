@@ -65,15 +65,6 @@
 "Données issues de" = "Data from";
 "À propos" = "About";
 
-/* Settings — Cache */
-"Vider le cache" = "Clear cache";
-"Cache vidé" = "Cache cleared";
-"Cache vidé ✓" = "Cache cleared ✓";
-"Vider le cache ?" = "Clear cache?";
-"Vider" = "Clear";
-"Les boîtes seront rechargées depuis le serveur." = "Boxes will be reloaded from the server.";
-"Supprime les données mises en cache localement." = "Deletes locally cached data.";
-
 /* Settings — Version */
 "Version" = "Version";
 

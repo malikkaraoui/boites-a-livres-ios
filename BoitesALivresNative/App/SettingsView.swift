@@ -57,7 +57,6 @@ struct SettingsView: View {
                 submissionsSection
                 deletionRequestsSection
                 aboutSection
-                cacheSection
                 versionSection
             }
             .contentMargins(.bottom, 100, for: .scrollContent)
@@ -517,27 +516,6 @@ struct SettingsView: View {
                         .foregroundStyle(.tertiary)
                 }
             }
-        }
-    }
-
-    private var cacheSection: some View {
-        Section {
-            Button(role: .destructive) {
-                vm.showCacheClearAlert = true
-            } label: {
-                Label(
-                    vm.cacheClearDone ? "Cache vidé" : "Vider le cache",
-                    systemImage: vm.cacheClearDone ? "checkmark.circle.fill" : "trash.fill"
-                )
-            }
-            .alert("Vider le cache ?", isPresented: $vm.showCacheClearAlert) {
-                Button("Vider", role: .destructive) { Task { await vm.clearCache() } }
-                Button("Annuler", role: .cancel) {}
-            } message: {
-                Text("Les boîtes seront rechargées depuis le serveur.")
-            }
-        } footer: {
-            Text("Supprime les données mises en cache localement.")
         }
     }
 
