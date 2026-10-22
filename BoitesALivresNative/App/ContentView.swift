@@ -16,7 +16,7 @@ struct ContentView: View {
     @Environment(\.openURL) private var openURL
     @State private var proximityReminder: String? = nil
 
-    private let accent = Color.accentColor
+    private let accent = Color("AccentColor")
     private let reviewPromptDelay: UInt64 = 90 * 1_000_000_000
 
     var body: some View {
@@ -48,6 +48,7 @@ struct ContentView: View {
                 .padding(.bottom, 10)
         }
         .ignoresSafeArea(.keyboard)
+        .tint(accent)
         .onChange(of: selectedTab) { _, newTab in
             loadedTabs.insert(newTab)
             if newTab != 0 { mapPath = NavigationPath() }

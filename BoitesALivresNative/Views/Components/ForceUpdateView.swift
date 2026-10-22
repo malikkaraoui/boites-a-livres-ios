@@ -7,7 +7,7 @@ import SwiftUI
 struct ForceUpdateView: View {
     @Environment(\.openURL) private var openURL
 
-    private let accent = Color.accentColor
+    private let accent = Color("AccentColor")
 
     var body: some View {
         VStack(spacing: 20) {
