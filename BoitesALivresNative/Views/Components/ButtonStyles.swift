@@ -24,6 +24,11 @@ func errorHaptic() {
     UINotificationFeedbackGenerator().notificationOccurred(.error)
 }
 
+// Ferme le clavier quel que soit le champ qui l'a (avec ou sans @FocusState) (F01 M0047)
+func dismissKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+}
+
 // Dernier toucher sur un bouton grisé : élément visé, compteur, message (F01 M0045)
 @MainActor @Observable
 final class MissingFeedback<Target: Hashable> {

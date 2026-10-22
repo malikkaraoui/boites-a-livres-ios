@@ -462,9 +462,13 @@ struct ReviewSubmitSheet: View {
     private func submitTapped(_ proxy: ScrollViewProxy) {
         guard !submitting else { return }
         guard let first = missingRequirements.first else {
+            // Clavier fermé avant l'envoi : la page de remerciement s'affiche sans lui (F01 M0047)
+            dismissKeyboard()
             submit()
             return
         }
+        // Manque non textuel : le clavier ne cache pas l'élément qui clignote (F01 M0047)
+        if first != .comment { dismissKeyboard() }
         errorHaptic()
         withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
         feedback.flash(first, message: first.hint)

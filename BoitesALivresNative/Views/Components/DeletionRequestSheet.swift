@@ -156,6 +156,8 @@ struct DeletionRequestSheet: View {
     private func submitTapped(_ proxy: ScrollViewProxy) {
         guard !submitting else { return }
         guard let first = missingRequirements.first else {
+            // Clavier fermé avant l'envoi : la page de remerciement s'affiche sans lui (F01 M0047)
+            dismissKeyboard()
             submit()
             return
         }

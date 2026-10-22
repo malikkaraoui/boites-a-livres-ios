@@ -353,6 +353,8 @@ struct AddBoxView: View {
     private func submitTapped(_ proxy: ScrollViewProxy) {
         guard !vm.isSubmitting else { return }
         guard let first = vm.missingRequirements.first else {
+            // Clavier fermé avant l'envoi : la page de remerciement s'affiche sans lui (F01 M0047)
+            dismissKeyboard()
             mediumHaptic()
             Task {
                 let token = NotificationService.shared.getPushToken()
@@ -360,6 +362,8 @@ struct AddBoxView: View {
             }
             return
         }
+        // Manque GPS ou distance : le clavier ne cache pas le message qui clignote (F01 M0047)
+        dismissKeyboard()
         errorHaptic()
         withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
         feedback.flash(first, message: first.hint)

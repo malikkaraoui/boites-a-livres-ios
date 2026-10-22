@@ -285,9 +285,13 @@ struct LocationUpdateSheet: View {
     private func submitTapped(_ proxy: ScrollViewProxy) async {
         guard phase != .sending else { return }
         guard let first = missingRequirements.first else {
+            // Clavier fermé avant l'envoi : la page de remerciement s'affiche sans lui (F01 M0047)
+            dismissKeyboard()
             await submit()
             return
         }
+        // Aucun champ texte ici, mais un clavier ouvert ailleurs ne doit pas cacher le blocage (F01 M0047)
+        dismissKeyboard()
         errorHaptic()
         withAnimation { proxy.scrollTo(first.anchor, anchor: .center) }
         feedback.flash(first, message: nil)
