@@ -1,87 +1,81 @@
-# Boîtes à Livres — iOS
+# Boîtes à Livres
 
-Application iOS native pour trouver les boîtes à livres (little free libraries) partout en France.
+<p align="center">
+  <img src="BoitesALivresNative/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Icône de Boîtes à Livres" width="140">
+</p>
+
+Trouvez les boîtes à livres près de chez vous, partout en France : sur une carte, dans une liste triée par distance, avec leurs photos et les avis de la communauté.
+
+**[Télécharger sur l'App Store](https://apps.apple.com/fr/app/bo%C3%AEtes-%C3%A0-livres/id6768351762)**
 
 Données issues de [boites-a-livres.fr](https://www.boites-a-livres.fr).
 
 ---
 
-## Stack
+## Fonctionnalités
+
+- **Carte** : boîtes géolocalisées, filtre de rayon (5, 10, 20 et 50 km), position actuelle.
+- **Liste** : boîtes triées par distance, filtre « avec photo ».
+- **Fiche** : adresse, coordonnées, ouverture dans Plans, carrousel de photos plein écran.
+- **Avis** : noter l'état d'une boîte et le nombre de livres, avec commentaire facultatif (depuis la boîte uniquement).
+- **Photos** : ajouter une photo d'une boîte, depuis l'appareil photo ou la bibliothèque.
+- **Localisation** : proposer une correction de position si la boîte est ailleurs.
+- **Suppression** : demander la suppression d'une boîte disparue, validée par un administrateur.
+- **Alerte de proximité** : un rappel quand vous passez près d'une boîte (la position reste sur votre téléphone).
+- **Français et anglais** : la langue suit celle de l'iPhone. Mode clair et sombre.
+
+## Captures
+
+<p align="center">
+  <img src="docs/captures/01-carte.png" alt="Écran carte de Boîtes à Livres" width="260">
+</p>
+
+## Stack technique
 
 | Composant | Technologie |
 |---|---|
-| UI | SwiftUI |
+| Interface | SwiftUI |
 | Carte | MapKit |
-| Backend | Supabase (PostgreSQL + Storage + Edge Functions) |
-| Cache local | UserDefaults + NSCache (images) |
-| Notifications push | APNs via Supabase |
-| Localisation | `fr.lproj` + `en.lproj` (FR/EN automatique) |
+| Backend | Supabase (PostgreSQL, Storage, Edge Functions) |
+| Localisation | `fr.lproj` et `en.lproj` |
 
-## Fonctionnalités
+Aucune dépendance externe : pas de SPM, pas de CocoaPods.
 
-- **Carte** — boîtes à livres géolocalisées avec filtre de rayon (5/10/20/50 km), marqueurs verts, style de carte paramétrable (standard / satellite / hybride)
-- **Liste** — liste triée par distance, pagination, filtre photo
-- **Détail** — coordonnées GPS (décimal/DMS), ouverture dans Plans, carousel photo plein écran, ajout de photo (appareil photo ou bibliothèque)
-- **Réglages** — thème (clair/sombre/auto), taille de texte, unités km/miles, notifications push, partage, notation App Store, gestion du cache
-- **Localisation** — 100 % français quand l'iPhone est en français, 100 % anglais sinon
-- **Deep links** — navigation directe vers une boîte depuis une notification ou un lien externe
-- **Mode sombre** — toutes les vues adaptées (pas de fond blanc codé en dur)
+## Commandes
 
-## Structure du projet
+Prérequis : Xcode 16 ou plus, cible iOS 17 ou plus.
+
+```bash
+make build          # compile pour le simulateur
+make run            # compile, lance le simulateur et installe l'app
+make device         # compile et installe sur un iPhone branché
+make release-check  # lecture seule : clé App Store Connect, version en ligne, builds
+```
+
+L'envoi sur l'App Store (`make release`) exige une confirmation explicite et n'est pas décrit ici.
+
+## Structure du dépôt
 
 ```
 BoitesALivresNative/
-├── App/
-│   ├── BoitesALivresApp.swift     # Point d'entrée, splash, notifications
-│   ├── ContentView.swift          # Tab bar flottante, gestion navigation
-│   ├── MapScreen.swift            # Vue carte principale
-│   ├── ListView.swift             # Vue liste + filtres
-│   └── SettingsView.swift         # Réglages
-├── Views/
-│   ├── Components/
-│   │   ├── BookBoxSheet.swift     # Sheet de prévisualisation sur la carte
-│   │   ├── PhotoCarousel.swift    # Carousel photos
-│   │   └── FullScreenPhotoViewer.swift
-│   └── Detail/
-│       └── DetailView.swift       # Vue détail d'une boîte
-├── ViewModels/
-│   ├── MapViewModel.swift
-│   ├── ListViewModel.swift
-│   ├── DetailViewModel.swift
-│   └── SettingsViewModel.swift
-├── Services/
-│   ├── APIService.swift           # Appels Supabase
-│   ├── LocationService.swift      # Géolocalisation
-│   ├── LocalCacheService.swift    # Cache boîtes
-│   ├── ImageCacheService.swift    # Cache images
-│   ├── NotificationService.swift  # APNs
-│   └── PhotoService.swift         # Upload photos
-├── Models/
-│   └── BookBox.swift
-├── en.lproj/Localizable.strings
-├── fr.lproj/Localizable.strings
-└── App/Constants.swift
+├── App/                  # point d'entrée, navigation par onglets, carte, liste, réglages
+├── Views/                # composants partagés, fiche (Detail), formulaires
+├── ViewModels/           # logique d'écran
+├── Services/             # Supabase, localisation, notifications, cache
+├── Models/               # modèles de données
+├── Assets.xcassets/      # icône, couleurs
+├── en.lproj/ fr.lproj/   # textes en anglais et en français
+docs/captures/            # captures d'écran du README
+release-notes/            # notes de version (fr-FR, en-US)
+scripts/                  # outils de publication et de contrôle
+supabase/                 # schéma et fonctions côté serveur
 ```
 
-## Build
-
-Prérequis : Xcode 16+, iOS 17+ cible.
-
-```bash
-# Ouvrir dans Xcode
-open BoitesALivresNative.xcodeproj
-```
-
-Aucune dépendance externe (pas de SPM, pas de CocoaPods). Tout est natif Apple.
+Historique des versions : [CHANGELOG.md](CHANGELOG.md).
 
 ## Localisation
 
-L'app détecte automatiquement la langue système. Pas de sélecteur manuel.
-
-- `fr.lproj/Localizable.strings` — français (mapping identité)
-- `en.lproj/Localizable.strings` — anglais
-
-Pour ajouter une langue : créer `XX.lproj/Localizable.strings` + ajouter la région dans `project.pbxproj`.
+L'app suit la langue du système, sans sélecteur manuel. Chaque texte affiché a une clé dans `fr.lproj/Localizable.strings` et une traduction dans `en.lproj/Localizable.strings`.
 
 ## Contributeurs
 
