@@ -4,8 +4,8 @@ import XCTest
 
 // Une méthode = une passe = un lancement de l'app (langue × apparence). Chaque écran atteint
 // donne une capture jointe au résultat (XCTAttachment, lifetime .keepAlways).
-// Règles : aucun formulaire envoyé (on ouvre, on touche au plus, on ferme) ; aucun appel à Apple
-// (donc « Confirmer la position » n'est jamais touché : il géocode via CLGeocoder).
+// Règles : aucun formulaire envoyé (on ouvre, on touche au plus, on ferme) ; aucun appel à Apple :
+// ni « Confirmer la position » (CLGeocoder), ni la feuille Localisation (CLGeocoder à l'ouverture).
 // Les arguments de lancement -UITEST_* sont lus par UITestHooks (compilé en DEBUG seulement).
 final class AuditCapturesTests: XCTestCase {
     private var app: XCUIApplication!
@@ -103,14 +103,9 @@ final class AuditCapturesTests: XCTestCase {
         ecran("avis-bouton-grise-touche")
         app.buttons[passe.annuler].firstMatch.tap()
 
-        // 5. Localisation (ouverte seulement si près de la boîte : sinon l'écran reste absent)
-        if toucherAvecDefilement(element("fiche-localisation")),
-           element("localisation-envoyer").waitForExistence(timeout: 10) {
-            ecran("localisation")
-            app.buttons[passe.fermer].firstMatch.tap()
-        } else {
-            noter("localisation : bouton absent ou inactif (position simulée hors de la boîte)")
-        }
+        // 5. Localisation : NON ouverte. Sa feuille géocode à l'ouverture (centerOnBox → CLGeocoder),
+        // ce qui appelle Apple. L'écran n'est donc pas capturé par le test.
+        noter("localisation : feuille non ouverte (géocodage Apple à l'ouverture)")
 
         // 6. Demander la suppression (même condition de distance)
         if toucherAvecDefilement(element("fiche-suppression")),

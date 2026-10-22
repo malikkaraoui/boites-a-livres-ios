@@ -39,6 +39,8 @@ echo "=== Export des captures ==="
 xcrun xcresulttool export attachments --path "$RESULTAT" --output-path "$EXPORT" >/dev/null
 
 mkdir -p "$SORTIE"
+# Pas de captures périmées d'un run précédent : on ne supprime que les PNG des sous-dossiers de passe
+find "$SORTIE" -mindepth 2 -maxdepth 2 -name "*.png" -delete
 python3 - "$EXPORT" "$SORTIE" <<'PY'
 import json, os, re, shutil, sys
 
