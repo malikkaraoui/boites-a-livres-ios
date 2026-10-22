@@ -56,6 +56,17 @@ make release-check  # lecture seule : clé App Store Connect, version en ligne, 
 
 L'envoi sur l'App Store (`make release`) exige une confirmation explicite et n'est pas décrit ici.
 
+### Contrôle visuel
+
+`make ui-audit` lance les tests d'interface (`BoitesALivresNativeUITests`, XCUITest) : ils parcourent les écrans
+(carte, liste, fiche, avis, localisation, suppression, ajout étape 1, réglages, alerte de proximité) dans quatre
+passes (FR/EN × clair/sombre) et rangent une capture par écran dans `vault/revues/audit-M0055/<passe>/`.
+
+- Simulateur par défaut : `iPhone 17` (variable `UI_AUDIT_SIMULATOR` pour changer).
+- Les tests n'envoient aucun formulaire et n'appellent aucun service Apple (pas de géocodage : l'étape 2 de l'ajout
+  n'est donc pas atteinte).
+- Les réglages de test (`-UITEST_ACTIVE`, `-UITEST_APPEARANCE`, `-UITEST_LOCATION`) n'existent qu'en build `DEBUG`.
+
 ## Structure du dépôt
 
 ```

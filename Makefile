@@ -5,7 +5,7 @@ BUILD_DIR = .build
 DEVICE_UDID = 00008101-001278EA36E9001E
 DEVICE_CORE_ID = C3CFC878-6C8D-5B87-8B35-1CB108A4922A
 
-.PHONY: build run device test clean doctor archive help release-check release
+.PHONY: build run device test ui-audit clean doctor archive help release-check release
 
 help:
 	@echo "Cibles disponibles:"
@@ -13,6 +13,7 @@ help:
 	@echo "  make run     - Compile, lance le simulateur et installe l'app"
 	@echo "  make device  - Compile et installe sur iPhone de Malik (USB)"
 	@echo "  make test    - Lance les tests"
+	@echo "  make ui-audit - Tests d'interface : captures FR/EN x clair/sombre dans vault/revues/audit-M0055"
 	@echo "  make clean   - Supprime le dossier de build"
 	@echo "  make doctor  - Diagnostic de l'environnement"
 	@echo "  make archive - Archive pour l'App Store"
@@ -76,6 +77,9 @@ test:
 		-configuration Debug \
 		-derivedDataPath "$(BUILD_DIR)" \
 		test 2>&1 | xcpretty
+
+ui-audit:
+	./scripts/ui-audit.sh vault/revues/audit-M0055
 
 clean:
 	rm -rf "$(BUILD_DIR)"
