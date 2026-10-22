@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 28
+
+- Boîtes : le numéro s'affiche en chiffres bruts (« #9812 »), sans séparateur de milliers, dans toutes les langues.
+- Département : la fiche affiche le nom du département (« Haute-Savoie ») au lieu du code (« 74 »). Les valeurs qui ne sont pas un code sont affichées telles quelles.
+
 ### Build 27
 
 - Couleurs : toute l'app passe au vert de la marque, y compris « Retour », les liens, les boutons et l'onglet sélectionné, en clair comme en sombre. Plus de bleu iOS. Les couleurs d'état (rouge, orange) ne changent pas.

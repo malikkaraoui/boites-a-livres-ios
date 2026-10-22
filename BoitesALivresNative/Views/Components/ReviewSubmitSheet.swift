@@ -305,7 +305,7 @@ struct ReviewSubmitSheet: View {
         VStack(spacing: 6) {
             Text("Donner mon avis")
                 .font(.system(size: 18, weight: .bold))
-            Text("Boîte #\(boxId)")
+            Text("Boîte #\(String(boxId))")
                 .font(.system(size: 13))
                 .foregroundStyle(.secondary)
         }

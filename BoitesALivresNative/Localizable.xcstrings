@@ -471,19 +471,19 @@
         }
       }
     },
-    "anti-répétition posée : boîte %lld, 30 j" : {
+    "anti-répétition posée : boîte %@, 30 j" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "repeat guard set: box %lld, 30 days"
+            "value" : "repeat guard set: box %@, 30 days"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "anti-répétition posée : boîte %lld, 30 j"
+            "value" : "anti-répétition posée : boîte %@, 30 j"
           }
         }
       }
@@ -800,6 +800,7 @@
       }
     },
     "Boîte #%@" : {
+      "comment" : "Book box title",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -811,6 +812,7 @@
     },
     "Boîte #%lld" : {
       "comment" : "Book box title",
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1158,19 +1160,19 @@
         }
       }
     },
-    "dans le rayon de la boîte %lld (%@)" : {
+    "dans le rayon de la boîte %@ (%@)" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "within range of box %lld (%@)"
+            "value" : "within range of box %@ (%@)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "dans le rayon de la boîte %lld (%@)"
+            "value" : "dans le rayon de la boîte %@ (%@)"
           }
         }
       }
@@ -2286,36 +2288,36 @@
         }
       }
     },
-    "notification bloquée : boîte %lld, anti-répétition 30 j" : {
+    "notification bloquée : boîte %@, anti-répétition 30 j" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification blocked: box %lld, 30-day repeat guard"
+            "value" : "notification blocked: box %@, 30-day repeat guard"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification bloquée : boîte %lld, anti-répétition 30 j"
+            "value" : "notification bloquée : boîte %@, anti-répétition 30 j"
           }
         }
       }
     },
-    "notification envoyée : boîte %lld" : {
+    "notification envoyée : boîte %@" : {
       "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification sent: box %lld"
+            "value" : "notification sent: box %@"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "notification envoyée : boîte %lld"
+            "value" : "notification envoyée : boîte %@"
           }
         }
       }

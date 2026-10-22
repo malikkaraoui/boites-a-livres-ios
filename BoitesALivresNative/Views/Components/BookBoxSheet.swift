@@ -65,7 +65,7 @@ struct BookBoxSheet: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Boîte #\(box.id)")
+                        Text("Boîte #\(String(box.id))")
                             .font(.system(size: 17, weight: .bold))
                         if let city = box.city {
                             Text(city)

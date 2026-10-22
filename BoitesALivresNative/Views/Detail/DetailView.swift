@@ -52,8 +52,8 @@ struct DetailView: View {
                                 if let cp = box.postal_code, let city = box.city {
                                     Text("\(cp) \(city)").font(.system(size: 15)).foregroundStyle(Color(.label))
                                 }
-                                if let dept = box.department {
-                                    Text("Département \(dept)").font(.system(size: 13)).foregroundStyle(.secondary)
+                                if let dept = box.department, !dept.isEmpty {
+                                    Text("Département \(Departements.libelle(dept))").font(.system(size: 13)).foregroundStyle(.secondary)
                                 }
                             }
                         }
@@ -82,7 +82,7 @@ struct DetailView: View {
                                         NavigationLink(value: nearby.id) {
                                             HStack {
                                                 VStack(alignment: .leading, spacing: 2) {
-                                                    Text("#\(nearby.id) — \(nearby.city ?? "—")")
+                                                    Text("#\(String(nearby.id)) — \(nearby.city ?? "—")")
                                                         .font(.system(size: 14))
                                                         .foregroundStyle(Color(.label))
                                                 }
@@ -103,7 +103,7 @@ struct DetailView: View {
                     }
                 }
                 .refreshable { await vm.refresh(boxId: boxId) }
-                .navigationTitle("#\(box.id) — \(box.city ?? String(localized: "Détail"))")
+                .navigationTitle("#\(String(box.id)) — \(box.city ?? String(localized: "Détail"))")
                 .navigationBarTitleDisplayMode(.inline)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     Color.clear.frame(height: 90)
@@ -519,7 +519,7 @@ struct DetailView: View {
             VStack(spacing: 4) {
                 Text("Ajouter une photo")
                     .font(.system(size: 17, weight: .bold))
-                Text("Boîte #\(boxId)")
+                Text("Boîte #\(String(boxId))")
                     .font(.system(size: 13))
                     .foregroundStyle(.secondary)
             }

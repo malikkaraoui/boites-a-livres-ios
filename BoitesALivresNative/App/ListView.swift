@@ -206,7 +206,7 @@ struct BookBoxRow: View {
 
             // Box info: ID, city, and address
             VStack(alignment: .leading, spacing: 3) {
-                Text(String(format: NSLocalizedString("Boîte #%lld", comment: "Book box title"), box.id))
+                Text(String(format: NSLocalizedString("Boîte #%@", comment: "Book box title"), String(box.id)))
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color(.label))
                 if let city = box.city {

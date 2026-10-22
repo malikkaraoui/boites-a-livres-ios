@@ -51,6 +51,7 @@
 		EF1EF0731506CC596B214FD4 /* ProximityAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66D14A52721E13F509E019B2 /* ProximityAlertService.swift */; };
 		F173BB30630708C3F6B8DEF6 /* ReviewSubmitSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BBD17B49B8AA0E618721CD /* ReviewSubmitSheet.swift */; };
 		F600B6CF935CE52FC6A83EF3 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 48012993160BAA96B57719E3 /* Localizable.xcstrings */; };
+		F703FE852B887FDAB1636171 /* Departements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5479ED8D9EE895713E4F6BC8 /* Departements.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		48012993160BAA96B57719E3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		4DEF503EFAC6CC8C6D5968F7 /* MapScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapScreen.swift; sourceTree = "<group>"; };
 		52844D8CDAA03AFDAD2AC81F /* DeletionRequestSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletionRequestSheet.swift; sourceTree = "<group>"; };
+		5479ED8D9EE895713E4F6BC8 /* Departements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Departements.swift; sourceTree = "<group>"; };
 		62DE9F849DE135DD219CC485 /* AuditCapturesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuditCapturesTests.swift; sourceTree = "<group>"; };
 		66D14A52721E13F509E019B2 /* ProximityAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProximityAlertService.swift; sourceTree = "<group>"; };
 		67C94311C28A7EADC952A988 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 			children = (
 				A924B3C6C1EED9C0DC38F81F /* BookBox.swift */,
 				21556067EC1F93E1BF3945BE /* BoxReview.swift */,
+				5479ED8D9EE895713E4F6BC8 /* Departements.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				430E5D43E1AF08B901B4A791 /* ContentView.swift in Sources */,
 				E87612981CE9503A22BCE18C /* DeepLinkRouter.swift in Sources */,
 				93D245FDE7BE544B4D6C9BBE /* DeletionRequestSheet.swift in Sources */,
+				F703FE852B887FDAB1636171 /* Departements.swift in Sources */,
 				818A6D2A545006EA1281CA15 /* DetailView.swift in Sources */,
 				8A7A9CFBDB43BFC593D35168 /* DetailViewModel.swift in Sources */,
 				C50612919DDFEA10B5D75DD7 /* ForceUpdateView.swift in Sources */,
@@ -418,7 +422,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
@@ -501,7 +505,7 @@
 				CODE_SIGN_ENTITLEMENTS = BoitesALivresNative/BoitesALivresNative.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UPES5479T5;
 				INFOPLIST_FILE = BoitesALivresNative/Info.plist;
