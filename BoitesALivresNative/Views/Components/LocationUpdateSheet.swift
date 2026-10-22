@@ -143,7 +143,7 @@ struct LocationUpdateSheet: View {
             note("Pas encore de photo ? Tu peux en ajouter une depuis la fiche de la boîte.")
         }
         if case .failed(let message) = phase {
-            notice(message, color: .red)
+            notice(LocalizedStringKey(message), color: .red)
         }
         submitButton(proxy)
     }
@@ -205,9 +205,9 @@ struct LocationUpdateSheet: View {
     }
 
     private var precisionText: String {
-        guard gps != nil else { return "Précision : inconnue" }
-        guard accuracy >= 0 else { return "Précision : inconnue" }
-        return String(format: "Précision : ± %.0f m", accuracy)
+        guard gps != nil else { return String(localized: "Précision : inconnue") }
+        guard accuracy >= 0 else { return String(localized: "Précision : inconnue") }
+        return String(format: String(localized: "Précision : ± %.0f m"), accuracy)
     }
 
     private var mapSection: some View {
@@ -218,7 +218,7 @@ struct LocationUpdateSheet: View {
             ZStack {
                 Map(position: $camera) {
                     UserAnnotation()
-                    Marker(box.address ?? "Boîte", coordinate: box.coordinate)
+                    Marker(box.address ?? String(localized: "Boîte"), coordinate: box.coordinate)
                         .tint(.gray)
                 }
                 .onMapCameraChange(frequency: .onEnd) { context in
@@ -267,7 +267,7 @@ struct LocationUpdateSheet: View {
                 if phase == .sending {
                     ProgressView().tint(.white)
                 } else {
-                    Text(kind == .move ? "Envoyer le nouvel emplacement" : "Oui, elle est bien ici")
+                    Text(kind == .move ? String(localized: "Envoyer le nouvel emplacement") : String(localized: "Oui, elle est bien ici"))
                         .font(.system(size: 16, weight: .semibold))
                 }
             }
@@ -329,7 +329,7 @@ struct LocationUpdateSheet: View {
     private func submit() async {
         guard canSubmit, let gps else { return }
         guard let token = NotificationService.shared.getPushToken(), !token.isEmpty else {
-            phase = .failed("Autorise les notifications : la proposition est liée à cet appareil.")
+            phase = .failed(String(localized: "Autorise les notifications : la proposition est liée à cet appareil."))
             return
         }
         phase = .sending
@@ -365,28 +365,28 @@ struct LocationUpdateSheet: View {
     static func message(for error: Error) -> String {
         if let e = error as? SupabaseError, case .httpError(let code, let body) = e {
             if body.contains("23505") || body.contains("duplicate") {
-                return "Tu as déjà une proposition en attente pour cette boîte."
+                return String(localized: "Tu as déjà une proposition en attente pour cette boîte.")
             }
             if body.contains("maximum") {
-                return "Proposition refusée : elle est trop loin de la boîte."
+                return String(localized: "Proposition refusée : elle est trop loin de la boîte.")
             }
             if code == 404 {
-                return "Le service de localisation n'est pas encore disponible."
+                return String(localized: "Le service de localisation n'est pas encore disponible.")
             }
         }
-        return "Envoi impossible pour le moment. Réessaie dans un instant."
+        return String(localized: "Envoi impossible pour le moment. Réessaie dans un instant.")
     }
 
     // MARK: - Éléments visuels
 
-    private func notice(_ text: String, color: Color) -> some View {
+    private func notice(_ text: LocalizedStringKey, color: Color) -> some View {
         Text(text)
             .font(.system(size: 13, weight: .medium))
             .foregroundStyle(color)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func note(_ text: String) -> some View {
+    private func note(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 12))
             .foregroundStyle(.secondary)

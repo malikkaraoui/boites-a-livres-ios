@@ -343,8 +343,8 @@ extension SubmitRequirements.Review {
     var hint: String? {
         switch self {
         case .proximity: return nil
-        case .condition: return "Choisis l'état de la boîte"
-        case .comment: return "Écris un commentaire"
+        case .condition: return String(localized: "Choisis l'état de la boîte")
+        case .comment: return String(localized: "Écris un commentaire")
         }
     }
 }
@@ -363,9 +363,9 @@ extension SubmitRequirements.AddBox {
 
     var submitHint: String {
         switch self {
-        case .photo: return "Ajoute une photo de la boîte"
-        case .gpsPrecision: return "Patiente, le GPS affine ta position (50 m ou mieux)…"
-        case .tooFar: return "Tu dois être à moins de 50 m du point proposé."
+        case .photo: return String(localized: "Ajoute une photo de la boîte")
+        case .gpsPrecision: return String(localized: "Patiente, le GPS affine ta position (50 m ou mieux)…")
+        case .tooFar: return String(localized: "Tu dois être à moins de 50 m du point proposé.")
         }
     }
 }

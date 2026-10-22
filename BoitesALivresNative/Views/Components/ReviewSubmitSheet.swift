@@ -113,7 +113,7 @@ struct ReviewSubmitSheet: View {
     @State private var feedback = MissingFeedback<SubmitRequirements.Review>()
 
     private let maxComment = 150
-    private let maxName = 30
+    private let maxName = 20
     private let maxDistanceMeters: CLLocationDistance = 100
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
 
@@ -432,7 +432,7 @@ struct ReviewSubmitSheet: View {
         } label: {
             HStack(spacing: 8) {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
-                Text(submitting ? "Envoi…" : "Envoyer mon avis")
+                Text(submitting ? String(localized: "Envoi…") : String(localized: "Envoyer mon avis"))
                     .font(.system(size: 16, weight: .semibold))
             }
             .frame(maxWidth: .infinity)

@@ -7,13 +7,13 @@ import SwiftUI
 struct ForceUpdateView: View {
     @Environment(\.openURL) private var openURL
 
-    private let blue = Color(red: 37/255, green: 99/255, blue: 235/255)
+    private let accent = Color("AccentColor")
 
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "arrow.down.app")
                 .font(.system(size: 56))
-                .foregroundStyle(blue)
+                .foregroundStyle(accent)
 
             Text("Mise à jour nécessaire")
                 .font(.title2.bold())
@@ -31,7 +31,7 @@ struct ForceUpdateView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
-                    .background(blue, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .background(accent, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
             .padding(.horizontal, 32)
             .padding(.top, 12)

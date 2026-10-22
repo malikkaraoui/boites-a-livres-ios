@@ -8,9 +8,9 @@ enum LocationError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .unavailable: return "Position non disponible"
-        case .timeout: return "Délai de géolocalisation dépassé"
-        case .denied: return "Accès à la localisation refusé"
+        case .unavailable: return String(localized: "Position non disponible")
+        case .timeout: return String(localized: "Délai de géolocalisation dépassé")
+        case .denied: return String(localized: "Accès à la localisation refusé")
         }
     }
 }

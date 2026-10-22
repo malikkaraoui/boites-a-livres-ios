@@ -120,7 +120,7 @@ struct SettingsView: View {
                     Text("Taille du texte")
                 } icon: {
                     Image(systemName: "textformat.size")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(Color("AccentColor"))
                 }
                 Spacer()
                 sizeButton(label: "A", size: 13, tag: 0)
@@ -217,7 +217,7 @@ struct SettingsView: View {
                     }
                 } label: {
                     Label(
-                        vm.notificationStatus == .denied ? "Ouvrir les Réglages" : "Activer les notifications",
+                        vm.notificationStatus == .denied ? String(localized: "Ouvrir les Réglages") : String(localized: "Activer les notifications"),
                         systemImage: "bell.badge"
                     )
                     .foregroundStyle(green)
@@ -344,7 +344,7 @@ struct SettingsView: View {
 
         case .box(let b):
             HStack(spacing: 12) {
-                typedIconTile(systemName: "mappin.and.ellipse", color: .blue)
+                typedIconTile(systemName: "mappin.and.ellipse", color: Color("AccentColor"))
                 rowBody(
                     title: NSLocalizedString("Nouvelle boîte", comment: "") + " · " + (b.city ?? b.address ?? "—"),
                     subtitle: relativeDate(from: b.submitted_at)
@@ -463,9 +463,9 @@ struct SettingsView: View {
 
     private func deletionStatusChip(_ status: String) -> some View {
         let (label, color): (String, Color) = switch status {
-            case "pending":  ("En attente", .orange)
-            case "approved": ("Supprimée", .red)
-            case "rejected": ("Refusée", .secondary)
+            case "pending":  (String(localized: "En attente"), .orange)
+            case "approved": (String(localized: "Supprimée"), .red)
+            case "rejected": (String(localized: "Refusée"), .secondary)
             default:         (status, .secondary)
         }
         return Text(label)

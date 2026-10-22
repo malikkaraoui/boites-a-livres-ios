@@ -103,7 +103,7 @@ struct DetailView: View {
                     }
                 }
                 .refreshable { await vm.refresh(boxId: boxId) }
-                .navigationTitle("#\(box.id) — \(box.city ?? "Détail")")
+                .navigationTitle("#\(box.id) — \(box.city ?? String(localized: "Détail"))")
                 .navigationBarTitleDisplayMode(.inline)
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     Color.clear.frame(height: 90)
@@ -323,7 +323,7 @@ struct DetailView: View {
             } label: {
                 HStack(spacing: 8) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(showDMS ? LocalizedStringKey("DMS") : "Décimal")
+                        Text(showDMS ? "DMS" : String(localized: "Décimal"))
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(.secondary)
                         Text(coordValue)
@@ -634,7 +634,8 @@ struct DetailView: View {
     // MARK: - Logic
 
     private func openMaps(box: BookBox) {
-        let url = URL(string: "maps://?ll=\(box.lat),\(box.lng)&q=Boîte+à+livres")
+        let title = String(localized: "Boîte à livres").replacingOccurrences(of: " ", with: "+")
+        let url = URL(string: "maps://?ll=\(box.lat),\(box.lng)&q=\(title)")
             ?? URL(string: "http://maps.apple.com/?ll=\(box.lat),\(box.lng)")!
         UIApplication.shared.open(url)
     }

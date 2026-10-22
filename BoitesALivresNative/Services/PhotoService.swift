@@ -10,8 +10,8 @@ enum PhotoError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .compressionFailed: return "Impossible de compresser l'image"
-        case .noImage: return "Aucune image sélectionnée"
+        case .compressionFailed: return String(localized: "Impossible de compresser l'image")
+        case .noImage: return String(localized: "Aucune image sélectionnée")
         }
     }
 }
@@ -32,35 +32,7 @@ struct CameraPickerView: UIViewControllerRepresentable {
         return picker
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            Self.frenchifyCancel(in: uiViewController.view)
-        }
-    }
-
-    private static func frenchifyCancel(in view: UIView) {
-        for sub in view.subviews {
-            if let btn = sub as? UIButton, btn.title(for: .normal) == "Cancel" {
-                btn.setTitle("Annuler", for: .normal)
-                btn.setTitle("Annuler", for: .highlighted)
-                btn.titleLabel?.adjustsFontSizeToFitWidth = false
-                btn.titleLabel?.lineBreakMode = .byClipping
-                btn.sizeToFit()
-                btn.frame = CGRect(
-                    x: btn.frame.minX,
-                    y: btn.frame.minY,
-                    width: max(btn.frame.width, 80),
-                    height: btn.frame.height
-                )
-            } else if let label = sub as? UILabel, label.text == "Cancel" {
-                label.text = "Annuler"
-                label.adjustsFontSizeToFitWidth = false
-                label.lineBreakMode = .byClipping
-                label.sizeToFit()
-            }
-            frenchifyCancel(in: sub)
-        }
-    }
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
     /// Delegate to handle camera picker callbacks
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {

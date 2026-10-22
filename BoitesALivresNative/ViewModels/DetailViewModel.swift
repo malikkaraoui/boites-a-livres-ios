@@ -59,8 +59,8 @@ final class DetailViewModel {
     func handlePhoto(source: PhotoSource, boxId: Int) async {
         showPhotoModal = false
         guard photos.count < Constants.maxPhotosPerBox else {
-            alertTitle = "Limite atteinte"
-            alertMessage = "Maximum \(Constants.maxPhotosPerBox) photos par boîte."
+            alertTitle = String(localized: "Limite atteinte")
+            alertMessage = String(localized: "Maximum \(Constants.maxPhotosPerBox) photos par boîte.")
             showAlert = true
             return
         }
@@ -93,7 +93,7 @@ final class DetailViewModel {
                 photos = ph
             }
         } catch {
-            alertTitle = "Erreur"
+            alertTitle = String(localized: "Erreur")
             alertMessage = error.localizedDescription
             showAlert = true
         }
