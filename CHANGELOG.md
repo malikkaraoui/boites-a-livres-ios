@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 23
+
+- Envoi : après « Envoyer mon avis » et « Envoyer la demande de suppression », l'écran de confirmation s'affiche en pleine page, aux couleurs de l'app, comme après l'envoi d'une photo. Plus d'alerte flottante. Même écran pour l'ajout de boîte, la localisation et la photo, sans changer les textes ni les actions.
+
 ### Build 22
 
 - Envoi grisé : toucher « Envoyer » quand il manque quelque chose ne envoie rien. L'écran défile jusqu'à ce qui manque (l'état de la boîte, le commentaire, la photo, la distance ou la précision), le fait clignoter, affiche un court message et vibre légèrement. Concerne l'avis, la demande de suppression, l'ajout de boîte et la localisation. « Réduire les animations » remplace le clignotement par un surlignage fixe.
