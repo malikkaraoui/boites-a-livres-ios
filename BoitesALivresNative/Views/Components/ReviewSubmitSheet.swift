@@ -434,6 +434,7 @@ struct ReviewSubmitSheet: View {
                 if submitting { ProgressView().tint(.white).scaleEffect(0.85) }
                 Text(submitting ? String(localized: "Envoi…") : String(localized: "Envoyer mon avis"))
                     .font(.system(size: 16, weight: .semibold))
+                    .accessibilityIdentifier("avis-envoyer")
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

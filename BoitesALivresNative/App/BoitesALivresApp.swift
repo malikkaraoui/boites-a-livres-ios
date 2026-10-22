@@ -32,6 +32,9 @@ struct BoitesALivresApp: App {
                     if phase == .active { Task { await versionGate.check() } }
                 }
                 .task {
+                    #if DEBUG
+                    guard !UITestHooks.isActive else { return }
+                    #endif
                     Task.detached(priority: .background) {
                         try? await Task.sleep(nanoseconds: 2_000_000_000)
                         let granted = await NotificationService.shared.requestPermission()
@@ -46,6 +49,9 @@ struct BoitesALivresApp: App {
     }
 
     private var resolvedColorScheme: ColorScheme? {
+        #if DEBUG
+        if let forced = UITestHooks.forcedColorScheme { return forced }
+        #endif
         switch colorSchemeIndex {
         case 1: return .light
         case 2: return .dark

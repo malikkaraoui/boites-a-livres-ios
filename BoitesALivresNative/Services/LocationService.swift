@@ -38,6 +38,9 @@ final class LocationService: NSObject, ObservableObject {
         manager.distanceFilter = 50
         authorizationStatus = manager.authorizationStatus
         currentLocation = manager.location // Load cached location immediately
+        #if DEBUG
+        if let simulated = UITestHooks.simulatedLocation { currentLocation = simulated }
+        #endif
     }
 
     // Trigger system dialog for "When In Use" location permission

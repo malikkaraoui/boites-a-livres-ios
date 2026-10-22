@@ -40,6 +40,17 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4857AFDA8D7858D08395A98C"
+               BuildableName = "BoitesALivresNativeUITests.xctest"
+               BlueprintName = "BoitesALivresNativeUITests"
+               ReferencedContainer = "container:BoitesALivresNative.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

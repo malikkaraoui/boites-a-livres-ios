@@ -269,6 +269,7 @@ struct LocationUpdateSheet: View {
                 } else {
                     Text(kind == .move ? String(localized: "Envoyer le nouvel emplacement") : String(localized: "Oui, elle est bien ici"))
                         .font(.system(size: 16, weight: .semibold))
+                        .accessibilityIdentifier("localisation-envoyer")
                 }
             }
             .frame(maxWidth: .infinity)

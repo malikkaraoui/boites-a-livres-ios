@@ -84,6 +84,7 @@ struct ListView: View {
                         showAddBox = true
                     } label: {
                         Image(systemName: "plus.circle.fill")
+                            .accessibilityIdentifier("ajouter-boite-liste")
                             .font(.system(size: 22))
                             .foregroundStyle(green)
                     }

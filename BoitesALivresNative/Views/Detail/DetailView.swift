@@ -388,6 +388,7 @@ struct DetailView: View {
                 showLocationSheet = true
             } label: {
                 Label("Localisation", systemImage: "mappin.and.ellipse")
+                    .accessibilityIdentifier("fiche-localisation")
                     .font(.system(size: 15, weight: .semibold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -415,6 +416,7 @@ struct DetailView: View {
                 showDeletionSheet = true
             } label: {
                 Label("Signaler une suppression", systemImage: "trash")
+                    .accessibilityIdentifier("fiche-suppression")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(canReport ? Color.red : Color.secondary)
                     .frame(maxWidth: .infinity)

@@ -59,6 +59,9 @@ struct ContentView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             // Retour au premier plan : rappel si l'alerte de proximité est incomplète (F01 M0023, #29)
+            #if DEBUG
+            guard !UITestHooks.isActive else { return }
+            #endif
             if phase == .active { proximityReminder = ProximityReminder.message() }
         }
         .alert("Alerte près d'une boîte désactivée", isPresented: Binding(
@@ -75,6 +78,9 @@ struct ContentView: View {
         .task {
             // Demande de notation auto après 90s d'usage — une fois par version max.
             // iOS limite réellement le prompt à 3/an, donc requestReview peut être no-op.
+            #if DEBUG
+            guard !UITestHooks.isActive else { return }
+            #endif
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
             guard reviewPromptShownForVersion != currentVersion else { return }
             try? await Task.sleep(nanoseconds: reviewPromptDelay)
