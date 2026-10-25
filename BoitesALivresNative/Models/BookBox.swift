@@ -182,6 +182,16 @@ enum LocationRules {
     static let presenceMeters: Double = 50
     // Rayon des régions de l'alerte de proximité : 100 m (F01 M0036)
     static let alertRadiusMeters: Double = 100
+    // Vitesse maximale pour notifier : au-dessus, on roule, pas d'alerte (issue #65, décision fondateur 25/10)
+    static let alertMaxSpeedKmh: Double = 7
+
+    enum SpeedDecision: Equatable { case notify, tooFast, unknown }
+
+    // Vitesse en m/s telle que la donne CLLocation.speed ; < 0 = invalide (iOS) → inconnue, donc pas d'alerte
+    static func alertSpeedDecision(speedMps: Double) -> SpeedDecision {
+        guard speedMps >= 0 else { return .unknown }
+        return speedMps * 3.6 > alertMaxSpeedKmh ? .tooFast : .notify
+    }
     // Déplacement maximal du repère par rapport à la boîte : 100 m (F01 M0036)
     static let moveMaxMeters: Double = 100
 

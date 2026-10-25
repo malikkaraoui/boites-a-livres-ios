@@ -3530,6 +3530,40 @@
           }
         }
       }
+    },
+    "boîte %@ : en mouvement (%@ km/h), pas de notification" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "box %@: moving (%@ km/h), no notification"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "boîte %@ : en mouvement (%@ km/h), pas de notification"
+          }
+        }
+      }
+    },
+    "boîte %@ : vitesse inconnue, pas de notification" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "box %@: speed unknown, no notification"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "boîte %@ : vitesse inconnue, pas de notification"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
