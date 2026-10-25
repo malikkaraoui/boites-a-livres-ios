@@ -41,6 +41,9 @@ struct SettingsView: View {
     @AppStorage(ProximityAlertService.enabledKey) private var proximityEnabled = true
     @State private var showProximityExplanation = false
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.scenePhase) private var scenePhase
+    // Vrai quand l'onglet Réglages est affiché (fourni par ContentView). Le rechargement n'a lieu que dans ce cas.
+    var isSelected: Bool = true
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private var shareText: String { NSLocalizedString("share_app_text", comment: "") }
@@ -61,8 +64,17 @@ struct SettingsView: View {
             }
             .contentMargins(.bottom, 100, for: .scrollContent)
             .navigationTitle("Réglages")
-            .task { await vm.onAppear() }
-            .refreshable { await vm.onAppear() }
+            // Recharge à chaque ouverture de l'onglet (id = isSelected : relancé quand il devient vrai)
+            .task(id: isSelected) {
+                guard isSelected else { return }
+                await vm.reload()
+            }
+            // Retour au premier plan : recharge seulement si Réglages est l'onglet affiché
+            .onChange(of: scenePhase) { _, phase in
+                guard phase == .active, isSelected else { return }
+                Task { await vm.reload() }
+            }
+            .refreshable { await vm.reload() }
         }
     }
 

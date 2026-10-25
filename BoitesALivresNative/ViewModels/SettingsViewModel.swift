@@ -14,9 +14,27 @@ final class SettingsViewModel {
     var myBoxSubmissions: [BoxSubmissionRecord] = []
     var myLocationUpdates: [LocationUpdateRecord] = []
 
+    // Chargement en cours. Un second reload() pendant ce chargement attend celui-ci au lieu d'en lancer un autre.
+    private var inFlight: Task<Void, Never>?
+
+    // Recharge tout : à l'ouverture de l'onglet, au retour au premier plan, et au tirer-pour-rafraîchir.
+    // Les valeurs affichées restent en place jusqu'à la réponse (pas de vidage pendant le chargement).
+    func reload() async {
+        if let inFlight {
+            await inFlight.value
+            return
+        }
+        let task = Task {
+            await self.load()
+            self.inFlight = nil
+        }
+        inFlight = task
+        await task.value
+    }
+
     // Load notification status, device push token, photo submissions, deletion requests,
     // mes avis et mes soumissions de nouvelles boîtes — tout en parallèle.
-    func onAppear() async {
+    private func load() async {
         notificationStatus = await NotificationService.shared.getAuthorizationStatus()
         pushToken = NotificationService.shared.getPushToken()
         async let subs = PhotoService.shared.loadSubmissions()
