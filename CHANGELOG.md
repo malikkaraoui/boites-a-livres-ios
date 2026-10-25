@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 30
+
+- Réglages se rechargent à l'ouverture et au retour dans l'app : les nouveaux statuts apparaissent sans tirer vers le bas.
+
 ### Build 29
 
 - Alerte de proximité : pas de notification au-dessus de 7 km/h (en voiture, par exemple). Une vitesse inconnue ne notifie pas non plus. Une boîte croisée en roulant n'est plus marquée comme vue : l'alerte reste possible à pied.

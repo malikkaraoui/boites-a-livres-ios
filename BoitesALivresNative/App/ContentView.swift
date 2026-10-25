@@ -38,7 +38,7 @@ struct ContentView: View {
 
             // Settings — same bottom inset
             if loadedTabs.contains(2) {
-                SettingsView()
+                SettingsView(isSelected: selectedTab == 2)
                     .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 110) }
                     .opacity(selectedTab == 2 ? 1 : 0)
                     .allowsHitTesting(selectedTab == 2)
