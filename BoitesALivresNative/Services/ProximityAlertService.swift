@@ -19,6 +19,11 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     // Boîtes dont l'alerte a déjà été traitée pendant cette présence (levée à la sortie)
     private var handledInside = Set<Int>()
+    // Demandes de position fraîche en attente (vitesse avant alerte) ; une seule requestLocation à la fois
+    private var pendingFixes: [(CLLocation?) -> Void] = []
+    private var savedAccuracy: CLLocationAccuracy?
+    private var fixGeneration = 0
+    private static let freshMaxAgeSeconds: TimeInterval = 10
 
     private override init() {
         super.init()
@@ -83,10 +88,61 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         }
     }
 
+    // Entrée ou état « dedans » : la vitesse décide avant toute notification (issue #65).
+    // Au-dessus de 7 km/h ou vitesse inconnue : rien d'écrit (ni notification, ni anti-répétition, ni handledInside).
+    private func handleInside(boxId: Int, origin: String) {
+        ProximityJournal.add(String(localized: "dans le rayon de la boîte \(String(boxId)) (\(origin))"))
+        guard !handledInside.contains(boxId) else { return }
+        freshLocation { [weak self] location in
+            guard let self else { return }
+            let decision = location.map { LocationRules.alertSpeedDecision(speedMps: $0.speed) } ?? .unknown
+            switch decision {
+            case .notify:
+                self.notifyIfAllowed(boxId: boxId)
+            case .tooFast:
+                let kmh = String(Int(((location?.speed ?? 0) * 3.6).rounded()))
+                ProximityJournal.add(String(localized: "boîte \(String(boxId)) : en mouvement (\(kmh) km/h), pas de notification"))
+            case .unknown:
+                ProximityJournal.add(String(localized: "boîte \(String(boxId)) : vitesse inconnue, pas de notification"))
+            }
+        }
+    }
+
+    // Position de moins de 10 s : celle du gestionnaire si elle est assez récente, sinon une demande ponctuelle
+    // à précision maximale, avec délai borné (10 s). nil = pas de position à temps.
+    private func freshLocation(_ done: @escaping (CLLocation?) -> Void) {
+        if let location = manager.location, Date().timeIntervalSince(location.timestamp) <= Self.freshMaxAgeSeconds {
+            done(location)
+            return
+        }
+        pendingFixes.append(done)
+        guard pendingFixes.count == 1 else { return }
+        savedAccuracy = manager.desiredAccuracy
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestLocation()
+        fixGeneration += 1
+        let generation = fixGeneration
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.freshMaxAgeSeconds) { [weak self] in
+            guard let self, self.fixGeneration == generation else { return }
+            self.resolveFixes(nil)
+        }
+    }
+
+    // Rend les demandes en attente (position ou nil) et remet la précision d'origine. Sans demande en attente : no-op.
+    private func resolveFixes(_ location: CLLocation?) {
+        guard !pendingFixes.isEmpty else { return }
+        let done = pendingFixes
+        pendingFixes = []
+        if let saved = savedAccuracy {
+            manager.desiredAccuracy = saved
+            savedAccuracy = nil
+        }
+        done.forEach { $0(location) }
+    }
+
     // Une seule notification par présence ; anti-répétition 30 j ; tout est journalisé localement.
     // Une alerte affichée compte comme vue : la date est posée à l'envoi, sans attendre une réponse (F01 M0024)
-    private func notifyIfAllowed(boxId: Int, origin: String) {
-        ProximityJournal.add(String(localized: "dans le rayon de la boîte \(String(boxId)) (\(origin))"))
+    private func notifyIfAllowed(boxId: Int) {
         guard !handledInside.contains(boxId) else { return }
         handledInside.insert(boxId)
         let blocked = LocationRules.isBlocked(lastPrompt: LocationPromptLog.all()[boxId], now: Date())
@@ -127,14 +183,25 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     // MARK: CLLocationManagerDelegate
 
     // Position significative (plusieurs centaines de mètres) : recalcul des 20 régions
+    // La réponse d'un requestLocation (demande de vitesse) répond aux demandes en attente ; sans attente, no-op.
+    // Le recalcul des régions tourne dans tous les cas.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let fresh = locations.last, Date().timeIntervalSince(fresh.timestamp) <= Self.freshMaxAgeSeconds {
+            resolveFixes(fresh)
+        }
         refreshRegions(origin: locations.last?.coordinate)
     }
 
-    // Entrée dans une boîte : rappel local, sauf anti-répétition 30 jours
+    // Position indisponible : les demandes en attente reçoivent nil, donc pas d'alerte (décision fondateur)
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("[Proximité] position indisponible : \(error.localizedDescription)")
+        resolveFixes(nil)
+    }
+
+    // Entrée dans une boîte : rappel local si on est à pied (≤ 7 km/h), sauf anti-répétition 30 jours
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         guard isEnabled, let boxId = boxId(of: region) else { return }
-        notifyIfAllowed(boxId: boxId, origin: String(localized: "entrée"))
+        handleInside(boxId: boxId, origin: String(localized: "entrée"))
     }
 
     // Sortie : la présence est close, la prochaine entrée peut de nouveau notifier (F01 M0023, revue R017)
@@ -147,7 +214,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         guard isEnabled, let boxId = boxId(of: region) else { return }
         if state == .inside {
-            notifyIfAllowed(boxId: boxId, origin: String(localized: "état au démarrage"))
+            handleInside(boxId: boxId, origin: String(localized: "état au démarrage"))
         } else if state == .outside {
             handledInside.remove(boxId)
         }
