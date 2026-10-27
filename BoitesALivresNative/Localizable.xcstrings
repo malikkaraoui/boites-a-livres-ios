@@ -109,6 +109,38 @@
         }
       }
     },
+    "Pas encore de photo. Tu passes devant ? Prends la première !" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photo yet. Passing by? Take the first one!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas encore de photo. Tu passes devant ? Prends la première !"
+          }
+        }
+      }
+    },
+    "Tu es à moins de 300 m : ta photo sera la première de cette boîte, la communauté te remercie déjà !" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're less than 300 m away: your photo will be the first of this box, the community already thanks you!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu es à moins de 300 m : ta photo sera la première de cette boîte, la communauté te remercie déjà !"
+          }
+        }
+      }
+    },
     "~%@ livres" : {
       "localizations" : {
         "en" : {

@@ -180,6 +180,10 @@ struct LocationUpdateRecord: Codable, Identifiable, Hashable {
 enum LocationRules {
     // Présence sur place (ajout, bouton Localisation, écran Localisation) : 50 m, inchangé
     static let presenceMeters: Double = 50
+    // Invitation à prendre la première photo (fiche sans photo) : texte « tu es sur place » à 300 m ou moins (M0061)
+    static let photoInviteMeters: Double = 300
+    // Position inconnue = loin : on n'affirme pas être sur place sans position
+    static func isNearPhotoInvite(distance: Double?) -> Bool { (distance ?? .greatestFiniteMagnitude) <= photoInviteMeters }
     // Rayon des régions de l'alerte de proximité : 100 m (F01 M0036)
     static let alertRadiusMeters: Double = 100
     // Vitesse maximale pour notifier : au-dessus, on roule, pas d'alerte (issue #65, décision fondateur 25/10)

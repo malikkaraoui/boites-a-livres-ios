@@ -283,12 +283,17 @@ struct DetailView: View {
 
     @ViewBuilder
     private func photoSection(box: BookBox) -> some View {
+        // Même règle que le bouton « Ajouter une photo » (photoAddButton) : 100 m, place disponible
+        let distance = distanceFromUser(to: box)
+        let canAdd = vm.photos.count < Constants.maxPhotosPerBox && (distance ?? .greatestFiniteMagnitude) <= 100
         ZStack(alignment: .topTrailing) {
             PhotoCarousel(
                 photos: vm.photos,
                 localImage: vm.localPhotoImage,
                 uploading: vm.uploading,
-                onTap: { index in photoViewerIndex = index }
+                onTap: { index in photoViewerIndex = index },
+                emptyInvite: vm.photos.isEmpty ? photoInviteText(distance: distance) : nil,
+                onTapEmpty: canAdd ? { vm.showPhotoModal = true } : nil
             )
             if vm.uploading && (!vm.photos.isEmpty || vm.localPhotoImage != nil) {
                 HStack(spacing: 6) {
@@ -487,6 +492,14 @@ struct DetailView: View {
         guard let loc = LocationService.shared.currentLocation else { return nil }
         let target = CLLocation(latitude: box.lat, longitude: box.lng)
         return loc.distance(from: target)
+    }
+
+    // Invitation dans le cadre d'une fiche sans photo : « tu es sur place » à 300 m ou moins (M0061)
+    private func photoInviteText(distance: CLLocationDistance?) -> String {
+        if LocationRules.isNearPhotoInvite(distance: distance) {
+            return NSLocalizedString("Tu es à moins de 300 m : ta photo sera la première de cette boîte, la communauté te remercie déjà !", comment: "")
+        }
+        return NSLocalizedString("Pas encore de photo. Tu passes devant ? Prends la première !", comment: "")
     }
 
     private func distanceExplanation(_ distance: CLLocationDistance?) -> String {

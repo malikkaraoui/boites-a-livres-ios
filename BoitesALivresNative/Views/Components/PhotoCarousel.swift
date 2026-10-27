@@ -8,6 +8,9 @@ struct PhotoCarousel: View {
     let localImage: UIImage?
     let uploading: Bool
     var onTap: ((Int) -> Void)? = nil
+    // Fiche sans aucune photo : texte d'invitation dans le cadre ; toucher le cadre ouvre l'ajout (M0061)
+    var emptyInvite: String? = nil
+    var onTapEmpty: (() -> Void)? = nil
     @State private var currentPage = 0
 
     // Count includes approved photos plus local preview or upload placeholder
@@ -21,7 +24,23 @@ struct PhotoCarousel: View {
 
     var body: some View {
         Group {
-            if photos.isEmpty && localImage == nil && !uploading {
+            if photos.isEmpty && localImage == nil && !uploading, let invite = emptyInvite {
+                // Aucune photo publiée : invitation à prendre la première (M0061)
+                Color(.systemGray5)
+                    .frame(height: 220)
+                    .overlay(
+                        VStack(spacing: 12) {
+                            Image(systemName: "camera.fill").font(.system(size: 36)).foregroundStyle(.secondary)
+                            Text(invite)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 24)
+                        }
+                    )
+                    .contentShape(Rectangle())
+                    .onTapGesture { onTapEmpty?() }
+            } else if photos.isEmpty && localImage == nil && !uploading {
                 // Plus rien à montrer : carré gris
                 Color(.systemGray5)
                     .frame(height: 220)
