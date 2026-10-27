@@ -286,14 +286,16 @@ struct DetailView: View {
         // Même règle que le bouton « Ajouter une photo » (photoAddButton) : 100 m, place disponible
         let distance = distanceFromUser(to: box)
         let canAdd = vm.photos.count < Constants.maxPhotosPerBox && (distance ?? .greatestFiniteMagnitude) <= 100
+        // Pendant le chargement, les photos ne sont pas encore reçues : pas d'invitation (M0061, R051)
+        let showInvite = !vm.loading && vm.photos.isEmpty
         ZStack(alignment: .topTrailing) {
             PhotoCarousel(
                 photos: vm.photos,
                 localImage: vm.localPhotoImage,
                 uploading: vm.uploading,
                 onTap: { index in photoViewerIndex = index },
-                emptyInvite: vm.photos.isEmpty ? photoInviteText(distance: distance) : nil,
-                onTapEmpty: canAdd ? { vm.showPhotoModal = true } : nil
+                emptyInvite: showInvite ? photoInviteText(distance: distance) : nil,
+                onTapEmpty: showInvite && canAdd ? { vm.showPhotoModal = true } : nil
             )
             if vm.uploading && (!vm.photos.isEmpty || vm.localPhotoImage != nil) {
                 HStack(spacing: 6) {
