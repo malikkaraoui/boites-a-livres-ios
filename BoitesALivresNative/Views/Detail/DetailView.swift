@@ -28,7 +28,8 @@ struct DetailView: View {
                 ScrollView {
                     VStack(spacing: 0) {
                         // Photo carousel
-                        if !vm.photos.isEmpty || vm.localPhotoImage != nil || vm.uploading {
+                        // Fiche chargée sans photo : la section affiche l'invitation (M0061) ; pendant le chargement, rien (comme avant)
+                        if !vm.photos.isEmpty || vm.localPhotoImage != nil || vm.uploading || !vm.loading {
                             photoSection(box: box)
                         }
 
