@@ -11,6 +11,10 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 31
+
+- Fiche d'une boîte sans photo : le cadre gris devient une invitation à prendre la première photo. Le texte change si tu es à moins de 300 m de la boîte. Toucher le cadre ouvre l'ajout de photo (même règle des 100 m).
+
 ### Build 30
 
 - Réglages se rechargent à l'ouverture et au retour dans l'app : les nouveaux statuts apparaissent sans tirer vers le bas.
