@@ -1343,23 +1343,6 @@
         }
       }
     },
-    "Diagnostic des alertes" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alert diagnostics"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diagnostic des alertes"
-          }
-        }
-      }
-    },
     "DMS" : {
       "extractionState" : "stale",
       "localizations" : {
