@@ -1,0 +1,21 @@
+---
+date: 2026-10-25
+session: F02
+mandat_id: M0060
+---
+
+# Reprise F02 / M0060 — Réglages se rechargent, build 30, installé
+
+- `main` = `6839378` (origin), fusion `caf3b01` de `fix/reglages-rechargement` (tip `a3375ef`), revue R050 GO (`vault/revues/2026-10-25-R050-reglages-rechargement.md`).
+- Installé sur « iPhone de Malik » (`00008101-001278EA36E9001E`) : `1.3.0 (30)`, via `devicectl device info apps`.
+- Ouvert : issue #67 (Réglages non rafraîchis au retour, citée par les commits, non fermée automatiquement) ; issue #68 (remarque R050 : tirer-pour-rafraîchir pendant un chargement).
+- Vérifié au simulateur (test UI temporaire, retiré avant commit) : rechargement à l'ouverture de Réglages et au retour au premier plan Réglages affiché ; aucun au retour sur Carte.
+- Non vérifié : le cas « rechargement déjà en cours, on attend » ; le retour terrain sur l'iPhone (à faire par le fondateur).
+- Worktrees `F02-M0060`, `F02-M0060-revue`, `F02-M0060-merge`, `F02-M0060-install` et branche `fix/reglages-rechargement` retirés. Worktree `F01-M0058` présente, non touchée.
+- Décision du fondateur (20:45, journal) : Réglages, listes, glisser à gauche = masquer sur ce téléphone ; à poser après M0060 (iOS) et M0061 (Android). Non traitée ici.
+
+# Reprise F02 / M0063 — Installation iPhone build 31 (2026-11-05)
+
+- `origin/main` = `c0e0371`, aucun commit de code. Build Debug 1.3.0 (31) installé sur « iPhone de Malik » (`00008101-001278EA36E9001E`) en Wi-Fi, vérifié par `devicectl device info apps`.
+- Avant l'installation, l'app n'était pas présente sur l'iPhone, ce qui contredit la note de M0062 (« 1.3.0 (31) installé »). Cause non établie.
+- Ouvert : lancement et écran de l'app sur l'iPhone à vérifier par le fondateur.
