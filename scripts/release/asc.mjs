@@ -86,6 +86,22 @@ export function makeToken({ keyId, issuerId, privateKeyPem, now = Math.floor(Dat
   return `${data}.${sig.toString('base64url')}`;
 }
 
+// Message d'erreur Apple lisible. Un 409 « not in valid state » ne dit la vraie cause que dans
+// meta.associatedErrors (champ manquant, avec son pointeur) : on l'inclut.
+export function describeErrors(json) {
+  const parts = [];
+  for (const e of json?.errors ?? []) {
+    parts.push(`${e.title ?? ''} ${e.detail ?? ''}`.trim());
+    for (const [res, list] of Object.entries(e.meta?.associatedErrors ?? {})) {
+      for (const a of list ?? []) {
+        const where = a.source?.pointer ? ` (${a.source.pointer})` : '';
+        parts.push(`${res} : ${a.detail ?? a.title ?? a.code ?? '?'}${where}`);
+      }
+    }
+  }
+  return parts.join(' | ');
+}
+
 export function makeClient({ keyId, issuerId, privateKeyPem }, { fetchImpl = fetch, nowFn = () => Math.floor(Date.now() / 1000) } = {}) {
   async function request(method, path, { query, body } = {}) {
     const url = new URL(path, API);
@@ -105,7 +121,7 @@ export function makeClient({ keyId, issuerId, privateKeyPem }, { fetchImpl = fet
       json = {};
     }
     if (!res.ok) {
-      const detail = (json.errors ?? []).map((e) => `${e.title ?? ''} ${e.detail ?? ''}`.trim()).join(' | ') || text.slice(0, 200);
+      const detail = describeErrors(json) || text.slice(0, 200);
       throw new AscError(res.status, `${method} ${url.pathname} -> HTTP ${res.status} : ${detail}`);
     }
     return json;

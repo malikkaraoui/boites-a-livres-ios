@@ -6,7 +6,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-  AscError, assertConfirmed, checkNotes, compareVersions, listVersions, makeClient, makeToken, parseEnvFile,
+  AscError, assertConfirmed, describeErrors, checkNotes, compareVersions, listVersions, makeClient, makeToken, parseEnvFile,
   planControls, preflight, publish, readLocalVersions, waitForBuild,
 } from './asc.mjs';
 
@@ -233,4 +233,18 @@ test('publish : chemin complet (préflight OK) va jusqu\'à la soumission', asyn
 test('listVersions refuse une pagination trop longue au lieu de tronquer', async () => {
   const endless = { get: async () => ({ data: [v('x', '1.0.0', 'REJECTED')], links: { next: `${API}/next` } }) };
   await assert.rejects(listVersions(endless, APP, 3), /trop longue/);
+});
+
+test('erreur Apple : la cause cachée dans associatedErrors est citée', () => {
+  const body = { errors: [{ status: '409', title: "appStoreVersions with id 'v1' is not in valid state.",
+    detail: 'This resource cannot be reviewed, please check associated errors to see why.',
+    meta: { associatedErrors: { '/v1/ageRatingDeclarations/v1': [{ code: 'ENTITY_ERROR.ATTRIBUTE.REQUIRED',
+      detail: "You must provide a value for the attribute 'socialMedia' with this request",
+      source: { pointer: '/data/attributes/socialMedia' } }] } } }] };
+  const msg = describeErrors(body);
+  assert.match(msg, /not in valid state/);
+  assert.match(msg, /ageRatingDeclarations\/v1 : You must provide a value for the attribute 'socialMedia'/);
+  assert.match(msg, /\(\/data\/attributes\/socialMedia\)/);
+  assert.equal(describeErrors({ errors: [{ title: 'T', detail: 'D' }] }), 'T D');
+  assert.equal(describeErrors({}), '');
 });
