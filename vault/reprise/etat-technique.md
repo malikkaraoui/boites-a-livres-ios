@@ -33,6 +33,7 @@ Règles d'écriture :
 | Quoi | Valeur | Source | Le |
 |---|---|---|---|
 | <outil, service, cible déployée> | <version ou SHA> | <commande ou rapport> | AAAA-MM-JJ |
+| Racine iOS et échanges | `origin/main` après chaque fusion ; `vault/echanges/Fxx.md` hors git | `git ls-tree HEAD vault/echanges/` | 2026-11-05 |
 
 ## Limites connues et dettes
 
