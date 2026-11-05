@@ -38,3 +38,5 @@ Règles d'écriture :
 ## Limites connues et dettes
 
 - <limite nommée, en une ligne> — <issue ou rapport> (AAAA-MM-JJ)
+
+- 2026-11-05 (M0069) : 1.4.0 (build 34) préparée sur `main` (d671b04), build envoyé et VALID, soumission à la revue échouée (409). Tag `v1.4.0` et release GitHub à faire après approbation Apple.
