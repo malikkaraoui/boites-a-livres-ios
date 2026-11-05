@@ -2389,19 +2389,36 @@
         }
       }
     },
-    "Ouvrir dans Plans" : {
-      "extractionState" : "stale",
+    "S'y rendre" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open in Maps"
+            "value" : "Get directions"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvrir dans Plans"
+            "value" : "S'y rendre"
+          }
+        }
+      }
+    },
+    "Voir sur la carte" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show on map"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir sur la carte"
           }
         }
       }

@@ -37,7 +37,7 @@ struct DetailView: View {
                             VStack(alignment: .leading, spacing: 12) {
                                 sectionTitle("Localisation")
                                 coordToggleRow(box: box)
-                                mapsButton(box: box)
+                                directionsButtons(box: box)
                                 locationUpdateButton(box: box)
                             }
                         }
@@ -364,17 +364,36 @@ struct DetailView: View {
         }
     }
 
-    // Bouton Maps avec icône et fond vert
-    private func mapsButton(box: BookBox) -> some View {
-        Button { lightHaptic(); openMaps(box: box) } label: {
-            Label("Ouvrir dans Plans", systemImage: "map.fill")
-                .font(.system(size: 15, weight: .semibold))
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .background(green)
-                .foregroundStyle(.white)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .shadow(color: green.opacity(0.35), radius: 8, y: 4)
+    // Deux boutons côte à côte : « S'y rendre » (itinéraire à pied dans Plans) et « Voir sur la carte »
+    private func directionsButtons(box: BookBox) -> some View {
+        HStack(spacing: 10) {
+            Button { lightHaptic(); openDirections(box: box) } label: {
+                Label("S'y rendre", systemImage: "figure.walk")
+                    .font(.system(size: 15, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(green)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: green.opacity(0.35), radius: 8, y: 4)
+            }
+            .accessibilityIdentifier("fiche-s-y-rendre")
+
+            Button { lightHaptic(); showOnMap(box: box) } label: {
+                Label("Voir sur la carte", systemImage: "map")
+                    .font(.system(size: 15, weight: .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(green)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .shadow(color: green.opacity(0.35), radius: 8, y: 4)
+            }
+            .accessibilityIdentifier("fiche-voir-sur-la-carte")
         }
     }
 
@@ -635,11 +654,19 @@ struct DetailView: View {
 
     // MARK: - Logic
 
-    private func openMaps(box: BookBox) {
-        let title = String(localized: "Boîte à livres").replacingOccurrences(of: " ", with: "+")
-        let url = URL(string: "maps://?ll=\(box.lat),\(box.lng)&q=\(title)")
-            ?? URL(string: "http://maps.apple.com/?ll=\(box.lat),\(box.lng)")!
-        UIApplication.shared.open(url)
+    // Ouvre Plans d'Apple avec l'itinéraire à pied vers la boîte (API MapKit officielle)
+    private func openDirections(box: BookBox) {
+        let placemark = MKPlacemark(coordinate: box.coordinate)
+        let item = MKMapItem(placemark: placemark)
+        item.name = String(localized: "Boîte à livres")
+        item.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking])
+    }
+
+    // Revient sur l'onglet Carte, centré sur la boîte ; la fiche est fermée par ContentView
+    private func showOnMap(box: BookBox) {
+        DeepLinkRouter.shared.pendingMapFocus = DeepLinkRouter.MapFocus(
+            boxId: box.id, latitude: box.lat, longitude: box.lng
+        )
     }
 
     private func dms(_ deg: Double, isLat: Bool) -> String {
