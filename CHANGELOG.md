@@ -7,9 +7,9 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et la nu
 X = refonte. Le numéro de build augmente de 1 à chaque envoi en store. Chaque publication reçoit
 une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
-## [1.3.0] - non publiée
+## [1.4.0] - non publiée
 
-Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
+Build 34. Contenu depuis la 1.3.0 (build 28, en ligne).
 
 ### Build 33
 
@@ -34,6 +34,10 @@ Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 ### Build 29
 
 - Alerte de proximité : pas de notification au-dessus de 7 km/h (en voiture, par exemple). Une vitesse inconnue ne notifie pas non plus. Une boîte croisée en roulant n'est plus marquée comme vue : l'alerte reste possible à pied.
+
+## [1.3.0] - publiée (date de mise en ligne non consignée)
+
+Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
 ### Build 28
 

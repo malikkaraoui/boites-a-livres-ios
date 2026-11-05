@@ -1,17 +1,17 @@
-Version 1.3.0 (build 33)
+New
+• Get directions: from a box's page, Maps opens with the walking route.
+• Show on map: the map centers on the box in one tap.
+• Handier preview: tap anywhere to open the box page, bigger photo, and a badge shows the box condition (good, fair, poor).
+• No photo yet? A camera invites you to add the first one.
+• Long-press the GPS coordinates to copy them.
 
-Required update: if your version is too old, a screen asks you to update the app before continuing.
+Improvements
+• Settings refresh on their own: the status of your submissions shows up without pulling down.
+• Tapping the Settings tab again takes you back to its top, like Map and List.
+• The usual app icon is back.
 
-Box location: you can confirm a box is really there, or suggest its exact position on the map, when you are close enough. Suggested positions are checked before being published.
-
-Nearby box alert (on by default, Settings › Location): a reminder when you pass within 100 m of a box. Your location stays on your phone. An alert you have already seen won't come back for 30 days.
-
-Removal: the report button only works within 100 m of the box.
-
-Photos: a new box requires a photo taken on site. No people should appear in the photo.
-
-Fixes: photo preview and carousel, "My submissions" and "My removal requests", build number shown in settings.
+Fixes
+• Nearby box alert: no more notifications while driving (above 7 km/h).
+• Nearby box alerts are no longer processed twice.
 
 Thank you to everyone who adds boxes, shares photos and reports changes: you are the ones keeping the map alive and accurate.
-
-Special thanks to Loane Morandeau, who reported a security issue that is fixed in this version.
