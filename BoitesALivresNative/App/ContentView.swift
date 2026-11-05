@@ -10,6 +10,7 @@ struct ContentView: View {
     @State private var router = DeepLinkRouter.shared
     @State private var mapPath = NavigationPath()
     @State private var listPath = NavigationPath()
+    @State private var settingsPath = NavigationPath()
     @Environment(\.requestReview) private var requestReview
     @AppStorage("reviewPromptShownForVersion") private var reviewPromptShownForVersion = ""
     @Environment(\.scenePhase) private var scenePhase
@@ -38,7 +39,7 @@ struct ContentView: View {
 
             // Settings — same bottom inset
             if loadedTabs.contains(2) {
-                SettingsView(isSelected: selectedTab == 2)
+                SettingsView(isSelected: selectedTab == 2, path: $settingsPath)
                     .safeAreaInset(edge: .bottom) { Color.clear.frame(height: 110) }
                     .opacity(selectedTab == 2 ? 1 : 0)
                     .allowsHitTesting(selectedTab == 2)
@@ -53,6 +54,7 @@ struct ContentView: View {
             loadedTabs.insert(newTab)
             if newTab != 0 { mapPath = NavigationPath() }
             if newTab != 1 { listPath = NavigationPath() }
+            if newTab != 2 { settingsPath = NavigationPath() }
         }
         .onChange(of: router.pendingBoxId) { _, newValue in
             if newValue != nil { selectedTab = 0 }
@@ -126,6 +128,7 @@ struct ContentView: View {
             if isSelected {
                 if tag == 0 { mapPath = NavigationPath() }
                 if tag == 1 { listPath = NavigationPath() }
+                if tag == 2 { settingsPath = NavigationPath() }
             } else {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     selectedTab = tag
