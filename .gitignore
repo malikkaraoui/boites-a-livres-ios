@@ -73,6 +73,6 @@ vault/runtime/events.jsonl
 # Archive de l'essai d'équipement du guichet (M0152, F99/M0000) : preuve durable gardée sur le disque,
 # jamais committée (un rituel d'orchestrateur committe les archives non suivies d'echanges/archive/).
 **/archive/*-F99-M0000-essai-equipement-*.md
-# L'essai EN COURS (`<chemins.echanges>/F99.md`) est ignoré par une ligne CALCULÉE que le bootstrap ajoute
-# après ce fragment, depuis `chemins.echanges` de la config du projet : pas de motif en dur ici.
-/vault/echanges/F99.md
+# Fichiers d'échange VIVANTS (`vault/echanges/Fxx.md`, F99 compris) : jamais committés, appartiennent à la
+# fenêtre qui les rédige. Restent suivis : `README.md` et `archive/`.
+/vault/echanges/F[0-9][0-9].md
