@@ -1,0 +1,341 @@
+---
+date: 2026-10-23
+session: F01
+mandat_id: M0056
+---
+
+---
+date: 2026-10-27
+session: F01
+mandat_id: M0061
+---
+
+# Reprise F01 / M0061 -- invitation à prendre la première photo : STOP, non fusionné, non installé
+
+- `main` = commit `5c87ef8` (archive M0058 reportée). Branche `feat/fiche-invitation-photo`, tip `67967bc` (issue #69), poussée, non fusionnée.
+- Revues : R051 RESERVE (`9dddc79`, chargement), R051b RESERVE (section photo jamais rendue pour une fiche sans photo). Correctif de rendu `67967bc` : non relu.
+- STOP : deux correctifs sur le même mécanisme d'affichage de l'invitation. Arbitrage à faire : vérification à l'écran puis relecture fraîche de `67967bc`.
+- Rien vu à l'écran. Build Release vert sur chaque commit ; tests `asc` 17/17.
+- Non installé sur l'iPhone de Malik. Rapport complet et checklist fondateur : `vault/echanges/F01.md` (section « Rapport M0061 », non committée : fichier de l'orchestrateur).
+
+# Reprise F01 / M0056 -- build 28 : numéro de boîte brut, département par son nom ; fusionné sur main, installation non faite
+
+- `main` = `75a65b8` (origin). Fusion de `fix/build-28-affichage` (tip `22d674b`) via merge `e9d0ba3`, relecture R048 : RÉSERVE (valeurs anglaises `%lld`) corrigée, re-relecture GO.
+- Issues ouvertes : #62 (constats), #63 (harmonisation `department` en base, action admin), #64 (remarques non bloquantes).
+- Limite connue : export des localisations en échec, défaut préexistant (`InfoPlist.xcstrings`, source `fr` contre projet `en`).
+- **Non installé** sur l'iPhone de Malik : appareil `unavailable` (devicectl, xcodebuild). À refaire à la reconnexion, Debug signé `00008101-001278EA36E9001E`, puis `device info apps` attendu `1.3.0 28`.
+- Branche `fix/build-28-affichage` supprimée (distante et locale). Worktrees du mandat retirés. Seul `main` reste.
+- Captures d'audit : `vault/revues/audit-M0056/` (32 captures FR/EN x clair/sombre).
+
+---
+date: 2026-10-22
+session: F01
+mandat_id: M0052
+---
+
+# Reprise F01 / M0052 -- build 27 en anglais (catalogue Xcode), icône v2, fusion sur main, installé
+
+- `main` = `f8452d8` (origin). Fusion de `feat/build-27` (tip `f5c5749`) via merge `4ccace3`, relecture R045 GO (R044 RESERVE corrigée).
+- Localisation : `Localizable.xcstrings` + `InfoPlist.xcstrings` ; export Xcode 221 unités, 0 sans cible.
+- Limite connue : preuve d'écran seulement pour la carte et l'alerte de proximité ; fiche, avis, localisation à capturer.
+- Installé sur l'iPhone de Malik : 1.3.0 (27). Icône RGBA signalée (alpha, à vérifier avant App Store).
+- Branche `feat/build-27` supprimée. Worktrees du mandat retirés.
+
+---
+date: 2026-10-20
+session: F01
+mandat_id: M0029
+---
+
+# Reprise F01 / M0029 -- nettoyage GitHub : vault poussé, worktrees et branches fusionnées retirés
+
+- `main` = `0b8d8c8` (origin) : commit vault seul (carnet du 19/10 soir + archives des mandats). Aucun code touché.
+- Worktrees retirés : F01-M0005, F01-M0008, F01-M0010, F01-M0020, F02-M0004, F02-M0009. Gardé : `F03-R003` (modifications staged hors `vault/`, à traiter par son propriétaire).
+- Branches distantes supprimées : 17, toutes dans `--merged origin/main`. Restent sur origin : `base/pre-mvp-polish`, `fix/2-mes-soumissions-cloisonnement`, `fix/version-et-fiche-carte` (non fusionnées, à trancher).
+- Branches locales supprimées avec `-d` (21, toutes fusionnées dans `main`), dont `base/pre-mvp-polish` locale (`7154add`) : restauration possible par `git branch base/pre-mvp-polish 7154add`. Reste localement : `fix/version-et-fiche-carte` (non fusionnée).
+- **Reste à faire** : décider du sort des trois branches non fusionnées ; statut de `F03-R003` ; `.claude/worktrees/` reste non suivi dans le dépôt racine.
+
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0028
+---
+
+# Reprise F01 / M0028 -- préflight App Store Connect avant archive : mergé, rien publié
+
+- `main` = `816b807` (origin) : merge `a7ba1c9` de `fix/release-controles-avant-envoi` (tip `883371330521ca1581d4c30781d94d1a9a64f959`), R025 BLOQUE puis R026 GO sur ce tip.
+- `make release` lance d'abord un préflight en lecture seule (clé, versions en revue, numéros, notes) ; échec = rien d'archivé ni envoyé.
+- Correctif R025 : `app` non défini dans `publish` après le préflight ; reproduit, corrigé, test de chemin complet ajouté.
+- **Reste à faire** : remarques 2 et 4 de l'issue #33 (`links.next` avec jeton Bearer ; limite `limit=200` et format de `links.next` à confirmer contre la doc Apple) ; trous de test (notes absentes, borne de pagination) ; liste des états d'attente à confirmer contre l'énumération Apple.
+- Le déclenchement réel de `make release CONFIRMER=OK-APPLE` n'a pas été exécuté (interdit par le mandat).
+- Worktrees de M0028 retirés.
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0027
+---
+
+# Reprise F01 / M0027 -- commande de publication App Store : mergée, rien publié
+
+- `main` = `323ab4d72d836e5777f2a8cac5d57ff2c5c8650c` (origin) : merge `f6a49c0` de `feat/publication-app-store` (tip `da88ba6eb56a257ede590c27d8f6895fdb2555c8`), doublage R023 GO (rapport committé dans `323ab4d`).
+- `make release-check` (lecture seule) : la clé `G2GFLJVZ6B` fonctionne. Version en ligne sur l'App Store : **1.2.0**. Dernier build reçu : **5**.
+- `make release CONFIRMER=OK-APPLE` existe et refuse sans la confirmation exacte. **Non exécuté** : aucun envoi, aucune version créée, aucune soumission.
+- Doublage : R023 = BLOQUE (listing des versions tronqué à 10 : contrôle de version en ligne contournable). Correctif `da88ba6` (pagination complète) puis passe R024 = GO sur ce tip.
+- Config hors dépôt : `~/.appstoreconnect/config.env` (chmod 600), clé `.p8` en 600.
+- **Reste à faire (fondateur)** : relire `release-notes/fr-FR.txt` ; décider de l'envoi réel par `make release CONFIRMER=OK-APPLE` (OK Apple explicite requis) ; traiter l'issue #33 (durcissements non bloquants).
+- Points ouverts : l'envoi du build a lieu avant le contrôle des versions en cours de revue (issue #33, point 3). Limite `limit=200` et format de `links.next` à confirmer en production.
+- Worktrees M0027 et scratch de merge retirés. Branche distante `feat/publication-app-store` conservée.
+
+---
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0026
+---
+
+# Reprise F01 / M0026 — version minimale (build 16) : mergé et installé
+
+- `main` = `995a6d6` (origin) : merge `a30fff4` de `feat/version-minimale` (tip `44c6f35`), rapport R022 GO committé dans `995a6d6`.
+- Installé sur l'iPhone de Malik : `1.3.0 16` vérifié par `devicectl` (`make device`, lancement OK).
+- Correctif A : écran « Mise à jour nécessaire » dans une `UIWindow` dédiée (`alert + 1`), `.overlay` retiré. Réserve R020 levée au code (R021 → R022).
+- Correctif C2 (R021) : swipe « Supprimer » de la liste soumis à la règle des 100 m, comme la fiche.
+- Suppression : « Signaler une suppression » actif seulement à 100 m ou moins ; photo inchangée à 100 m.
+- Tests : build Release vert ; logique pure 20/20 sur le source (seuils 99/100/101 m, position inconnue, versions).
+- **Reste à faire (fondateur, sur téléphone)** : gestes du rapport M0026 (version minimale à l'écran, écran au-dessus d'une fiche ouverte, bouton grisé à plus de 100 m). Non exécutés par la session.
+- Points ouverts (LOW, R022) : focus de la fenêtre principale après masquage ; garde de distance à la soumission ; `currentLocation` initialisée par une position cachée ; C1 multi-scène (non applicable aujourd'hui).
+- Worktrees M0025 et M0026 retirés. Worktrees de F01 plus anciens (M0005, M0008, M0010, M0020) restent : non touchés.
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0025 — version minimale (build 16) : STOP en revue, non mergé
+
+- `main` = `41488d1` (origin) : archive M0024 seulement. Rien d'autre mergé.
+- Branche `feat/version-minimale` poussée, tip `54b868f` (`4755455` logique + écran, `54b868f` version 16). Build Release OK, logique pure 20/20.
+- Doublage R020 = **RÉSERVE** (`vault/revues/2026-10-19-R020-version-minimale.md`) : l'écran bloquant est un overlay sous les modales ouvertes depuis ses descendants. Preuve par lecture de code, non exécutée.
+- **Décision à prendre** : option A (fenêtre UIKit dédiée au-dessus des modales, recommandée), B (fullScreenCover racine, partiel), ou C (accepter et consigner). Détail dans R020.
+- **Reste à faire** : trancher ; corriger ; R021 ; merge `ff-only` ; `make device` ; `devicectl` → `1.3.0 16`. Journaliser aussi la valeur illisible (point c de R020).
+- iPhone « iPhone de Malik » joignable (`available (paired)`), non installé : rien à installer avant merge.
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0024
+---
+
+# Reprise F01 / M0024 — alerte affichée = vue (30 j) : mergé et installé (build 15)
+
+- `main` = `d7a8d4e` (origin) : merge `31714ad` de `fix/alerte-vue-30-jours` (tip `70af1ac`), doublage R019 GO (rapport commité dans `d7a8d4e`).
+- Installé sur l'iPhone de Malik : `1.3.0 (15)` vérifié par `devicectl`.
+- Correctif : `ProximityAlertService.notifyIfAllowed` pose `LocationPromptLog.mark` à l'envoi ; « Plus tard » et l'envoi restent valides.
+- **Reste à faire** : issue #32 (remarque R019 : la pose précède `UNUserNotificationCenter.add` sans contrôle d'erreur ; décision à prendre) ; test terrain des 3 gestes du rapport M0024 dans `vault/echanges/F01.md`.
+- Pas de test automatisé dans le dépôt ; `scripts/verifier-rendu.mjs` absent du dépôt.
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0023
+---
+
+# Reprise F01 / M0023 — build 14 mergé et installé (#30 absente)
+
+- `main` = `72636c7` (origin) : merge `4cde830` de `feat/build-14` (`e26d228`), rapport R017 GO (R017 RÉSERVE puis correctif puis R018 GO).
+- Installé sur l'iPhone de Malik : `1.3.0 (14)` vérifié par `devicectl`.
+- **Reste à faire** : #30 (pastille Bon/Moyen/Mauvais et invitation avis/photo, non implémentée, issue ouverte) ; captures simulateur (absentes, checklist fondateur dans `vault/echanges/F01.md`) ; issue à ouvrir pour la réalerte après « Ignorer » sans « Plus tard ».
+- Remarque : `vault/revues/2026-10-19-R017-build-14.md` porte la chaîne R017/R018.
+
+---
+date: 2026-10-19
+session: F01
+mandat_id: M0022
+---
+
+# Reprise F01 / M0022 — build 14 : STOP propre (contrainte `accuracy_m` ≤ 10 m en prod)
+
+- `main` = `ac93d96` (origin) : seule la Mission 0 est faite (13 archives committées et poussées).
+- STOP : la validation manuelle entre 10 et 50 m (A.2) avec `accuracy_m` = précision réelle est refusée par `location_updates_accuracy_ck` (0 à 10 m), lue en lecture seule en prod. Il faudrait une migration.
+- Arbitrage attendu : option 1 = migration qui élargit la contrainte ; option 2 = `accuracy_m = null` pour `source = manual` au-delà de 10 m (aucune migration). Recommandation : option 2.
+- Cause du point 2 relevée pour la suite : `LocationService.swift:38` `distanceFilter = 50`, jamais levé par `beginPrecisionUpdates()` (l.58-61).
+- Aucun code modifié, aucune branche restante (`feat/build-14` supprimée, worktree retiré). Build 13 toujours sur l'iPhone.
+
+# Reprise F01 / M0020 — build 13 : localisation + alerte de proximité (+ #21, #22)
+
+- `main` = `c914ac7` (origin). Merge de `feat/localisation` (tip `9f9c343`, revue R016 GO).
+- Installation sur l'iPhone de Malik **non faite** : appareil `unavailable` pendant la session. À faire : `make device`, puis vérifier `1.3.0 13` avec devicectl.
+- Migration `location_updates` non appliquée : l'envoi d'une proposition répond « service pas encore disponible » tant qu'elle ne l'est pas. Mandat dédié, après feu vert du fondateur.
+- Issues ouvertes : #21 et #22 (commentées, à tester sur téléphone), #23 à #28 (remarques de revue).
+- Hors lot : photo EXIF. Point ouvert : `UIBackgroundModes location` (à trancher sur téléphone).
+- Checklist de test terrain : voir `vault/echanges/F01.md`, section Rapport M0020.
+
+# Reprise F01 / M0016 — installation 1.3.0 (10) sur l'iPhone de Malik
+
+## Rapport M0018
+
+En français simple : Réglages affiche maintenant « v1.3.0 (11) ». Le build 11 est mergé dans `main` (`2cc2f79`, revue R014 GO), puis installé et lancé sur l'iPhone de Malik. `devicectl` donne `1.3.0 11`. La vérification à l'écran reste à faire par Malik (checklist ci-dessous).
+
+- Garde : `origin/main` = `02868ab` à l'ouverture, conforme au mandat. Découpe de M0017 : seul `SettingsView.swift` repris de `260e3c3`, `MapScreen.swift` non touché.
+- Commit de mise en œuvre : `a7f0afa` sur `fix/version-build-11` (poussée, `ls-remote` = `a7f0afa`). Build 10 → 11 dans `project.yml` et `project.pbxproj` (4 occurrences), CHANGELOG 1.3.0 « Build 11 » + entrée + note App Store FR.
+- Build Release `generic/platform=iOS`, `CODE_SIGNING_ALLOWED=NO` : `** BUILD SUCCEEDED **`.
+- Revue R014 (N3, sous-agent frais) : `verdict: GO`, `tip: a7f0afa51449572b2f75e3cc8344d37856b125b5`. Rapport committé : `vault/revues/2026-10-18-R014-version-build-11.md`.
+- Merge `--no-ff` `2dec1b9` puis rapport `2cc2f79` dans le scratch, `ff-only` à la racine, `git push origin main` : `02868ab..2cc2f79`. `git ls-remote origin refs/heads/main` = `2cc2f79`.
+- Installation : `make device` (Debug, `.build/…/Debug-iphoneos`) : `** BUILD SUCCEEDED **`, installation et lancement OK. `devicectl device info apps` : `Boîtes à Livres  com.malikkaraoui.boitesalivresapp  1.3.0  11`.
+- Non vérifié : l'affichage réel de « v1.3.0 (11) » dans Réglages (pas de capture d'écran). Le `.app` local n'a pas pu être relu (chemin relatif erroné) ; la preuve d'installation est `devicectl`.
+- Écarts relevés, non traités ici : `scripts/verifier-rendu.mjs` absent du dépôt, donc pas de ligne `Scellé tests` / `Contre-témoins` produite. Le CHANGELOG et le build Release sont cohérents avec le mandat.
+- Worktrees `F01-M0018`, `F01-M0018-merge`, `F01-M0018-install` retirés.
+
+Checklist fondateur (à faire sur l'iPhone, build 1.3.0 (11)) :
+1. Ouvrir l'app « Boîtes à Livres ».
+2. Ouvrir l'écran Réglages de l'app.
+3. Descendre jusqu'à la ligne de version : elle doit afficher `v1.3.0 (11)`.
+4. Si elle affiche `v1.3.0` seul ou `v?`, le build installé n'est pas le bon : le dire.
+
+## Rapport M0016
+
+En français simple : `main` (`777f4ab`) est construite en Debug, installée et lancée sur l'iPhone de Malik. Le `.app` et l'iPhone donnent 1.3.0 (10). Aucun code modifié, aucun envoi App Store ou TestFlight, aucune écriture Supabase. La checklist à l'écran reste à faire par Malik.
+
+- `origin/main` = `777f4ab` à la garde ; `project.yml` = 1.3.0 / 10.
+- `devicectl list devices` : « iPhone de Malik » `00008101-001278EA36E9001E`, `available (paired)`. Le transport Wi-Fi n'est pas affiché par cette commande.
+- `make device` : `** BUILD SUCCEEDED **`, installation et lancement OK.
+- `devicectl device info apps` : `Boîtes à Livres  com.malikkaraoui.boitesalivresapp  1.3.0  10`.
+- Worktree `F01-M0016` retiré.
+- Non vérifié : la checklist à l'écran (`vault/echanges/F01.md`). À faire par Malik.
+
+## Reprise pour la session suivante
+
+- `main` = `origin/main` = `777f4ab`, inchangé par ce mandat.
+- Build 1.3.0 (10) installé sur l'iPhone de Malik ; checklist visuelle restée à faire.
+
+---
+
+## Rapport M0014
+
+En français simple : `main` (`f94f360`) est construite en Debug, installée et lancée sur l'iPhone de Malik. Le `.app` et l'iPhone donnent 1.3.0 (9). Aucun code modifié, aucun envoi App Store ou TestFlight, aucune écriture Supabase.
+
+- `origin/main` = `f94f360` à la garde ; `project.yml` = 1.3.0 / 9.
+- `xcrun devicectl list devices` : « iPhone de Malik » `00008101-001278EA36E9001E`, `available (paired)` (UDID = `DEVICE_UDID`). Le transport Wi-Fi n'est pas affiché par cette commande.
+- `make device` : `** BUILD SUCCEEDED **`, installation et lancement OK.
+- `devicectl device info apps` : `Boîtes à Livres  com.malikkaraoui.boitesalivresapp  1.3.0  9`.
+- Worktree `F01-M0014` retiré sans `--force`.
+- Non vérifié : la checklist à l'écran (Réglages « 1.3.0 (9) », boîte #14183, « Mes soumissions »). À faire par Malik.
+
+## Reprise pour la session suivante
+
+- `main` = `origin/main` = `f94f360`, inchangé par ce mandat.
+- Build 1.3.0 (9) installé sur l'iPhone de Malik ; checklist visuelle restée à faire.
+
+---
+
+## Rapport M0013
+
+En français simple : le motif de modération d'une photo refusée ou acceptée s'affiche dans « Mes soumissions », et la date est relative (« il y a 1 j »). Mergé sur `main` (`e14e7db`), poussé. L'affichage à l'écran n'est pas vérifié (checklist dans `vault/echanges/F01.md`).
+
+- `origin/main` = `a9e33d8` à la garde ; `main` = `origin/main` = `e14e7db` après le merge.
+- Correctif `a05ca65` (4 fichiers, 57 lignes) puis merge `--no-ff` `abec8d8` (scratch) et `ff-only` → `e14e7db`. Relecture N1 (sous-agent frais) : `verdict: GO`, `tip: a05ca65…`, rapport `vault/revues/2026-10-18-R011-reglages-motif-date.md`, commité dans `e14e7db`.
+- Build Release iOS réussi et harnais de dates passant, rejoués sur le scratch fusionné avant le `ff-only`.
+- `git ls-remote origin refs/heads/main` : `e14e7db6efc07d30164a4016f722110ae9a48f73`. Branche `fix/reglages-motif-date` poussée : `a05ca6525af5065266c009f65616fb0b8c98a096`.
+- Remarques R011 en issue : https://github.com/malikkaraoui/boites-a-livres-ios/issues/18.
+- Non fait : motif pour les soumissions de boîtes et demandes de suppression (pas de `review_notes` dans leurs modèles ; le toucher exige `Services/SupabaseService.swift`, zone critique → N3 si voulu).
+
+## Reprise pour la session suivante
+
+- `main` = `origin/main` = `e14e7db`. Correctif M0013 intégré.
+- À vérifier à l'écran par le fondateur (checklist dans `vault/echanges/F01.md`).
+- Remarques R011 ouvertes en issue #18.
+
+M0013
+Implementation      ✅
+Tests               ✅
+Commit              ✅
+Branch push         ✅
+Review              ✅
+Merge main          ✅
+Main push           ✅
+TASK STATUS         INTEGRATED
+PROJECT STATUS      INTEGRATED
+
+## Rapport M0011
+
+En français simple : la pose du harnais v1.6.6 (`26d68f3`) et la réconciliation (`c86a208`) sont passées par la voie normale : branche `chore/harnais-v1.6.6`, doublage R009 GO, merge `--no-ff` (`71cd4b3`), puis `ff-only` sur `main` (`38812c3`) poussé sur `origin/main`. Aucune réécriture d'historique, aucune écriture Supabase, aucun fichier suivi modifié hors de ce merge. Le hook `pre-push` a accepté le push, ce qui confirme le rapport GO pour le tip mergé. Un `git worktree remove --force` a été fait sur le worktree de relecture après `cmp` : son rapport est identique à celui committé.
+
+- Préconditions : `origin/main` = `5da85f2`, `main` = `c86a208`, branche `main`. `origin/main..main` = `26d68f3` (harnais) + `c86a208` (vault seul, vérifié par `git show --stat`).
+- Branche `chore/harnais-v1.6.6` créée sur `c86a208`, poussée. `git ls-remote origin refs/heads/chore/harnais-v1.6.6` : `c86a208da0c0a9b42c13ff57e3a0ea45003de9ed`.
+- Doublage R009 (N2, sous-agent frais, lecture seule) : `verdict: GO`, `tip: c86a208…`, `niveau: N2`. Rapport `vault/revues/2026-10-18-R009-harnais-v166.md`, vérifié par la session (frontmatter, périmètre, `config/harnais.json` valide). Remarques non bloquantes, à traiter en issues : `SKILL.md:113` cite `scripts/preparer-worktree.sh` absent du dépôt ; `SKILL.md:259-262` décrit le mode `direct` alors que c'est `pr` ; `git.mode_fusion`, `git.fusion_pr.methode`, `auto_merge` absents de `config/harnais.json` ; garde `harnais-ok` non vérifiable en lecture seule (pas de `.github/workflows`) ; `README.md:199` cite `pre-commit.test.mjs` et `M0300-*` absents.
+- Scratch de merge `.claude/worktrees/F01-M0011-merge` (détaché sur `origin/main`) : `git merge --no-ff c86a208` → `71cd4b3`. Contrôle de budget sur le scratch : 4 OK, 0 ATTENTION, 0 BLOQUE, exit 0. JSON `config/harnais.json` valide. Hooks en `755`. Pas de `node --test` dans le dépôt.
+- Rapport copié dans le scratch, commit `docs(revues): R009 -- GO` = `38812c3`. Verdict et tip vérifiés dans le fichier committé.
+- `ff-only` depuis la racine : `c86a208..38812c3`, fast-forward.
+- `git push origin main` : `5da85f2..38812c3`. `git ls-remote origin refs/heads/main` : `38812c3f63211747b9719180860a2463469cdf85 refs/heads/main`.
+- Nettoyage : scratch retiré (`git worktree remove`), worktree R009 retiré avec `--force` après `cmp`.
+- Non fait : les `ECART` du doublage ne sont pas corrigés ici (hors périmètre, issues à ouvrir). Le lock `vault/runtime/entretien.lock.15095` appartient à un autre processus, non touché.
+
+## Mandat M0033 (F01) -- installation build 16 sur iPhone Laura et iPhone de Malik
+
+- Statut : **STOP propre à la garde 2**. Rien installé, rien compilé, aucun code touché.
+- Garde 1 OK : `git fetch origin` ; `origin/main` = `739cbf67b877e09719a3ea8cb1b9861871c63d96` ; `main` ancêtre de `origin/main` (rc=0).
+- Garde 2 KO : racine sur `main`, mais `git status --short` liste des fichiers hors `vault/echanges/` : `.claude/skills/orchestration-bureau/SKILL.md`, `.claude/skills/orchestration-bureau/references/gabarits.md`, `config/harnais.json`, `scripts/harnais-hooks/README.md`, `scripts/harnais-hooks/commit-msg` (modifiés), et `.claude/worktrees/` (non suivi).
+- Non fait, volontairement : `git merge --ff-only` (garde 3), Mission 0 (archive M0029 non committée), worktree détaché, build et install sur les deux téléphones. Pas de `stash`, `reset` ni `checkout` pour contourner les modifications en cours.
+- Question qui aurait été posée : faut-il d'abord committer ou ranger les modifications du harnais (`.claude/skills/`, `config/harnais.json`, `scripts/harnais-hooks/`) ? Option retenue : ne rien toucher et STOP. Relance possible une fois ces fichiers committés par leur auteur, ou remisés hors de la racine.
+- Vault committé par ce mandat : seulement `vault/reprise/F01.md`. Les `vault/echanges/Fxx.md` restent non committés.
+- Push refusé : `git push origin main` non fast-forward. Le commit vault `5f51d13` est local, posé sur `63ee5b3`, en retard sur `origin/main` `739cbf6`. Aucun force, aucun rebase. Le commit reste local jusqu'à décision.
+
+## M0050 — tout sur `main`, nettoyage des branches (22/10/2026)
+- Fusion de `feat/carte-localisation` (tip de code `c1cb1e7`, R041 GO) dans `main` : merge `93d93e2`, rapport `docs(revues): R041 -- GO`, poussé. `origin/main` = `9647780`.
+- Tests sur le résultat de fusion : `node --test scripts/release/asc.test.mjs` 17/17 ; build Release `generic/platform=iOS` : BUILD SUCCEEDED.
+- Branches distantes et locales supprimées, sauf `main`. Tags d'archive poussés avant suppression pour les 5 branches non ancêtres : `archive/base-pre-mvp-polish`, `archive/chore-harnais-v1.7.3`, `archive/feat-carte-localisation`, `archive/fix-2-mes-soumissions-cloisonnement`, `archive/fix-version-et-fiche-carte`. `docs/notes-1.3.0` était ancêtre de `main` : supprimée sans tag.
+- STOP étape 2 : la racine (`5f51d13`) n'est pas remise sur `main`. Modifs locales non commitées sur `.claude/skills/orchestration-bureau/SKILL.md` (chemin `poser-mandat`) et `config/harnais.json` (`v1.7.3` au lieu de `v1.7.6`). Rien n'a été restauré ni écrasé : décision à prendre par le propriétaire de ces modifs.
+- STOP étape 4 partielle : worktree `.claude/worktrees/F03-R003` (détaché `d78c177`) conservé. Il porte des modifs indexées non commitées et 3 commits non poussés (`d78c177`, `c024e21`, `db5866e`) qu'aucune branche distante ne contient ; un `worktree remove --force` les détruirait. Worktree scratch `F01-merge` retiré (propre, poussé).
+- Vault : archives M0029 à M0049 et cette reprise committées en local sur `main` racine ; push non fait tant que la racine n'est pas alignée.
+
+## Mandat M0051 (F01) -- racine alignée sur main ; build 27 : STOP à la 2e réserve (non fusionné)
+
+- Partie A faite : racine sur `main` = `origin/main` = `7cb9236` (archives M0029-M0049 reprises, conflit additif résolu). Tags `archive/main-local-61cf592` et `archive/worktree-f03-r003` poussés. Patchs de sauvegarde : `_archive/racine-ios-modifs-2026-10-22.patch` (harnais v1.7.3 et hooks, non commités, restaurés à HEAD après copie), `_archive/f03-r003-indexe.patch`, `_archive/f03-r003-non-indexe.patch` (vide). Worktree F03-R003 retiré.
+- Partie B : issue `#59`. Branche `feat/build-27` poussée, tip `6a83f18` : couleur d'accent verte (clair et sombre, `Color("AccentColor")` + `.tint`), pseudo 20, traductions (contrôle 0 manquante), icône Halloween 1024 RGBA, README, version 27, correctif de l'onglet Carte (bleu -> vert vérifié par capture).
+- Revues : R042 = RESERVE (textes String non localisés, `vault/revues/2026-10-22-R042-build-27.md`) ; correctif puis R043 = RESERVE de même classe (`vault/revues/2026-10-22-R043-build-27.md`). 2e réserve de même classe : STOP selon le mandat. Rien fusionné sur `main`, rien installé sur l'iPhone de Malik, `feat/build-27` conservée (non supprimée).
+- **Reste à faire (décision fondateur)** : localiser les textes restants relevés par R043 (LocationUpdateSheet 140/143/253/332/365-378, ContentView 73, ProximityAlertService 184/187, PhotoService 13-14/43-56, SupabaseService 13-15/97, ProximityJournal SettingsView 613), et corriger `check_i18n.py` (faux vert sur `note(`, `.failed(`, `Text(<String>)`), puis nouvelle revue.
+
+## Mandat M0054 (F01) -- audit build 27 : contrôle partiel, STOP au visuel (22/10/2026)
+
+- Garde OK : `origin/main` = `fa34690`, racine sur `main` au même SHA, `CURRENT_PROJECT_VERSION: 27`. Worktree détaché `F01-M0054` créé puis retiré.
+- Build Debug iPhone 17 : BUILD SUCCEEDED. Export xliff EN : 221 unités, 0 sans cible.
+- Garde des littéraux accentués hors appel localisable : rien à corriger, sauf `AppDelegate.swift:22` (`print` de journal, exclu). Le filet ne voit pas les mots sans accent.
+- Références R043 (LocationUpdateSheet, ContentView, ProximityAlertService, PhotoService, SupabaseService, SettingsView 613) : numéros de ligne périmés sur `main`, à reprendre par motif.
+- Visuel : une seule capture (carte, alerte, FR clair). STOP : installer et piloter le simulateur refusé par la politique d'autorisation, pas contourné. Passes FR sombre, EN clair, EN sombre et écrans restants non faits.
+- Aucun défaut confirmé, aucune issue créée, aucun code modifié. Rapport : `vault/revues/2026-10-22-audit-build-27.md`.
+- Reste : reprendre les 4 passes dans une session qui peut piloter le simulateur.
+
+## Mandat M0055 (F01) -- tests d'interface et audit visuel du build 27 (23/10/2026)
+
+- Livré sur `main` : `origin/main` = `03ec034` (merge `--no-ff` de `test/ui-audit`, tip relu `452cbb1`, revue R047 GO).
+- Contenu : cible XCUITest `BoitesALivresNativeUITests` (4 passes FR/EN × clair/sombre), hooks `#if DEBUG` (`UITestHooks.swift`), identifiants d'accessibilité, `make ui-audit` et `scripts/ui-audit.sh`, section README « Contrôle visuel ».
+- Audit : 32 captures dans `vault/revues/audit-M0055/`, rapport `vault/revues/2026-10-23-audit-build-27.md`. Aucun défaut confirmé ; contour bleu du bouton Annuler (sombre) à confirmer ; icône Halloween non vérifiée.
+- Non couvert : localisation (feuille géocode à l'ouverture, donc appel Apple), suppression (distance), étape 2 de l'ajout (géocodage Apple), écran de succès (envoi requis).
+- Issues ouvertes : #60 (tuiles MapKit et règle « aucun appel à Apple » : décision au fondateur), #61 (`make test` lance l'audit ; `ui-audit.sh` échoue si le dossier de sortie est absent ; état d'alerte persistant).
+- Reste à décider : faut-il compter les tuiles Apple comme appel à Apple (#60) ; et un hook DEBUG qui permette de couvrir l'étape 2 sans géocodage.
+- Pas d'installation sur l'iPhone (aucun changement visible en Release).
+
+## Mandat M0058 (F01) -- publication App Store 1.3.0 (build 28) : soumission NON faite, arrêt à l'étape 6/6 (23/10/2026)
+
+- Garde OK : `origin/main` = `0647239`, `project.yml` 1.3.0 / 28, première ligne des notes `Version 1.3.0 (build 28)`, `~/.appstoreconnect/config.env` présent.
+- Tests `asc.test.mjs` : 17 pass, 0 fail. `make release-check` (1re fois) : Contrôles OK 1.3.0 (28), en ligne 1.2.0, préflight OK.
+- `make release CONFIRMER=OK-APPLE`, lancé une seule fois : archive OK, envoi OK (`EXPORT SUCCEEDED`), build 28 `VALID` vu à l'essai 5/40, création de la version 1.3.0 OK, notes fr-FR et rattachement du build OK.
+- Étape 6/6 (soumission) en erreur : `POST /v1/reviewSubmissionItems` -> HTTP 409, « appStoreVersions ... is not in valid state ». Arrêt, aucune relance.
+- État relevé après l'erreur (lecture seule) : version 1.3.0 `PREPARE_FOR_SUBMISSION`, build 28 `VALID`, aucune soumission en revue. 1.2.0 reste en ligne.
+- Un état partiel est possible : la version 1.3.0 existe et attend en préparation. À décider par l'orchestrateur : la cause exacte du 409 (sans doute une exigence de version encore incomplète côté App Store Connect) se lit dans l'interface App Store Connect, pas ici.
+- Worktree `.claude/worktrees/F01-M0058` conservé (détaché, propre, sans commit) pour diagnostic ; à retirer après décision.
+
+## Mandat M0062 (F01) -- fiche « S'y rendre » + « Voir sur la carte », icône par défaut, build 31 (05/11/2026)
+
+- Livré sur `main` : `e36239f` (merge `3b7c7f9`, tip `484abc9`, issue #70, revue R052 GO N3). Build Release OK, `asc.test.mjs` 17/17.
+- Installé sur l'iPhone de Malik : `1.3.0 31`.
+- Non vu à l'écran : le simulateur ne démarre pas (CoreSimulator « out of date »). Checklist fondateur de 5 gestes dans `vault/echanges/F01.md`, section « Rapport M0062 ».
+- Écart : branche non poussée avant le merge ; `scripts/ouvrir-issue.mjs` absent, remarque R1 (pin en surbrillance) non ouverte.
+- Icône Halloween archivée dans `docs/icones/archive/halloween-2026/`.
+
+## M0064 — aperçu touchable, photo 180 pt, appareil photo, pastille, appui long coordonnées (build 32)
+
+- Mergé sur `main` : `e2af2a2` (merge `cd323c0`, revue `vault/revues/2026-11-05-R053b-apercu-fiche-ios.md` GO N3). Tip branche `cd323c0`, branche retirée.
+- Installé sur l'iPhone de Malik : `1.3.0 32`.
+- Non vu à l'écran : le simulateur reste sur l'écran de lancement. Checklist fondateur de 5 gestes dans `vault/echanges/F01.md`, section « Rapport M0064 ».
+- Écart : racine locale restée sur `c0e0371` (fichiers non committés d'une autre fenêtre) ; à synchroniser à la racine.
+- Ouvert : issue #71 (fonction), issue #72 (appui long relâché hors du bouton de format, mineur).
