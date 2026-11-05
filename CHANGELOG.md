@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 31
+
+- Fiche : « Ouvrir dans Plans » devient « S'y rendre » (itinéraire à pied dans Plans, tracé affiché) et « Voir sur la carte » (revient sur la carte, centrée sur la boîte, sans rouvrir la fiche).
+- Icône : l'icône par défaut revient. L'icône Halloween est archivée dans `docs/icones/archive/halloween-2026/`.
+
 ### Build 30
 
 - Réglages se rechargent à l'ouverture et au retour dans l'app : les nouveaux statuts apparaissent sans tirer vers le bas.
@@ -29,7 +34,7 @@ Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 - Couleurs : toute l'app passe au vert de la marque, y compris « Retour », les liens, les boutons et l'onglet sélectionné, en clair comme en sombre. Plus de bleu iOS. Les couleurs d'état (rouge, orange) ne changent pas.
 - Avis : le nom affiché (facultatif) est limité à 20 caractères, saisie et collage compris.
 - Anglais : tous les textes affichés ont désormais leur traduction anglaise, dont les titres d'alertes et les boutons.
-- Icône : nouvelle icône de l'app (thème Halloween, toile d'araignée).
+- Icône : thème Halloween (toile d'araignée), archivée depuis le build 31.
 - Localisation : les textes sont dans un catalogue Xcode (`Localizable.xcstrings`), contrôlé par Xcode lui-même.
 - README : présentation, lien App Store et captures d'écran.
 
