@@ -7,7 +7,7 @@ struct MapScreen: View {
     @Binding var path: NavigationPath
     @State private var vm = MapViewModel()
     @State private var router = DeepLinkRouter.shared
-    @State private var sheetDetent: PresentationDetent = .height(320)
+    @State private var sheetDetent: PresentationDetent = .height(360)
     @State private var showAddBox = false
     @State private var isHandlingAnnotationTap = false
     @State private var focusedBoxId: Int?
@@ -178,7 +178,8 @@ struct MapScreen: View {
             }
             .sheet(item: sheetItem) { item in
                 let box = item.box
-                let small: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
+                // Bloc photo 180 pt (toujours présent, avec appareil photo si pas de photo) : 360 pt
+                let small: PresentationDetent = .height(360)
                 let trigger: PresentationDetent = .fraction(0.75)
                 BookBoxSheet(box: box) {
                     let id = box.id
@@ -271,7 +272,7 @@ struct MapScreen: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             isHandlingAnnotationTap = false
         }
-        sheetDetent = .height(box.photo_url != nil ? 320 : 200)
+        sheetDetent = .height(360)  // même valeur que `small` dans la feuille (détent sélectionné présent)
         focusedBoxId = nil
         vm.selectedBox = box
     }

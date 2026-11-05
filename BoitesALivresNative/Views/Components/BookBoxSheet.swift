@@ -22,44 +22,63 @@ struct BookBoxSheet: View {
         PreviewPhotoPicker.current(candidates: candidates, failed: failedUrls).flatMap { URL(string: $0) }
     }
 
-    // Bloc photo affiché tant qu'une photo est attendue : candidate en cours, ou photo_url en échec
-    // pendant la recherche des photos validées (place réservée, la fiche ne saute pas).
-    // Liste chargée et plus aucune candidate affichable : bloc masqué.
-    private var showsPhotoBlock: Bool {
-        imageURL != nil || (box.photo_url != nil && !listLoaded)
-    }
+    // Hauteur du bloc photo (180 pt). Le bloc est toujours présent : photo, chargement, ou appareil
+    // photo si la boîte n'a aucune photo. Ainsi rien ne saute quand la liste des photos arrive.
+    static let photoHeight: CGFloat = 180
 
     private var needsList: Bool {
         !listLoaded && (box.photo_url == nil || !failedUrls.isEmpty)
     }
 
+    // État affiché dans l'aperçu (même pastille que la fiche), absente si aucun avis approuvé
+    private var condition: BoxReview.Condition? {
+        box.last_review_condition.flatMap { BoxReview.Condition(rawValue: $0) }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            if showsPhotoBlock {
-                Group {
-                    if let url = imageURL {
-                        CachedAsyncImage(url: url, onFailure: { failedUrls.insert(url.absoluteString) }) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image.resizable().aspectRatio(contentMode: .fill)
-                            case .failure:
-                                Color(.systemGray5)
-                                    .overlay(Image(systemName: "photo").font(.system(size: 30)).foregroundStyle(.secondary))
-                            case .empty:
-                                Color(.systemGray6).overlay(ProgressView())
-                            }
+            Group {
+                if let url = imageURL {
+                    CachedAsyncImage(url: url, onFailure: { failedUrls.insert(url.absoluteString) }) { phase in
+                        switch phase {
+                        case .success(let image):
+                            image.resizable().aspectRatio(contentMode: .fill)
+                        case .failure:
+                            Color(.systemGray5)
+                                .overlay(Image(systemName: "photo").font(.system(size: 30)).foregroundStyle(.secondary))
+                        case .empty:
+                            Color(.systemGray6).overlay(ProgressView())
                         }
-                    } else {
-                        Color(.systemGray6).overlay(ProgressView())
                     }
+                } else if listLoaded {
+                    // Aucune photo publiée ni validée : appareil photo qui invite à ajouter la première
+                    Color(.systemGray6)
+                        .overlay(
+                            VStack(spacing: 8) {
+                                Image(systemName: "camera.fill")
+                                    .font(.system(size: 34))
+                                    .foregroundStyle(green)
+                                Text("Ajoute la première photo")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundStyle(green)
+                            }
+                        )
+                } else {
+                    Color(.systemGray6).overlay(ProgressView())
                 }
-                .frame(maxWidth: .infinity, minHeight: 140, maxHeight: 140)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(.white.opacity(0.25), lineWidth: 1)
-                )
+            }
+            .frame(maxWidth: .infinity, minHeight: Self.photoHeight, maxHeight: Self.photoHeight)
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(.white.opacity(0.25), lineWidth: 1)
+            )
+            .overlay(alignment: .topLeading) {
+                if let condition {
+                    ConditionBadge(condition: condition, compact: true)
+                        .padding(8)
+                }
             }
 
             VStack(alignment: .leading, spacing: 8) {
@@ -117,6 +136,13 @@ struct BookBoxSheet: View {
             .buttonStyle(ScaleButtonStyle())
         }
         .padding(20)
+        // Toucher n'importe où sur l'aperçu (photo, texte, fond) = « Voir le détail ». Le bouton
+        // garde son action propre ; le glisser de la feuille n'est pas gêné par un tap.
+        .contentShape(Rectangle())
+        .onTapGesture {
+            mediumHaptic()
+            onDetail()
+        }
         .task(id: needsList) {
             guard needsList else { return }
             let published = try? await SupabaseService.shared.listPhotos(for: box.id)

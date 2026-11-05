@@ -11,6 +11,8 @@ struct DetailView: View {
     @State private var photoViewerIndex: Int? = nil
     @State private var coordCopied = false
     @State private var coordRotating = false
+    @State private var coordHighlight = false
+    @State private var coordLongPressFired = false
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     @State private var showDeletionSheet = false
     @State private var showReviewSheet = false
@@ -312,6 +314,11 @@ struct DetailView: View {
 
         HStack(alignment: .center, spacing: 0) {
             Button {
+                // Appui long déjà traité (il copie) : le relâchement ne doit pas basculer le format
+                if coordLongPressFired {
+                    coordLongPressFired = false
+                    return
+                }
                 lightHaptic()
                 withAnimation(.easeInOut(duration: 0.35)) {
                     showDMS.toggle()
@@ -347,11 +354,7 @@ struct DetailView: View {
 
             Button {
                 lightHaptic()
-                UIPasteboard.general.string = coordValue
-                withAnimation(.spring(duration: 0.2)) { coordCopied = true }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    withAnimation(.easeOut(duration: 0.3)) { coordCopied = false }
-                }
+                copyCoordinates(coordValue)
             } label: {
                 Image(systemName: coordCopied ? "checkmark" : "doc.on.doc")
                     .font(.system(size: 15, weight: .medium))
@@ -361,6 +364,33 @@ struct DetailView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .animation(.spring(duration: 0.2), value: coordCopied)
             }
+        }
+        // Appui long sur toute la cellule : copie (même valeur), surlignage, retour haptique
+        .padding(.vertical, 4)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(green.opacity(coordHighlight ? 0.18 : 0))
+                .animation(.easeOut(duration: 0.4), value: coordHighlight)
+        )
+        .contentShape(Rectangle())
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: 0.5)
+                .onEnded { _ in
+                    coordLongPressFired = true
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    copyCoordinates(coordValue)
+                    coordHighlight = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { coordHighlight = false }
+                }
+        )
+    }
+
+    // Copie les coordonnées dans le presse-papier et affiche la coche (1,5 s)
+    private func copyCoordinates(_ value: String) {
+        UIPasteboard.general.string = value
+        withAnimation(.spring(duration: 0.2)) { coordCopied = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            withAnimation(.easeOut(duration: 0.3)) { coordCopied = false }
         }
     }
 

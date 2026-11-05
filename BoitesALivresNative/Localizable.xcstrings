@@ -321,6 +321,22 @@
         }
       }
     },
+    "Ajoute la première photo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add the first photo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoute la première photo"
+          }
+        }
+      }
+    },
     "Ajoute une photo de la boîte" : {
       "extractionState" : "stale",
       "localizations" : {

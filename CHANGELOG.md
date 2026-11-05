@@ -11,6 +11,11 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 32
+
+- Aperçu de boîte : toucher n'importe où sur l'aperçu ouvre la fiche ; photo plus grande (180 pt) ; sans photo, un appareil photo invite à ajouter la première ; pastille d'état (vert, orange, rouge) quand la boîte a un avis.
+- Fiche : appui long sur la cellule des coordonnées = copie dans le presse-papier, avec surlignage et retour haptique.
+
 ### Build 31
 
 - Fiche : « Ouvrir dans Plans » devient « S'y rendre » (itinéraire à pied dans Plans, tracé affiché) et « Voir sur la carte » (revient sur la carte, centrée sur la boîte, sans rouvrir la fiche).
