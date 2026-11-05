@@ -11,6 +11,12 @@ une entrée ici, un tag `vX.Y.Z` et une release GitHub.
 
 Build 13. Contenu depuis la 1.2.0 publiée (build 5, commit `9783299`).
 
+### Build 33
+
+- Diagnostic des alertes réservé aux builds de test : la ligne et l'écran n'existent pas dans les builds publiés.
+- Alertes de proximité sans traitement en double : une seule entrée de journal par événement, régions enregistrées seulement quand la liste change.
+- Re-toucher « Réglages » quand l'onglet est affiché ramène à la racine, comme Carte et Liste.
+
 ### Build 32
 
 - Aperçu de boîte : toucher n'importe où sur l'aperçu ouvre la fiche ; photo plus grande (180 pt) ; sans photo, un appareil photo invite à ajouter la première ; pastille d'état (vert, orange, rouge) quand la boîte a un avis.
