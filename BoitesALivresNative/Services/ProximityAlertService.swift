@@ -19,6 +19,10 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     private let manager = CLLocationManager()
     // Boîtes dont l'alerte a déjà été traitée pendant cette présence (levée à la sortie)
     private var handledInside = Set<Int>()
+    // Boîtes dont le traitement d'entrée attend une position (vitesse) : un seul traitement par boîte à la fois
+    private var inFlightBoxes = Set<Int>()
+    // Régions actuellement surveillées (id, position) : un enregistrement seulement si cet ensemble change
+    private var registeredSignature: [String] = []
     // Demandes de position fraîche en attente (vitesse avant alerte) ; une seule requestLocation à la fois
     private var pendingFixes: [(CLLocation?) -> Void] = []
     private var savedAccuracy: CLLocationAccuracy?
@@ -57,6 +61,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         UserDefaults.standard.set(false, forKey: Self.enabledKey)
         manager.stopMonitoringSignificantLocationChanges()
         stopBoxRegions()
+        registeredSignature = []
     }
 
     // Recalcule les régions à partir des boîtes en cache, sans réseau
@@ -72,10 +77,14 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     }
 
     // Enregistre les régions puis demande l'état courant de chacune : une alerte immédiate
-    // si on est déjà dans un rayon (F01 M0023 B1), sans attendre une entrée
+    // si on est déjà dans un rayon (F01 M0023 B1), sans attendre une entrée.
+    // Ensemble inchangé = rien à faire : chaque position reçue recalcule les régions, sans les réenregistrer.
     private func apply(_ picks: [BookBox]) {
-        stopBoxRegions()
         let chosen = Array(picks.prefix(LocationRules.regionLimit))
+        let signature = Self.regionSignature(chosen)
+        guard signature != registeredSignature else { return }
+        registeredSignature = signature
+        stopBoxRegions()
         handledInside.formIntersection(chosen.map(\.id))
         ProximityJournal.add(String(localized: "régions enregistrées : \(chosen.count)"))
         for box in chosen {
@@ -90,11 +99,14 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
 
     // Entrée ou état « dedans » : la vitesse décide avant toute notification (issue #65).
     // Au-dessus de 7 km/h ou vitesse inconnue : rien d'écrit (ni notification, ni anti-répétition, ni handledInside).
+    // Un seul traitement par boîte à la fois : un événement répété pendant l'attente de position n'ajoute rien.
     private func handleInside(boxId: Int, origin: String) {
+        guard !handledInside.contains(boxId), !inFlightBoxes.contains(boxId) else { return }
         ProximityJournal.add(String(localized: "dans le rayon de la boîte \(String(boxId)) (\(origin))"))
-        guard !handledInside.contains(boxId) else { return }
+        inFlightBoxes.insert(boxId)
         freshLocation { [weak self] location in
             guard let self else { return }
+            self.inFlightBoxes.remove(boxId)
             let decision = location.map { LocationRules.alertSpeedDecision(speedMps: $0.speed) } ?? .unknown
             switch decision {
             case .notify:
@@ -160,6 +172,11 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
         for region in manager.monitoredRegions where region.identifier.hasPrefix(Self.regionPrefix) {
             manager.stopMonitoring(for: region)
         }
+    }
+
+    // Empreinte d'un ensemble de régions (id + position), indépendante de l'ordre : sert à savoir si l'ensemble a changé
+    static func regionSignature(_ boxes: [BookBox]) -> [String] {
+        boxes.map { "\($0.id)@\($0.lat),\($0.lng)" }.sorted()
     }
 
     private func registerCategory() {
