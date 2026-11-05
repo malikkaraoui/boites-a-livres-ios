@@ -178,7 +178,8 @@ struct MapScreen: View {
             }
             .sheet(item: sheetItem) { item in
                 let box = item.box
-                let small: PresentationDetent = .height(box.photo_url != nil ? 320 : 200)
+                // Bloc photo 180 pt (toujours présent, avec appareil photo si pas de photo) : 360 pt
+                let small: PresentationDetent = .height(360)
                 let trigger: PresentationDetent = .fraction(0.75)
                 BookBoxSheet(box: box) {
                     let id = box.id
