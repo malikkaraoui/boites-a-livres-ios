@@ -44,12 +44,14 @@ struct SettingsView: View {
     @Environment(\.scenePhase) private var scenePhase
     // Vrai quand l'onglet Réglages est affiché (fourni par ContentView). Le rechargement n'a lieu que dans ce cas.
     var isSelected: Bool = true
+    // Pile de navigation de l'onglet, vidée par ContentView au re-toucher « Réglages » (retour à la racine)
+    @Binding var path: NavigationPath
 
     private let green = Color(red: 0.102, green: 0.718, blue: 0.608)
     private var shareText: String { NSLocalizedString("share_app_text", comment: "") }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 unitsSection
                 appearanceSection
@@ -64,6 +66,13 @@ struct SettingsView: View {
             }
             .contentMargins(.bottom, 100, for: .scrollContent)
             .navigationTitle("Réglages")
+            #if DEBUG
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .diagnostic: ProximityDiagnosticView()
+                }
+            }
+            #endif
             // Recharge à chaque ouverture de l'onglet (id = isSelected : relancé quand il devient vrai)
             .task(id: isSelected) {
                 guard isSelected else { return }
@@ -252,8 +261,11 @@ struct SettingsView: View {
                 }
             ))
             .tint(green)
-            NavigationLink("Diagnostic des alertes") { ProximityDiagnosticView() }
+            #if DEBUG
+            // Builds de test seulement : absent des builds publiés (App Store / TestFlight)
+            NavigationLink("Diagnostic des alertes", value: SettingsRoute.diagnostic)
                 .foregroundStyle(green)
+            #endif
             if proximityEnabled && CLLocationManager().authorizationStatus != .authorizedAlways {
                 Text("Pour être prévenu même application fermée, autorise « Toujours » dans les Réglages iOS.")
                     .font(.system(size: 12))
@@ -611,6 +623,12 @@ struct SettingsView: View {
 
 // MARK: - Diagnostic des alertes (F01 M0023 B2)
 
+#if DEBUG
+// Destinations poussées depuis Réglages : seulement dans les builds de test (le diagnostic n'existe pas en Release)
+enum SettingsRoute: Hashable {
+    case diagnostic
+}
+
 // Lecture seule du journal local (200 lignes max), rien n'est envoyé au serveur
 struct ProximityDiagnosticView: View {
     @State private var lines = ProximityJournal.lines()
@@ -641,3 +659,4 @@ struct ProximityDiagnosticView: View {
         .onAppear { lines = ProximityJournal.lines() }
     }
 }
+#endif
