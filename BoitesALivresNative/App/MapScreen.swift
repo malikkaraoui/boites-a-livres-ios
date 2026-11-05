@@ -10,6 +10,7 @@ struct MapScreen: View {
     @State private var sheetDetent: PresentationDetent = .height(320)
     @State private var showAddBox = false
     @State private var isHandlingAnnotationTap = false
+    @State private var focusedBoxId: Int?
     @AppStorage("useImperialUnits") private var useImperialUnits = false
     @Namespace private var mapScope
 
@@ -36,7 +37,7 @@ struct MapScreen: View {
                 Map(position: $vm.cameraPosition, scope: mapScope) {
                     ForEach(vm.boxes) { box in
                         Annotation("", coordinate: box.coordinate, anchor: .center) {
-                            let isSelected = vm.selectedBox?.id == box.id
+                            let isSelected = vm.selectedBox?.id == box.id || focusedBoxId == box.id
                             let pinColor = pinFillColor(for: box, isSelected: isSelected)
                             Circle()
                                 .fill(pinColor)
@@ -62,6 +63,7 @@ struct MapScreen: View {
                             return
                         }
                         vm.selectedBox = nil
+                        focusedBoxId = nil
                     }
                 )
                 .ignoresSafeArea()
@@ -208,6 +210,16 @@ struct MapScreen: View {
                 path.append(boxId)
                 router.pendingBoxId = nil
             }
+            .onChange(of: router.pendingMapFocus) { _, focus in
+                guard let focus else { return }
+                router.pendingMapFocus = nil
+                vm.selectedBox = nil
+                focusedBoxId = focus.boxId
+                vm.cameraPosition = .camera(MapCamera(
+                    centerCoordinate: CLLocationCoordinate2D(latitude: focus.latitude, longitude: focus.longitude),
+                    distance: 700
+                ))
+            }
             .onAppear {
                 if let boxId = router.pendingBoxId {
                     path.append(boxId)
@@ -260,6 +272,7 @@ struct MapScreen: View {
             isHandlingAnnotationTap = false
         }
         sheetDetent = .height(box.photo_url != nil ? 320 : 200)
+        focusedBoxId = nil
         vm.selectedBox = box
     }
 }

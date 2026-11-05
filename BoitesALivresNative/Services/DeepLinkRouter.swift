@@ -11,4 +11,12 @@ final class DeepLinkRouter {
     var pendingBoxId: Int?
     // Fiche à ouvrir avec le parcours « Localisation » (tap sur la notification de proximité)
     var pendingLocationBoxId: Int?
+    // Boîte à montrer sur la carte (bouton « Voir sur la carte » de la fiche) : centre la carte, sans rouvrir la fiche
+    var pendingMapFocus: MapFocus?
+
+    struct MapFocus: Equatable {
+        let boxId: Int
+        let latitude: Double
+        let longitude: Double
+    }
 }

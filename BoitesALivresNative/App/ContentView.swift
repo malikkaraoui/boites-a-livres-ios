@@ -57,6 +57,13 @@ struct ContentView: View {
         .onChange(of: router.pendingBoxId) { _, newValue in
             if newValue != nil { selectedTab = 0 }
         }
+        .onChange(of: router.pendingMapFocus) { _, newValue in
+            // « Voir sur la carte » : ferme la fiche (piles vidées), puis MapScreen centre la carte
+            guard newValue != nil else { return }
+            selectedTab = 0
+            mapPath = NavigationPath()
+            listPath = NavigationPath()
+        }
         .onChange(of: scenePhase) { _, phase in
             // Retour au premier plan : rappel si l'alerte de proximité est incomplète (F01 M0023, #29)
             #if DEBUG
