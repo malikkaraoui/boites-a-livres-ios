@@ -315,7 +315,10 @@ struct DetailView: View {
         HStack(alignment: .center, spacing: 0) {
             Button {
                 // Appui long déjà traité (il copie) : le relâchement ne doit pas basculer le format
-                if coordLongPressFired { return }
+                if coordLongPressFired {
+                    coordLongPressFired = false
+                    return
+                }
                 lightHaptic()
                 withAnimation(.easeInOut(duration: 0.35)) {
                     showDMS.toggle()
@@ -378,7 +381,6 @@ struct DetailView: View {
                     copyCoordinates(coordValue)
                     coordHighlight = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { coordHighlight = false }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { coordLongPressFired = false }
                 }
         )
     }
