@@ -14,7 +14,7 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     static let notifType = "location-proximity"
     static let categoryId = "PROXIMITY"
     static let laterActionId = "LATER"
-    private static let regionPrefix = "box-"
+    static let regionPrefix = "box-"
 
     private let manager = CLLocationManager()
     // Boîtes dont l'alerte a déjà été traitée pendant cette présence (levée à la sortie)
@@ -78,12 +78,12 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
 
     // Enregistre les régions puis demande l'état courant de chacune : une alerte immédiate
     // si on est déjà dans un rayon (F01 M0023 B1), sans attendre une entrée.
-    // Ensemble inchangé = rien à faire : chaque position reçue recalcule les régions, sans les réenregistrer.
+    // Ensemble déjà surveillé = rien à faire : chaque position reçue recalcule les régions, sans les réenregistrer.
     private func apply(_ picks: [BookBox]) {
         let chosen = Array(picks.prefix(LocationRules.regionLimit))
-        let signature = Self.regionSignature(chosen)
-        guard signature != registeredSignature else { return }
-        registeredSignature = signature
+        let monitoredIds = manager.monitoredRegions.map(\.identifier).filter { $0.hasPrefix(Self.regionPrefix) }
+        guard Self.needsRegistration(chosen: chosen, registered: registeredSignature, monitoredIds: monitoredIds) else { return }
+        registeredSignature = Self.regionSignature(chosen)
         stopBoxRegions()
         handledInside.formIntersection(chosen.map(\.id))
         ProximityJournal.add(String(localized: "régions enregistrées : \(chosen.count)"))
@@ -177,6 +177,12 @@ final class ProximityAlertService: NSObject, CLLocationManagerDelegate {
     // Empreinte d'un ensemble de régions (id + position), indépendante de l'ordre : sert à savoir si l'ensemble a changé
     static func regionSignature(_ boxes: [BookBox]) -> [String] {
         boxes.map { "\($0.id)@\($0.lat),\($0.lng)" }.sorted()
+    }
+
+    // Réenregistrement seulement si l'ensemble voulu diffère de la dernière demande OU de ce que iOS surveille réellement
+    static func needsRegistration(chosen: [BookBox], registered: [String], monitoredIds: [String]) -> Bool {
+        let expectedIds = chosen.map { "\(regionPrefix)\($0.id)" }.sorted()
+        return regionSignature(chosen) != registered || monitoredIds.sorted() != expectedIds
     }
 
     private func registerCategory() {
