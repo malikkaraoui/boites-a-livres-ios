@@ -1,0 +1,103 @@
+---
+date: 2026-11-05
+tags: [fiche, itineraire, carte, icone-par-defaut, build-31, merge]
+session: F01
+mandat: fiche-sy-rendre-voir-carte-icone
+mandat_id: M0062
+statut: reponse-disponible
+commande: cd '/Users/malik/Documents/Boites-a-livres/BoitesALivresNative' && claude --dangerously-skip-permissions --disallowedTools ScheduleWakeup,CronCreate --settings '/Users/malik/.harnais/hooks.json' --model 'claude-haiku-5-5' --effort 'medium' 'Va lire ton prompt dans vault/echanges/F01.md et exécute-le. Applique strictement les rituels décrits.'
+worktree: /Users/malik/Documents/Boites-a-livres/BoitesALivresNative/.claude/worktrees/F01-M0062
+branche: feat/fiche-sy-rendre-icone
+niveau: N3
+derniere_maj: 2026-11-05T09:05:19+0100
+---
+
+# F01 / M0062 — Fiche : « S'y rendre » + « Voir sur la carte » à la place de « Ouvrir dans Plans » ; icône par défaut (Halloween archivée) ; build 31 ; fusion ; installation iPhone
+
+**Tu ne poses JAMAIS de question et tu n'attends JAMAIS de réponse.** Personne n'est devant l'écran. Si tu es sur le point de demander un arbitrage, c'est un **STOP** : question, options et choix motivé au rapport, puis rituels de fin. Un STOP propre est un rendu valable. Demande d'autorisation d'outil : contourne ; sans contournement, STOP propre. **Va jusqu'au bout** : un rendu partiel n'est valable que pour un STOP nommé (cause + preuve). Le fondateur teste ce matin : vise court.
+
+Modèle : Haiku 5.5 medium (doublage compris). **N3** (`project.yml`/`project.pbxproj`).
+
+## Demandes du fondateur (verbatim, datées — ne pas re-débattre)
+- 05/11 08:51 : « remettre le logo de l'icone par défaut. garde en archive celui de halloween ». 09:04 : « OUI » au build 31 pour l'icône iPhone.
+- 05/11 09:04 : « lorsque je suis dans la page de détails d'une boite a livre lorsque je clic sur ouvrir dans plan, j'aimerai plutot deux bouton. s'y rendre (et donc ouvrir plan de ios et mettre a pied le paramétrage et ainsi avoir le tracé) et un autre bouton voir sur la carte (ce qui a pour effet de revenir dans l'onglet carte et de centrer la carte sur cette boite a livre) ».
+
+## Contexte lu par l'orchestrateur (`origin/main` `8b5e657`)
+- `Views/Detail/DetailView.swift:370` bouton `Label("Ouvrir dans Plans", systemImage: "map.fill")` ; `:636-641` `openMaps(box:)` ouvre `maps://?ll=…&q=…` (pas d'itinéraire).
+- `App/ContentView.swift:8` `selectedTab` (0 = Carte) ; `:57-58` `router.pendingBoxId` bascule sur Carte ; `App/MapScreen.swift:206-215` `pendingBoxId` **ouvre la fiche** (`path.append`) : ce n'est PAS ce qu'il faut pour « Voir sur la carte ».
+- Icône Halloween : `Assets.xcassets/AppIcon.appiconset/AppIcon.png` changée par `54f19c3` puis `60943d5` (Build 27, #59). **Icône par défaut = ce fichier au commit `0d414f5c5c6a1610947b9e27825a5ceb7f9166cc`** (parent de `54f19c3`). `60943d5` a aussi touché README/CHANGELOG.
+- La branche `feat/fiche-invitation-photo` (`67967bc`, M0061 STOP, build 31 non fusionné) **n'est pas incluse : ne pas la toucher.** Elle prendra un autre numéro plus tard.
+
+## Règles
+1. Remplacer « Ouvrir dans Plans » par deux boutons côte à côte (ou l'un sous l'autre si trop étroit), même style que l'actuel :
+   - **« S'y rendre »** (EN « Get directions », icône `figure.walk`) : ouvre Plans d'Apple avec l'**itinéraire à pied** vers la boîte, tracé affiché. Méthode recommandée (API officielle) : `MKMapItem(placemark: MKPlacemark(coordinate:))` nommé « Boîte à livres », `openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking])`. Si tu prends une URL à la place, cite la doc Apple qui la justifie.
+   - **« Voir sur la carte »** (EN « Show on map », icône `map`) : ferme la fiche, bascule sur l'onglet Carte, **centre la carte sur la boîte** (zoom de rue) et la met en évidence (pin sélectionné) **sans rouvrir la fiche**. Nouveau champ dédié dans `DeepLinkRouter` (ex. `pendingMapFocusBoxId`), lu par `ContentView` (onglet 0, vider `mapPath` et `listPath`) et `MapScreen` (caméra). `pendingBoxId` et les liens profonds/notifications restent inchangés. Fonctionne depuis une fiche ouverte depuis la Carte ET depuis la Liste.
+2. Textes FR + EN dans `Localizable.xcstrings` ; retirer la chaîne « Ouvrir dans Plans » si plus utilisée nulle part.
+3. **Icône** : copier l'`AppIcon.png` ACTUEL (Halloween) vers `docs/icones/archive/halloween-2026/AppIcon.png` + `README.md` de 3 lignes (origine `54f19c3`/`60943d5`, date, comment la remettre) — hors cible Xcode, rien n'entre dans le build. Puis `git checkout 0d414f5 -- BoitesALivresNative/Assets.xcassets/AppIcon.appiconset/AppIcon.png` (et `Contents.json` seulement s'il diffère). Mettre à jour la mention Halloween dans README/CHANGELOG si elle existe, par REMPLACEMENT.
+4. Ne touche pas : `DetailViewModel.swift`, `LocationService.swift`, `AppDelegate.swift`, `Constants.swift`, `SupabaseService.swift`. S'il le faut : STOP propre. Aucun payload/endpoint/base changé.
+
+## Version 31
+`project.yml` `CURRENT_PROJECT_VERSION: 31` (MARKETING 1.3.0 inchangé), `project.pbxproj` aligné, `CHANGELOG.md` « Build 31 : fiche, boutons S'y rendre (itinéraire à pied dans Plans) et Voir sur la carte ; icône par défaut (Halloween archivée) » ; `release-notes/fr-FR.txt` et `en-US.txt` : « build 30 » → « build 31 » seulement.
+
+## Interdits permanents
+Jamais de `sleep`, de tâche de fond vivante à la sortie, de `--no-verify`, de `push --force`, de rebase, de `stash`, de `reset --hard`, de `checkout -- .`. `git add` ciblé. **Aucune écriture Supabase. Aucun appel à Apple** (ni release, ni archive App Store, ni TestFlight : il faut « OK Apple » du fondateur). Commits en heredoc terminés par `Co-Authored-By: Malik & Claude`. Rapports de revue sous `vault/revues/` à la racine. Refus d'un hook : STOP.
+
+## Garde (écart = STOP)
+`git fetch origin --prune` ; `git rev-parse origin/main` = `8b5e6573130897450a8fcdcf9a82e0c391dd0a37`.
+
+## Mission 0 — scope git strict
+Scratch détaché sur `origin/main` : commit ciblé de `vault/echanges/archive/2026-10-27-F01-M0061-fiche-invitation-photo-stop.md` s'il n'est pas suivi (`docs(vault): reconciliation orchestrateur -- archive M0061`), push `HEAD:main`, `ls-remote` collé. Rien d'autre.
+
+## Travail
+1. `git worktree add -b feat/fiche-sy-rendre-icone .claude/worktrees/F01-M0062 origin/main`. Issue `gh issue create` « Fiche : S'y rendre + Voir sur la carte ; icône par défaut » ; numéro cité dans les commits.
+2. Règles 1-4 ; version 31.
+3. **Tests** : Build Release `xcodebuild -scheme BoitesALivresNative -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build` (fin collée) ; `node --test scripts/release/asc.test.mjs` vert.
+4. **Preuve d'écran** (gabarit §10), simulateur : fiche AVANT (bouton unique) / APRÈS (deux boutons) ; après « Voir sur la carte » : onglet Carte centré sur la boîte, fiche fermée (depuis Carte puis depuis Liste) ; écran d'accueil du simulateur montrant l'icône par défaut. « S'y rendre » : capture de Plans avec itinéraire à pied si le simulateur l'affiche, sinon le dire. Captures dans `vault/revues/captures-M0062/`, citées au rapport. Impossible → axe UX ⚠️ « non vérifié à l'écran » + checklist fondateur.
+5. Commits ciblés, push + `ls-remote` collé. Tip de code = `T`.
+6. **Doublage N3 `R052`** (relu dans `state.json`) sur `origin/main..T` : sous-agent FRAIS (Haiku), worktree détaché lecture seule ; vérifie règles 1-4 fichier:ligne, mode à pied, « Voir sur la carte » n'ouvre pas la fiche et marche depuis Liste, `pendingBoxId` intact, icône = `0d414f5` octet pour octet (`git diff 0d414f5 T -- <AppIcon.png>` vide), archive hors build, version 31 cohérente, captures relues, budget `sh "$(git config core.hooksPath)/pre-commit" --controle T --base $(git merge-base origin/main T)` collé. Rapport `vault/revues/2026-11-05-R052-fiche-sy-rendre-icone.md`, frontmatter fermé : `verdict: GO|RESERVE`, `tip:` (sha 40), `niveau: N3`. RESERVE → correctif → re-relecture (`R052b`…) ; loi des deux patchs.
+7. **Si GO : fusion sur `main`** (gabarit §9 mode direct, `.claude/skills/orchestration-bureau/references/gabarits.md` lu en entier), push, `ls-remote` collé ; branche et worktrees retirés.
+8. **Installation sur l'iPhone de Malik** (Wi-Fi), comme M0059 étape 7 (`vault/echanges/archive/F02-M0059.md`) → `device info apps` collé → `1.3.0 31`. Injoignable → le dire, pas un STOP.
+
+## Sous-agents (gabarit §3)
+(1) agents FRAIS, jamais `fork` ; (2) aucun sous-agent ne commit, ne pousse, ne modifie `vault/runtime/` ni `vault/reprise/`, n'écrit en base ni ne tue un autre agent ; (3) rapport vérifié (fichier:ligne) ; (4) après incident : `git status`/`diff`/`log`/`reflog` d'abord ; (5) attendre le retour de tous avant les rituels de fin (jamais `sleep`) ; échec = STOP propre.
+
+## Rituels
+- DÉBUT : `statut: en-cours` à la racine du frontmatter, avant tout.
+- FIN, dans l'ordre : `## Rapport M0062` dans ce fichier (5 lignes max en français simple ; ce qui n'a PAS été vu à l'écran ; checklist fondateur de 3 à 5 gestes sur iPhone ; preuves) → `vault/reprise/F01.md` → `vault/runtime/events.jsonl` + `state.json` (jamais committés ; ne modifier que `windows.F01`, `last_event`, `updated_at`, et avancer `next_revue_id`) → commit vault ciblé sur `main` + push + `ls-remote` collé → footer de statut (gabarit §4, première ligne `M0062`) → **`statut: reponse-disponible` posé EN DERNIER GESTE**.
+
+## Rapport M0062
+
+- Livré sur `main` : `e36239f` (merge `--no-ff` `3b7c7f9` de `feat/fiche-sy-rendre-icone`, tip `484abc9`, issue #70), rapport R052 GO (`vault/revues/2026-11-05-R052-fiche-sy-rendre-icone.md`, tip `484abc9`, niveau N3).
+- Fiche : « Ouvrir dans Plans » devient « S'y rendre » (itinéraire à pied, MapKit) et « Voir sur la carte » (ferme la fiche, centre la carte sur la boîte, sans rouvrir la fiche ; champ `DeepLinkRouter.pendingMapFocus`). `pendingBoxId` inchangé.
+- Icône par défaut restaurée (octet pour octet `0d414f5`) ; Halloween archivée dans `docs/icones/archive/halloween-2026/`. Build 31 : `project.yml`, `pbxproj`, CHANGELOG, release notes.
+- Installé sur l'iPhone de Malik : `1.3.0 31` (`devicectl device info apps`).
+- Non vu à l'écran : les deux boutons, Plans avec l'itinéraire, le centrage carte depuis Carte et Liste, l'icône sur l'écran d'accueil. Aucune capture : le simulateur refuse de démarrer (CoreSimulator « out of date », 1174.9.2 contre 1174.21) ; non réparé, hors mandat.
+- Réserve R1 (mineure, non bloquante, au rapport R052) : `App/MapScreen.swift:13` le pin reste en surbrillance si la feuille est fermée par glissement. `scripts/ouvrir-issue.mjs` n'existe pas dans le dépôt : remarque non ouverte en issue.
+- Écart : la branche n'a pas été poussée avant le merge (étape 5 manquée) ; elle n'existe plus sur `origin` (`ls-remote` vide) et le tip est dans `main`.
+
+**Checklist fondateur (build 31, iPhone) :**
+1. Onglet Carte, toucher une boîte, « Ouvrir la fiche » : deux boutons côte à côte, « S'y rendre » et « Voir sur la carte ».
+2. « S'y rendre » : Plans s'ouvre avec l'itinéraire à pied tracé vers la boîte.
+3. Fiche ouverte depuis la Carte, toucher « Voir sur la carte » : onglet Carte, fiche fermée, carte centrée sur la boîte (zoom rue), pin blanc.
+4. Onglet Liste, ouvrir une fiche, « Voir sur la carte » : même résultat.
+5. Écran d'accueil : l'icône par défaut (pas la toile d'araignée).
+
+**Preuves :**
+- Build Release : `** BUILD SUCCEEDED **` (`BUILD_EXIT=0`), sur le worktree et sur le résultat de fusion.
+- `node --test scripts/release/asc.test.mjs` : 17 pass, 0 fail.
+- Build Debug device puis `devicectl device install app` : `INSTALL_EXIT=0`, `device info apps` : `Boîtes à Livres  com.malikkaraoui.boitesalivresapp  1.3.0  31`.
+- `git ls-remote origin refs/heads/main` : `e36239fab435e61842b5eb4be67451aa74184b3e`.
+
+Mission 0 : archive M0061 sur `main` en `63c0818`.
+Issue : #70.
+
+M0062
+Implementation      ✅
+Tests               ✅
+Commit              ✅
+Branch push         ❌ (branche jamais poussée avant le merge ; absente de `origin` après fusion, `ls-remote` vide)
+Review              ✅ (R052 GO, tip 484abc9)
+Merge main          ✅ (e36239f, ff-only sur origin/main 63c0818)
+Main push           ✅ (ls-remote e36239f)
+TASK STATUS         INTEGRATED
+PROJECT STATUS      INTEGRATED
