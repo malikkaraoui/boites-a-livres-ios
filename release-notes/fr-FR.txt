@@ -1,17 +1,17 @@
-Version 1.3.0 (build 33)
+Nouveautés
+• S'y rendre : depuis la fiche d'une boîte, Plans s'ouvre avec l'itinéraire à pied.
+• Voir sur la carte : la carte se centre sur la boîte, en un geste.
+• Aperçu plus pratique : touchez n'importe où pour ouvrir la fiche, photo plus grande, et une pastille indique l'état de la boîte (bon, moyen, mauvais).
+• Pas encore de photo ? Un appareil photo vous invite à ajouter la première.
+• Appui long sur les coordonnées GPS pour les copier.
 
-Mise à jour obligatoire : si ta version est trop ancienne, un écran te demande de mettre l'app à jour avant de continuer.
+Améliorations
+• Réglages se mettent à jour tout seuls : le statut de vos envois apparaît sans tirer vers le bas.
+• Toucher à nouveau l'onglet Réglages ramène à son début, comme Carte et Liste.
+• Retour de l'icône habituelle.
 
-Localisation des boîtes : tu peux confirmer qu'une boîte est bien là, ou proposer la position exacte sur la carte, quand tu es assez près d'elle. Les positions proposées sont vérifiées avant d'être publiées.
-
-Alerte près d'une boîte (activée par défaut, Réglages › Localisation) : un rappel quand tu passes à moins de 100 m d'une boîte. Ta position reste sur ton téléphone. Une alerte déjà vue ne revient plus pendant 30 jours.
-
-Suppression : le bouton de signalement n'est actif qu'à 100 m ou moins de la boîte.
-
-Photos : une nouvelle boîte demande une photo prise sur place. Aucune personne ne doit apparaître sur la photo.
-
-Corrections : aperçu et carrousel des photos, « Mes soumissions » et « Mes demandes de suppression », affichage du numéro de build dans les réglages.
+Corrections
+• Alerte près d'une boîte : plus de notification en voiture (au-dessus de 7 km/h).
+• Les alertes près d'une boîte ne sont plus traitées en double.
 
 Merci à toutes celles et ceux qui ajoutent des boîtes, envoient des photos et signalent les changements : c'est grâce à vous que la carte reste vivante et fiable.
-
-Un merci tout particulier à Loane Morandeau, qui nous a signalé une faille de sécurité, corrigée dans cette version.
